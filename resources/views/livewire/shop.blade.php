@@ -1,0 +1,119 @@
+<div class="flex flex-wrap bg-white p-6 rounded shadow-md">
+    <div class="w-full">
+        <h2 class="text-xl text-center font-bold mb-4">Магазин</h2>
+
+        <div
+            x-data="{ show: false, message: '', type: 'info' }"
+            x-init="
+                window.addEventListener('notify', event => {
+                    message = event.detail.message;
+                    type = event.detail.type;
+                    show = true;
+                    setTimeout(() => show = false, 2000);
+                });
+            "
+            x-show="show"
+            x-transition
+            :class="{
+                'bg-green-100 border-green-500 text-green-700': type === 'success',
+                'bg-red-100 border-red-500 text-red-700': type === 'error',
+                'bg-yellow-100 border-yellow-500 text-yellow-700': type === 'info'
+            }"
+            class="fixed top-5 right-5 border-l-4 p-4 rounded shadow text-sm z-50"
+            style="display: none;"
+        >
+            <span x-text="message"></span>
+        </div>
+
+        <div class="flex">
+            <div class="flex flex-col" style="width: calc(100% - 300px)">
+                @php
+                    $labels_ua = [
+                        'strength' => 'Сила',
+                        'agility' => 'Ловкість',
+                        'intelligence' => 'Інтелект',
+                        'endurance' => 'Витривалість',
+                    ];
+                @endphp
+                @forelse($items as $item)
+                    <div id="item-{{ $item->id }}" class="flex odd:bg-[#f9f9f9] p-2">
+                        <div class="item flex flex-col w-[200px] items-center justify-center py-4">
+                            @php
+                                $heightClass = match(true) {
+                                    in_array($item->type, ['knife', 'sword', 'axe', 'mace', 'helmet', 'shield']) => 'h-[90px]',
+                                    in_array($item->type, ['armor', 'legs']) => 'h-[120px]',
+                                    in_array($item->type, ['shoulders', 'belt', 'arms', 'boots']) => 'h-[50px]',
+                                    in_array($item->type, ['earrings', 'neckless', 'ring']) => 'h-[30px]',
+                                    default => '',
+                                };
+                            @endphp
+                            <div class="{{ $item->type === 'ring' ? 'h-[30px]' : 'w-[90px]' }} {{ $heightClass }} shadow-md cursor-pointer" title="Купити">
+                                <img src="{{ asset($item->image) }}" class="w-full h-full object-cover" alt="{{ $item->name }}">
+                            </div>
+                        </div>
+
+                        <div class="w-full flex flex-col p-2">
+                            <h3 class="font-semibold mb-1">{{ $item->name }} [{{ $item->required_level }}]</h3>
+                            @if($item->min_damage)
+                                <p>Урон: {{ $item->min_damage }}–{{ $item->max_damage }}</p>
+                            @endif
+                            @foreach($item->bonuses ?? [] as $stat => $value)
+                                <p>{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
+                            @endforeach
+                            <p>Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
+                            <p @class(['!text-red-500' => $character->level < $item->required_level])>
+                                {{ $character->level < $item->required_level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->required_level }}
+                            </p>
+                            <p class="mt-2 text-[14px] font-thin italic">{{ $item->description }}</p>
+                            <div class="flex mt-5">
+                                <div wire:click="buyItem({{ $item->id }})" class="cursor-pointer bg-green-500 px-2 py-1 hover:bg-green-400 text-white">
+                                    Купити за {{ $item->buy_price }} золота
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-500">Магазин порожній.</p>
+                @endforelse
+            </div>
+
+                {{-- shop filter --}}
+            <div class="w-[300px] ml-4 border-l border-r border-gray-100">
+                <div class="p-2 mb-4 bg-gray-100">
+                    <p>У вас {{ $character->gold }} золота</p>
+                </div>
+                <div class="flex flex-col gap-2 justify-end">
+                    {{-- Кнопка "Усі товари" --}}
+                    <button
+                        wire:click="setFilter('all')"
+                        class="p-2 text-sm text-end border-b border-gray-100 {{ $filterType === 'all' ? 'font-semibold underline text-blue-600' : '' }}"
+                    >
+                        Усі товари
+                    </button>
+
+                    @foreach($allTypesGrouped as $groupName => $types)
+                        <div class="px-2 text-end border-b border-gray-100">
+                            <div class="font-bold text-gray-700">{{ $groupName }}</div>
+
+                            <div class="flex flex-wrap gap-2 mt-1 justify-end flex-col">
+                                @if($types->isNotEmpty())
+                                    @foreach($types as $type)
+                                        <button
+                                            wire:click="setFilter('{{ $type }}')"
+                                            class="py-1 text-sm text-end {{ $filterType === $type ? 'font-semibold underline text-blue-600' : '' }}">
+                                            {{ ucfirst($type) }}
+                                        </button>
+                                    @endforeach
+                                @else
+                                    <button class="py-1 text-sm text-end text-gray-400 cursor-default" disabled>-</button>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
