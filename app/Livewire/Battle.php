@@ -92,7 +92,7 @@ class Battle extends Component
             'legs_head' => ['legs', 'head'],
         ];
 
-        $possibleZones = ['head' => 'Голова', 'chest' => 'Груди', 'belly' => 'Живіт', 'belt' => 'Пояс', 'legs' => 'Ноги'];
+        $possibleZones = ['head' => 'Голову', 'chest' => 'Груди', 'belly' => 'Живіт', 'belt' => 'Пояс', 'legs' => 'Ноги'];
 
         $charAttack = $this->attackChoice;
         $charDefenseZones = $defenseMap[$this->defenseChoice] ?? [];
@@ -104,7 +104,7 @@ class Battle extends Component
 
         // --- Удар по монстру ---
         if (in_array($charAttack, $monsterDefenseZones)) {
-            $msg = "Монстр заблокував ваш удар у зоні " . $possibleZones[$charAttack] . ".";
+            $msg = "Монстр заблокував ваш удар у " . $possibleZones[$charAttack] . ".";
             $this->messages[] = $msg;
             $this->character->log($msg);
             $this->dispatch('showHit', ['message' => 'Блок!', 'target' => 'monster', 'type' => 'block']);
@@ -124,7 +124,7 @@ class Battle extends Component
             $charDamage = max(0, $charDamage - $monsterArmorAvg);
 
             if (rand(1, 100) <= $this->monster->dodge_chance - $this->character->anti_dodge_chance) {
-                $msg = "Монстр ухилився від вашого удару у зоні " . $possibleZones[$charAttack] . ".";
+                $msg = "Монстр ухилився від вашого удару у " . $possibleZones[$charAttack] . ".";
                 $this->messages[] = $msg;
                 $this->character->log($msg);
                 $this->dispatch('showHit', ['message' => "Ухил", 'target' => 'monster', 'type' => 'dodge']);
@@ -138,22 +138,35 @@ class Battle extends Component
                 $this->monster->current_health = max(0, $this->monster->current_health - $charDamage);
                 $this->monster->save();
 
-                $msg = "Ви вдарили монстра у " . $possibleZones[$charAttack] . " і нанесли $charDamage шкоди.";
+                if ($charDamage > 0){
+                    $msg = "Ви вдарили монстра у " . $possibleZones[$charAttack] . " і нанесли $charDamage шкоди.";
+                } else{
+                    $msg = "Ви вдарили монстра у " . $possibleZones[$charAttack] . " але не нанесли жодної шкоди.";
+                }
                 if ($isCrit) $msg .= " Критичний удар!";
                 $this->messages[] = $msg;
                 $this->character->log($msg);
 
-                $this->dispatch('showHit', [
-                    'message' => "-{$charDamage} хп",
-                    'target' => 'monster',
-                    'type' => $isCrit ? 'crit' : 'hit',
-                ]);
+                if ($charDamage > 0){
+                    $this->dispatch('showHit', [
+                        'message' => "-{$charDamage} хп",
+                        'target' => 'monster',
+                        'type' => $isCrit ? 'crit' : 'hit',
+                    ]);
+                }else{
+                    $this->dispatch('showHit', [
+                        'message' => "0 хп",
+                        'target' => 'monster',
+                        'type' => $isCrit ? 'crit' : 'hit',
+                    ]);
+                }
+
             }
         }
 
         // --- Удар по персонажу ---
         if (in_array($monsterAttack, $charDefenseZones)) {
-            $msg = "Ви заблокували удар монстра у зоні " . $possibleZones[$monsterAttack] . ".";
+            $msg = "Ви заблокували удар монстра у " . $possibleZones[$monsterAttack] . ".";
             $this->messages[] = $msg;
             $this->character->log($msg);
 
@@ -169,7 +182,7 @@ class Battle extends Component
             $monsterDamage = max(0, $monsterDamage - $armorAvg);
 
             if (rand(1, 100) <= $this->character->dodge_chance - $this->monster->anti_dodge_chance) {
-                $msg = "Ви ухилилися від удару монстра у зоні " . $possibleZones[$monsterAttack] . ".";
+                $msg = "Ви ухилилися від удару монстра у " . $possibleZones[$monsterAttack] . ".";
                 $this->messages[] = $msg;
                 $this->character->log($msg);
 
@@ -187,7 +200,7 @@ class Battle extends Component
                 if ($monsterDamage > 0){
                     $msg = "Монстр вдарив вас у " . $possibleZones[$monsterAttack] . " і наніс $monsterDamage шкоди.";
                 } else{
-                    $msg = "Монстр вдарив вас у " . $possibleZones[$monsterAttack] . " і не наніс жодної шкоди.";
+                    $msg = "Монстр вдарив вас у " . $possibleZones[$monsterAttack] . " але не наніс жодної шкоди.";
                 }
                 if ($isCrit) $msg .= " Критичний удар!";
                 $this->messages[] = $msg;
@@ -211,6 +224,8 @@ class Battle extends Component
 
         // ... решта логіки бою і підрахунок результатів
         $this->dispatch('refreshInfoChat');
+
+        $this->character->wearDownEquippedItems();
 
         if ($this->character->current_health <= 0 && $this->monster->current_health <= 0) {
             $result = "Нічия! Обидва опоненти впали.";

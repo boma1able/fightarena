@@ -25,9 +25,11 @@ return new class extends Migration
                 'armor', 'helmet', 'shield', 'shoulders', 'belt', 'arms', 'legs', 'boots',
                 'ring', 'earrings','neckless'])->nullable();
             $table->string('slot')->nullable();
-            $table->json('bonuses')->nullable(); // приклад: {"strength":2, "agility":1}
+            $table->json('bonuses')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
+            $table->unsignedInteger('base_max_durability')->default(20);
+            $table->boolean('is_shop')->default(false);
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
             $table->unsignedTinyInteger('current_durability')->default(10);
             $table->unsignedTinyInteger('max_durability')->default(10);
+            $table->boolean('is_broken')->default(false);
             $table->string('slot')->nullable()->after('location');
             $table->enum('location', ['inventory', 'equipped', 'shop'])->default('shop');
             $table->timestamps();

@@ -34,6 +34,32 @@ class Character extends Model
         });
     }
 
+    public function getMaxDurabilityForItem(Item $item): int
+    {
+        $baseDurability = $item->base_max_durability ?? 100;
+        $levelFactor = 1 + ($item->required_level * 0.1);
+
+        return (int) round($baseDurability * $levelFactor);
+    }
+
+    public function giveShopItems()
+    {
+        $shopItems = Item::where('is_shop', true)->get();
+
+        foreach ($shopItems as $item) {
+            $maxDurability = $this->getMaxDurabilityForItem($item);
+
+            $this->allItems()->attach($item->id, [
+                'location' => 'shop',
+                'slot' => $item->slot,
+                'current_durability' => $maxDurability,
+                'max_durability' => $maxDurability,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    }
+
     // Базова витривалість = здоровʼя
     public function getMaxHealthAttribute(): int
     {
@@ -313,12 +339,56 @@ class Character extends Model
             ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability']);
     }
 
+    public function shopItems()
+    {
+        return $this->belongsToMany(Item::class, 'character_items')
+            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability'])
+            ->wherePivot('location', 'shop');
+    }
+
     public function equippedItemsBySlot()
     {
         return $this->equippedItems()
             ->get()
             ->groupBy(fn($item) => $item->pivot->slot);
     }
+
+    public function wearDownEquippedItems(): void
+    {
+        foreach ($this->equippedItems as $item) {
+            $pivot = $item->pivot;
+
+            // Пропускаємо, якщо немає durability або вже зламано
+            if (
+                is_null($pivot->current_durability) ||
+                $pivot->current_durability <= 0 ||
+                $pivot->is_broken
+            ) {
+                continue;
+            }
+
+            // 10% шанс на зношення
+            if (rand(1, 100) <= 50) {
+                $newDurability = max(0, $pivot->current_durability - 1);
+
+                $updateData = ['current_durability' => $newDurability];
+                $msg = "{$item->name} зазнав шкоди [залишилось $newDurability / $pivot->max_durability].";
+
+                // Якщо зламано — ставимо прапорець
+                if ($newDurability === 0) {
+                    $updateData['is_broken'] = true;
+                    $msg = "Предмет {$item->name} зламався!";
+                }
+
+                \DB::table('character_items')
+                    ->where('id', $pivot->id)
+                    ->update($updateData);
+
+                $this->log($msg);
+            }
+        }
+    }
+
 
     public function log(string $message): void
     {

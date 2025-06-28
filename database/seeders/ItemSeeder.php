@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Item;
+use Illuminate\Support\Facades\DB;
 
 class ItemSeeder extends Seeder
 {
@@ -24,6 +25,7 @@ class ItemSeeder extends Seeder
             'slot' => 'weapon',
             'image' => '/images/items/knifes/knife-0.webp',
             'description' => 'Дешевий ніж з грубо обробленої сталі, який підійде для різання, кидання або відчаю, але не для серйозної битви.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -42,6 +44,7 @@ class ItemSeeder extends Seeder
             'slot' => 'armor',
             'image' => '/images/items/torso/torso-0.webp',
             'description' => 'Проста, але надійна броня з грубої шкіри, яку носять мисливці, початківці та ті, кому треба легкий захист без зайвого тягаря. Пахне дьогтем і пригодами.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -59,6 +62,7 @@ class ItemSeeder extends Seeder
             'slot' => 'helmet',
             'image' => '/images/items/helmet/helmet-0.jpeg',
             'description' => 'Старий, трохи пом’ятий шолом зі сталі. Надійно прикриває голову від легких ударів, але залишає вуха холодними. Ідеальний для тих, хто тільки починає шлях воїна.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -77,6 +81,7 @@ class ItemSeeder extends Seeder
             'slot' => 'shoulders',
             'image' => '/images/items/shoulders/shoulders-0.jpg',
             'description' => 'Прості шкіряні наплічники, які забезпечують мінімальний захист плечей. Вони легкі, але вже дають відчуття справжнього захисту на полі бою.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -94,6 +99,7 @@ class ItemSeeder extends Seeder
             'slot' => 'belt',
             'image' => '/images/items/belt/belt-0.jpg',
             'description' => 'Старий потертий пояс, який ледве тримає штани. Все ж таки дає невеликий приріст витривалості.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -109,6 +115,7 @@ class ItemSeeder extends Seeder
             'slot' => 'earrings',
             'image' => '/images/items/earrings/earrings-0.jpg',
             'description' => 'Срібна сережки, яку носять маги-початківці. Кажуть, вона допомагає краще зосередитись.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -124,6 +131,7 @@ class ItemSeeder extends Seeder
             'slot' => 'neckless',
             'image' => '/images/items/neckless/neckless-0.jpg',
             'description' => 'Простий дерев’яний амулет на шкіряній нитці. Допомагає трішки більше щастити в бою.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -139,6 +147,7 @@ class ItemSeeder extends Seeder
             'slot' => 'ring',
             'image' => '/images/items/ring/ring-0.jpg',
             'description' => 'Легке металеве кільце. Його носять новачки, що прагнуть пришвидшити свої рухи.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -156,6 +165,7 @@ class ItemSeeder extends Seeder
             'slot' => 'arms',
             'image' => '/images/items/arms/arms-0.jpg',
             'description' => 'Шкіряні рукавиці з мозолями. Служать скромним, але надійним захистом для рук.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -171,6 +181,7 @@ class ItemSeeder extends Seeder
             'slot' => 'shield',
             'image' => '/images/items/shield/shield-0.jpg',
             'description' => 'Простий щит з дуба. Може витримати кілька ударів і подарувати відчуття безпеки.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -189,6 +200,7 @@ class ItemSeeder extends Seeder
             'slot' => 'legs',
             'image' => '/images/items/legs/legs-0.jpg',
             'description' => 'Зношені штани з грубого полотна. Не захистять від меча, але не сковують рухів.',
+            'is_shop' => true,
         ]);
 
         Item::create([
@@ -206,6 +218,7 @@ class ItemSeeder extends Seeder
             'slot' => 'boots',
             'image' => '/images/items/boots/boots-0.jpg',
             'description' => 'Легкі черевики зі старої шкіри. Допомагають швидше бігати та краще триматися на ногах.',
+            'is_shop' => true,
         ]);
 
     }

@@ -65,6 +65,12 @@ class User extends Authenticatable
                 'experience' => 0,
                 'gold' => 0,
             ]);
+
+            // Завантажуємо свіжо створений персонаж
+             $character = $user->character;
+
+            // Виклик додавання предметів у shop
+            $character->giveShopItems();
         });
 
         static::deleting(function (User $user) {

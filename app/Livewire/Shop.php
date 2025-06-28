@@ -61,6 +61,7 @@ class Shop extends Component
     {
         $item = Item::findOrFail($itemId);
         $character = auth()->user()->character;
+        $maxDurability = $character->getMaxDurabilityForItem($item);
 
         if ($character->gold < $item->buy_price) {
             $this->dispatch('trigger-toast', [
@@ -85,6 +86,8 @@ class Shop extends Component
         // Додаємо предмет до персонажа
         $character->allItems()->attach($item->id, [
             'location' => 'inventory',
+            'current_durability' => $maxDurability,
+            'max_durability' => $maxDurability,
         ]);
 
         $this->dispatch('trigger-toast', [
