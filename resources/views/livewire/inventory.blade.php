@@ -287,6 +287,8 @@
 
                 @livewire('character-modificators', ['character' => $character])
 
+                @livewire('character-armor', ['character' => $character])
+
                 <h2 class="mb-2 mt-3 p-2 text-[14px] font-semibold bg-[#f9f9f9]">Статистика боїв</h2>
                 @php
                     $totalFights = $character->wins + $character->losses + $character->draws;
@@ -368,6 +370,11 @@
                             'agility' => 'Ловкість',
                             'intelligence' => 'Інтелект',
                             'endurance' => 'Витривалість',
+                            'head' => 'Голови',
+                            'chest' => 'Грудей',
+                            'belly' => 'Живота',
+                            'belt' => 'Пояса',
+                            'legs' => 'Ніг',
                         ];
                     @endphp
                     @forelse($inventory as $item)
@@ -392,6 +399,10 @@
                                 @if($item->min_damage)
                                     <p>Урон: {{ $item->min_damage }}–{{ $item->max_damage }}</p>
                                 @endif
+                                @foreach($item->defense_by_zone as $zone => $range)
+                                    <p>Броня {{ $labels_ua[$zone] ?? ucfirst($zone) }}: {{ $range['min'] }}–{{ $range['max'] }}</p>
+                                @endforeach
+
                                 @foreach($item->bonuses ?? [] as $stat => $value)
                                     <p>{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
                                 @endforeach

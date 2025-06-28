@@ -107,27 +107,27 @@ class Battle extends Component
             $msg = "Монстр заблокував ваш удар у зоні " . $possibleZones[$charAttack] . ".";
             $this->messages[] = $msg;
             $this->character->log($msg);
-            $this->dispatch('showHit', ['message' => 'Блок!', 'target' => 'monster']);
-            $this->dispatch('showHit', [
-                'message' => "Блок!",
-                'target' => 'monster',
-                'type' => 'block',
-            ]);
+            $this->dispatch('showHit', ['message' => 'Блок!', 'target' => 'monster', 'type' => 'block']);
         } else {
             $range = $this->character->totalDamageRange;
             $charDamage = rand($range['min'], $range['max']);
+
+            // Якщо у монстра є броня по зоні — віднімаємо її
+            $monsterDefenseByZone = method_exists($this->monster, 'totalDefenseByZone')
+                ? $this->monster->totalDefenseByZone()
+                : [];
+
+            $monsterZoneArmor = $monsterDefenseByZone[$charAttack] ?? ['min' => 0, 'max' => 0];
+            // Візьмемо середнє значення броні монстра для зони
+            $monsterArmorAvg = intval(round(($monsterZoneArmor['min'] + $monsterZoneArmor['max']) / 2));
+
+            $charDamage = max(0, $charDamage - $monsterArmorAvg);
 
             if (rand(1, 100) <= $this->monster->dodge_chance - $this->character->anti_dodge_chance) {
                 $msg = "Монстр ухилився від вашого удару у зоні " . $possibleZones[$charAttack] . ".";
                 $this->messages[] = $msg;
                 $this->character->log($msg);
-                $this->dispatch('showHit', ['message' => $msg]);
-
-                $this->dispatch('showHit', [
-                    'message' => "Ухил",
-                    'target' => 'monster',
-                    'type' => 'dodge',
-                ]);
+                $this->dispatch('showHit', ['message' => "Ухил", 'target' => 'monster', 'type' => 'dodge']);
             } else {
                 $isCrit = rand(1, 10000) <= ($this->character->crit_chance - $this->monster->anti_crit_chance) * 100;
                 if ($isCrit) {
@@ -151,32 +151,29 @@ class Battle extends Component
             }
         }
 
-
         // --- Удар по персонажу ---
         if (in_array($monsterAttack, $charDefenseZones)) {
             $msg = "Ви заблокували удар монстра у зоні " . $possibleZones[$monsterAttack] . ".";
             $this->messages[] = $msg;
             $this->character->log($msg);
 
-            $this->dispatch('showHit', [
-                'message' => "Блок!",
-                'target' => 'player',
-                'type' => 'block',
-            ]);
+            $this->dispatch('showHit', ['message' => "Блок!", 'target' => 'player', 'type' => 'block']);
         } else {
             $range = $this->monster->totalDamageRange ?? ['min' => $this->monster->base_damage, 'max' => $this->monster->base_damage];
             $monsterDamage = rand($range['min'], $range['max']);
+
+            $defenseByZone = $this->character->totalDefenseByZone();
+            $zoneDefense = $defenseByZone[$monsterAttack] ?? ['min' => 0, 'max' => 0];
+            $armorAvg = intval(round(($zoneDefense['min'] + $zoneDefense['max']) / 2));
+
+            $monsterDamage = max(0, $monsterDamage - $armorAvg);
 
             if (rand(1, 100) <= $this->character->dodge_chance - $this->monster->anti_dodge_chance) {
                 $msg = "Ви ухилилися від удару монстра у зоні " . $possibleZones[$monsterAttack] . ".";
                 $this->messages[] = $msg;
                 $this->character->log($msg);
 
-                $this->dispatch('showHit', [
-                    'message' => "Ухил",
-                    'target' => 'player',
-                    'type' => 'dodge',
-                ]);
+                $this->dispatch('showHit', ['message' => "Ухил", 'target' => 'player', 'type' => 'dodge']);
             } else {
                 $isCrit = rand(1, 10000) <= ($this->monster->crit_chance - $this->character->anti_crit_chance) * 100;
                 if ($isCrit) {
@@ -187,22 +184,34 @@ class Battle extends Component
                 $this->character->current_health = max(0, $this->character->current_health - $monsterDamage);
                 $this->character->save();
 
-                $msg = "Монстр вдарив вас у " . $possibleZones[$monsterAttack] . " і наніс $monsterDamage шкоди.";
+                if ($monsterDamage > 0){
+                    $msg = "Монстр вдарив вас у " . $possibleZones[$monsterAttack] . " і наніс $monsterDamage шкоди.";
+                } else{
+                    $msg = "Монстр вдарив вас у " . $possibleZones[$monsterAttack] . " і не наніс жодної шкоди.";
+                }
                 if ($isCrit) $msg .= " Критичний удар!";
                 $this->messages[] = $msg;
                 $this->character->log($msg);
 
-                $this->dispatch('showHit', [
-                    'message' => "-{$monsterDamage} хп",
-                    'target' => 'player',
-                    'type' => $isCrit ? 'crit' : 'hit',
-                ]);
+                if ($monsterDamage > 0) {
+                    $this->dispatch('showHit', [
+                        'message' => "-{$monsterDamage} хп",
+                        'target' => 'player',
+                        'type' => $isCrit ? 'crit' : 'hit',
+                    ]);
+                }else{
+                    $this->dispatch('showHit', [
+                        'message' => "0 хп",
+                        'target' => 'player',
+                        'type' => $isCrit ? 'crit' : 'hit',
+                    ]);
+                }
             }
         }
 
+        // ... решта логіки бою і підрахунок результатів
         $this->dispatch('refreshInfoChat');
 
-        // --- КІНЕЦЬ БОЮ ---
         if ($this->character->current_health <= 0 && $this->monster->current_health <= 0) {
             $result = "Нічия! Обидва опоненти впали.";
             $xpMultiplier = 0;
@@ -262,7 +271,6 @@ class Battle extends Component
         $this->attackChoice = null;
         $this->defenseChoice = null;
     }
-
 
     private function resetBattle()
     {

@@ -20,6 +20,7 @@ class Character extends Model
         'health_regeneration_started_at' => 'datetime',
         'stat_points' => 'integer',
         'bonuses' => 'array',
+        'defense_by_zone' => 'array',
     ];
 
     protected static function booted(): void
@@ -128,7 +129,6 @@ class Character extends Model
         return $base + $bonus;
     }
 
-
     // Анті-ухил
     public function getAntiDodgeChanceAttribute(): float
     {
@@ -141,6 +141,60 @@ class Character extends Model
         $bonus = $this->bonuses['intuition'] ?? 0;
 
         return $base + $bonus;
+    }
+
+    public function totalDefenseByZone(): array
+    {
+        $zones = [
+            'head' => ['min' => 0, 'max' => 0],
+            'chest' => ['min' => 0, 'max' => 0],
+            'belly' => ['min' => 0, 'max' => 0],
+            'belt' => ['min' => 0, 'max' => 0],
+            'legs' => ['min' => 0, 'max' => 0],
+        ];
+
+        foreach ($this->equippedItems as $item) {
+            $defenseByZone = $item->defense_by_zone ?? [];
+
+            foreach ($defenseByZone as $zone => $values) {
+                if (!isset($zones[$zone])) continue;
+
+                $min = $values['min'] ?? 0;
+                $max = $values['max'] ?? 0;
+
+                $zones[$zone]['min'] += intval($min);
+                $zones[$zone]['max'] += intval($max);
+            }
+        }
+
+        return $zones;
+    }
+
+    public function defenseForZone(string $zone): array
+    {
+        $zones = $this->totalDefenseByZone();
+
+        return $zones[$zone] ?? ['min' => 0, 'max' => 0];
+    }
+
+    public function totalPhysicalDefense(): array
+    {
+        $zones = $this->totalDefenseByZone();
+
+        $totalMin = 0;
+        $totalMax = 0;
+        foreach ($zones as $zoneData) {
+            $totalMin += $zoneData['min'] ?? 0;
+            $totalMax += $zoneData['max'] ?? 0;
+        }
+
+        return ['min' => $totalMin, 'max' => $totalMax];
+    }
+
+    public function equippedArmor()
+    {
+        return $this->equippedItems
+            ->whereIn('type', ['armor', 'helmet', 'boots', 'shoulders', 'belt', 'legs']);
     }
 
     public function getBonusesAttribute(): array

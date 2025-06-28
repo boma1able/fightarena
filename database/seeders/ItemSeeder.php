@@ -14,6 +14,7 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Гострий Зуб',
             'required_level' => 1,
+            'defense_by_zone' => [],
             'buy_price' => 15,
             'sell_price' => 5,
             'bonuses' => ['strength' => 1],
@@ -28,6 +29,10 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Шкіряний Дух Мандрівника',
             'required_level' => 1,
+            'defense_by_zone' => [
+                'chest' => ['min' => 2, 'max' => 4],
+                'belly' => ['min' => 1, 'max' => 2]
+            ],
             'buy_price' => 12,
             'sell_price' => 4,
             'bonuses' => ['endurance' => 1],
@@ -42,6 +47,9 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Металевий Шолом Новачка',
             'required_level' => 1,
+            'defense_by_zone' => [
+                'head' => ['min' => 1, 'max' => 3],
+            ],
             'buy_price' => 10,
             'sell_price' => 3,
             'bonuses' => ['endurance' => 1],
@@ -56,6 +64,10 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Плечі Новобранця',
             'required_level' => 1,
+            'defense_by_zone' => [
+                'head' => ['min' => 1, 'max' => 2],
+                'chest' => ['min' => 2, 'max' => 4],
+            ],
             'buy_price' => 8,
             'sell_price' => 2,
             'bonuses' => ['strength' => 1],
@@ -70,6 +82,9 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Пояс Злидаря',
             'required_level' => 1,
+            'defense_by_zone' => [
+                'belt' => ['min' => 3, 'max' => 6],
+            ],
             'buy_price' => 6,
             'sell_price' => 2,
             'bonuses' => ['endurance' => 1],
@@ -84,6 +99,7 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Срібні Сережки Учня',
             'required_level' => 1,
+            'defense_by_zone' => [],
             'buy_price' => 5,
             'sell_price' => 1,
             'bonuses' => ['intellect' => 1],
@@ -98,6 +114,7 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Амулет Початківця',
             'required_level' => 1,
+            'defense_by_zone' => [],
             'buy_price' => 7,
             'sell_price' => 2,
             'bonuses' => ['luck' => 1],
@@ -112,6 +129,7 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Кільце Практиканта',
             'required_level' => 1,
+            'defense_by_zone' => [],
             'buy_price' => 5,
             'sell_price' => 1,
             'bonuses' => ['agility' => 1],
@@ -126,6 +144,9 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Рукавиці Робітника',
             'required_level' => 1,
+            'defense_by_zone' => [
+                'belly' => ['min' => 1, 'max' => 3],
+            ],
             'buy_price' => 6,
             'sell_price' => 2,
             'bonuses' => ['strength' => 1],
@@ -140,6 +161,7 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Дерев’яний Щит Початківця',
             'required_level' => 1,
+            'defense_by_zone' => [],
             'buy_price' => 12,
             'sell_price' => 4,
             'bonuses' => ['block' => 2],
@@ -154,6 +176,10 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Штани Учня',
             'required_level' => 1,
+            'defense_by_zone' => [
+                'belt' => ['min' => 1, 'max' => 2],
+                'legs' => ['min' => 3, 'max' => 6],
+            ],
             'buy_price' => 9,
             'sell_price' => 3,
             'bonuses' => ['endurance' => 1],
@@ -168,6 +194,9 @@ class ItemSeeder extends Seeder
         Item::create([
             'name' => 'Черевики Новачка',
             'required_level' => 1,
+            'defense_by_zone' => [
+                'legs' => ['min' => 2, 'max' => 4],
+            ],
             'buy_price' => 7,
             'sell_price' => 2,
             'bonuses' => ['agility' => 1],

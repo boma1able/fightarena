@@ -15,16 +15,13 @@ class Item extends Model
         'durability_current', 'durability_max',
         'bonuses', 'min_damage', 'max_damage', 'type', 'slot',
         'image', 'description', 'location', 'character_id',
+        'defense_by_zone',
     ];
 
     protected $casts = [
+        'defense_by_zone' => 'array',
         'bonuses' => 'array',
     ];
-
-    // public function scopeInShop($query)
-    // {
-    //     return $query->where('location', 'shop');
-    // }
 
     public function scopeInShop($query)
     {
@@ -32,11 +29,6 @@ class Item extends Model
             $q->wherePivot('location', 'shop');
         });
     }
-
-    // public function character()
-    // {
-    //     return $this->belongsTo(Character::class);
-    // }
 
     public function characters()
     {

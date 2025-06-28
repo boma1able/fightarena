@@ -121,6 +121,7 @@ class Inventory extends Component
             ->toArray();
 
         $this->dispatch('statUpdated');
+        $this->dispatch('update-armor');
     }
 
     public function sellItem(int $pivotId)

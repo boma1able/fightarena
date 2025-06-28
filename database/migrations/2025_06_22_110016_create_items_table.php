@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('sell_price')->default(0);
             $table->unsignedTinyInteger('min_damage')->nullable();
             $table->unsignedTinyInteger('max_damage')->nullable();
+            $table->json('defense_by_zone')->nullable();
             $table->enum('type', [
                 'sword', 'axe', 'mace', 'knife',
                 'armor', 'helmet', 'shield', 'shoulders', 'belt', 'arms', 'legs', 'boots',
