@@ -11,7 +11,7 @@
 
         <nav class="flex w-full justify-center items-center gap-4 mb-2">
             <a href="{{ route('home') }}" class="px-3 py-1 {{ request()->routeIs('home') ? 'bg-blue-500 text-white' : 'text-gray-700' }}">
-                Персонаж
+                Головна
             </a>
             <a href="{{ route('inventory') }}" class="px-3 py-1 {{ request()->routeIs('inventory') ? 'bg-blue-500 text-white' : 'text-gray-700' }}">
                 Інвентар

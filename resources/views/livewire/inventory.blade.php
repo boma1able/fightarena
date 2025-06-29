@@ -306,6 +306,11 @@
                     <div class="bg-gray-300" style="width: {{ $percentDraws }}%"></div>
                     <div class="bg-red-500" style="width: {{ $percentLosses }}%"></div>
                 </div>
+                <ul class="my-2 px-2">
+                    <li>Перемоги: {{ $character->wins }}</li>
+                    <li>Програші: {{ $character->losses }}</li>
+                    <li>Нічиї: {{ $character->draws }}</li>
+                </ul>
             </div>
 
             <div class="w-[700px] ml-[auto]">

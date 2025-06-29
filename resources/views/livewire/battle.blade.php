@@ -20,11 +20,107 @@
                 <div class="block w-full text-center mb-3"><strong>{{ $character->user->name }}</strong> [{{ $character->level }}]</div>
                 <div class="flex">
                     <div>
-                        <div id="helmet" class="w-[90px] h-[90px] border"></div>
-                        <div id="sholders" class="w-[90px] h-[50px] border"></div>
-                        <div id="weapon" class="w-[90px] h-[90px] border"></div>
-                        <div id="torso" class="w-[90px] h-[120px] border"></div>
-                        <div id="belt" class="w-[90px] h-[50px] border"></div>
+                        <div id="helmet" class="relative w-[90px] h-[90px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
+                            @if(isset($equippedBySlot['helmet']))
+                                @php
+                                    $helmet = (object) $equippedBySlot['helmet'];
+                                    $helmet->pivot = (object) $helmet->pivot;
+
+                                    $title = $helmet->name . ' [' . $helmet->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $helmet->pivot->current_durability . ' / ' . $helmet->pivot->max_durability . "\n";
+
+                                    foreach ($helmet->bonuses ?? [] as $stat => $value) {
+                                        $title .= ucfirst($stat) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                <div class="w-[90px] h-[90px]" title="{{ trim($title) }}">
+                                    <img src="{{ asset($helmet->image) }}" class="w-full h-full object-cover p-1" alt="{{ ($helmet->name) }}">
+                                </div>
+                            @else
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/helmet.png') }}) center center no-repeat; background-size: cover;background-size: 75%; opacity: .3"></span>
+                            @endif
+                        </div>
+                        <div id="shoulders" class="relative mt-[-1px] w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
+                            @if(isset($equippedBySlot['shoulders']))
+                                @php
+                                    $shoulders = (object) $equippedBySlot['shoulders'];
+                                    $shoulders->pivot = (object) $shoulders->pivot;
+
+                                    $title = $shoulders->name . ' [' . $shoulders->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $shoulders->pivot->current_durability . ' / ' . $shoulders->pivot->max_durability . "\n";
+
+                                    foreach ($shoulders->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                <div class="w-[90px] h-[50px]" title="{{ trim($title) }}">
+                                    <img src="{{ asset($shoulders->image) }}" class="w-full h-full object-cover p-1" alt="{{ $shoulders->name }}">
+                                </div>
+                            @else
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/shoulders.png') }}) center center no-repeat; background-size: 80%; opacity: .3"></span>
+                            @endif
+                        </div>
+                        <div id="weapon" class="relative w-[90px] h-[90px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
+                            @if(isset($equippedBySlot['weapon']))
+                                @php
+                                    $weapon = (object) $equippedBySlot['weapon'];
+                                    $weapon->pivot = (object) $weapon->pivot;
+
+                                    $title = $weapon->name . ' [' . $weapon->required_level . ']' . "\n"
+                                        . 'Урон: ' . $weapon->min_damage . '–' . $weapon->max_damage . "\n"
+                                        . 'Міцність: ' . $weapon->pivot->current_durability . ' / ' . $weapon->pivot->max_durability . "\n";
+
+                                    foreach ($weapon->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                <div class="w-[90px] h-[90px]" title="{{ trim($title) }}">
+                                    <img src="{{ asset($weapon->image) }}" class="w-full h-full object-cover p-1" alt="{{ $weapon->name }}">
+                                </div>
+                            @else
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/weapon.png') }}) center center no-repeat; background-size: 70%; opacity: .3"></span>
+                            @endif
+                        </div>
+                        <div id="armor" class="relative w-[90px] h-[120px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
+                            @if(isset($equippedBySlot['armor']))
+                                @php
+                                    $armor = (object) $equippedBySlot['armor'];
+                                    $armor->pivot = (object) $armor->pivot;
+
+                                    $title = $armor->name . ' [' . $armor->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $armor->pivot->current_durability . ' / ' . $armor->pivot->max_durability . "\n";
+
+                                    foreach ($armor->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                <div class="w-[90px] h-[120px]" title="{{ trim($title) }}">
+                                    <img src="{{ asset($armor->image) }}" class="w-full h-full object-cover p-1" alt="{{ $armor->name }}">
+                                </div>
+                            @else
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/armor.png') }}) center center no-repeat; background-size: cover; background-size: 85%; opacity: .3"></span>
+                            @endif
+                        </div>
+                        <div id="belt" class="relative w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
+                            @if(isset($equippedBySlot['belt']))
+                                @php
+                                    $belt = (object) $equippedBySlot['belt'];
+                                    $belt->pivot = (object) $belt->pivot;
+
+                                    $title = $belt->name . ' [' . $belt->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $belt->pivot->current_durability . ' / ' . $belt->pivot->max_durability . "\n";
+
+                                    foreach ($belt->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                <div class="w-[90px] h-[50px]" title="{{ trim($title) }}">
+                                    <img src="{{ asset($belt->image) }}" class="w-full h-full object-cover p-1" alt="{{ $belt->name }}">
+                                </div>
+                            @else
+                            <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/belt.png') }}) center center no-repeat; background-size: cover; transform: rotate(45deg); background-size: 60%; opacity: .3"></span>
+                            @endif
+                        </div>
                     </div>
                     <div class="relative w-[165px] h-full">
                         @livewire('health-regen')
@@ -62,19 +158,153 @@
                     </div>
 
                     <div>
-                        <div class="w-[90px] h-[90px] border">
-                            <div id="earrings" class="h-[30px] border"></div>
-                            <div id="neckless" class="h-[30px] border"></div>
-                            <div class="flex h-[30px] border">
-                                <div id="ring1" class="w-[30px] border"></div>
-                                <div id="ring2" class="w-[30px] border"></div>
-                                <div id="ring3" class="w-[30px] border"></div>
+                        <div class="w-[90px] h-[90px]">
+                            <div id="earrings" class="relative h-[30px]" style="box-shadow: inset 0px 1px 5px 1px #5a5a5a36;">
+                                @if(isset($equippedBySlot['earrings']))
+                                    @php
+                                        $earrings = (object) $equippedBySlot['earrings'];
+                                        $earrings->pivot = (object) $earrings->pivot;
+
+                                        $title = $earrings->name . ' [' . $earrings->required_level . ']' . "\n"
+                                            . 'Міцність: ' . $earrings->pivot->current_durability . ' / ' . $earrings->pivot->max_durability . "\n";
+
+                                        foreach ($earrings->bonuses ?? [] as $stat => $value) {
+                                            $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                        }
+                                    @endphp
+                                    <div class="w-[90px] h-[30px]" title="{{ trim($title) }}">
+                                        <img src="{{ asset($earrings->image) }}" class="w-full h-full object-cover p-1" alt="{{ $earrings->name }}">
+                                    </div>
+                                @else
+                                    <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/earrings.png') }}) center center no-repeat; background-size: contain; opacity: .3"></span>
+                                @endif
+                            </div>
+                            <div id="neckless" class="relative h-[30px]" style="box-shadow: inset 0px 1px 2px 1px #5a5a5a36;">
+                                @if(isset($equippedBySlot['neckless']))
+                                @php
+                                    $neckless = (object) $equippedBySlot['neckless'];
+                                    $neckless->pivot = (object) $neckless->pivot;
+
+                                    $title = $neckless->name . ' [' . $neckless->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $neckless->pivot->current_durability . ' / ' . $neckless->pivot->max_durability . "\n";
+
+                                    foreach ($neckless->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                    <div class="w-[90px] h-[30px]" title="{{ trim($title) }}">
+                                        <img src="{{ asset($neckless->image) }}" class="w-full h-full object-cover p-1" alt="{{ $neckless->name }}">
+                                    </div>
+                                @else
+                                    <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/neckless.png') }}) center center no-repeat; background-size: contain; opacity: .3"></span>
+                                @endif
+                            </div>
+                            <div class="flex h-[30px]">
+                                @foreach(['ring1', 'ring2', 'ring3'] as $ringSlot)
+                                    <div id="{{ $ringSlot }}" class="relative w-[30px]" style="box-shadow: inset 0px 0px 1px 1px #5a5a5a36;">
+                                        @if(isset($equippedBySlot[$ringSlot]))
+                                            @php
+                                                $ring = (object) $equippedBySlot[$ringSlot];
+                                                $ring->pivot = (object) $ring->pivot;
+
+                                                $title = $ring->name . ' [' . $ring->required_level . ']' . "\n"
+                                                    . 'Міцність: ' . $ring->pivot->current_durability . ' / ' . $ring->pivot->max_durability . "\n";
+
+                                                foreach ($ring->bonuses ?? [] as $stat => $value) {
+                                                    $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                                }
+                                            @endphp
+                                            <div class="w-[30px] h-[30px]" title="{{ trim($title) }}">
+                                                <img src="{{ asset($ring->image) }}" class="w-full h-full object-cover p-1" alt="{{ $ring->name }}">
+                                            </div>
+                                        @else
+                                            <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/ring.png') }}) center center no-repeat; background-size: 80%; opacity: .3"></span>
+                                        @endif
+                                    </div>
+                                @endforeach
+
                             </div>
                         </div>
-                        <div id="arms" class="w-[90px] h-[50px] border"></div>
-                        <div id="shield" class="w-[90px] h-[90px] border"></div>
-                        <div id="legs" class="w-[90px] h-[120px] border"></div>
-                        <div id="boots" class="w-[90px] h-[50px] border"></div>
+                        <div id="arms" class="relative w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 4px 1px #5a5a5a36;">
+                            @if(isset($equippedBySlot['arms']))
+                                @php
+                                    $arms = (object) $equippedBySlot['arms'];
+                                    $arms->pivot = (object) $arms->pivot;
+
+                                    $title = $arms->name . ' [' . $arms->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $arms->pivot->current_durability . ' / ' . $arms->pivot->max_durability . "\n";
+
+                                    foreach ($arms->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                <div class="w-[90px] h-[50px]" title="{{ trim($title) }}">
+                                    <img src="{{ asset($arms->image) }}" class="w-full h-full object-cover p-1" alt="{{ $arms->name }}">
+                                </div>
+                            @else
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/arms.png') }}) center center no-repeat; background-size: contain; opacity: .3"></span>
+                            @endif
+                        </div>
+                        <div id="shield" class="relative w-[90px] h-[90px]" style="box-shadow: inset 0px 2px 5px 1px #5a5a5a36;">
+                            @if(isset($equippedBySlot['shield']))
+                                @php
+                                    $shield = (object) $equippedBySlot['shield'];
+                                    $shield->pivot = (object) $shield->pivot;
+
+                                    $title = $shield->name . ' [' . $shield->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $shield->pivot->current_durability . ' / ' . $shield->pivot->max_durability . "\n";
+
+                                    foreach ($shield->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                <div class="w-[90px] h-[90px]" title="{{ trim($title) }}">
+                                    <img src="{{ asset($shield->image) }}" class="w-full h-full object-cover p-1" alt="{{ $shield->name }}">
+                                </div>
+                            @else
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/shield.png') }}) center center no-repeat; background-size: cover; background-size: 80%; opacity: .3"></span>
+                            @endif
+                        </div>
+                        <div id="legs" class="relative w-[90px] h-[120px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
+                            @if(isset($equippedBySlot['legs']))
+                                @php
+                                    $legs = (object) $equippedBySlot['legs'];
+                                    $legs->pivot = (object) $legs->pivot;
+
+                                    $title = $legs->name . ' [' . $legs->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $legs->pivot->current_durability . ' / ' . $legs->pivot->max_durability . "\n";
+
+                                    foreach ($legs->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                <div class="w-[90px] h-[120px]" title="{{ trim($title) }}">
+                                    <img src="{{ asset($legs->image) }}" class="w-full h-full object-cover p-1" alt="{{ $legs->name }}">
+                                </div>
+                            @else
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/legs.png') }}) center center no-repeat; background-size: 80%; opacity: .3"></span>
+                            @endif
+                        </div>
+                        <div id="boots" class="relative w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
+                            @if(isset($equippedBySlot['boots']))
+                                @php
+                                    $boots = (object) $equippedBySlot['boots'];
+                                    $boots->pivot = (object) $boots->pivot;
+
+                                    $title = $boots->name . ' [' . $boots->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $boots->pivot->current_durability . ' / ' . $boots->pivot->max_durability . "\n";
+
+                                    foreach ($boots->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                @endphp
+                                <div class="w-[90px] h-[50px]" title="{{ trim($title) }}">
+                                    <img src="{{ asset($boots->image) }}" class="w-full h-full object-cover p-1" alt="{{ $boots->name }}">
+                                </div>
+                            @else
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/boots.png') }}) center center no-repeat; background-size: contain; opacity: .3"></span>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

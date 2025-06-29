@@ -367,14 +367,13 @@ class Character extends Model
                 continue;
             }
 
-            // 10% шанс на зношення
+            // 1% шанс на зношення
             if (rand(1, 100) <= 1) {
                 $newDurability = max(0, $pivot->current_durability - 1);
 
                 $updateData = ['current_durability' => $newDurability];
                 $msg = "{$item->name} зазнав шкоди [залишилось $newDurability / $pivot->max_durability].";
 
-                // Якщо зламано — ставимо прапорець
                 if ($newDurability === 0) {
                     $updateData['is_broken'] = true;
                     $msg = "Предмет {$item->name} зламався!";
