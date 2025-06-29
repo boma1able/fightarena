@@ -368,7 +368,7 @@ class Character extends Model
             }
 
             // 10% шанс на зношення
-            if (rand(1, 100) <= 50) {
+            if (rand(1, 100) <= 1) {
                 $newDurability = max(0, $pivot->current_durability - 1);
 
                 $updateData = ['current_durability' => $newDurability];

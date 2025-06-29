@@ -16,6 +16,8 @@ class Battle extends Component
     public $attackChoice = null;
     public $defenseChoice = null;
 
+    public bool $battleFinished = false;
+
     public $messages = [];
 
     public function mount()
@@ -280,7 +282,7 @@ class Battle extends Component
             }
 
             $this->resetBattle();
-            return redirect()->route('home');
+            return redirect()->route('history');
         }
 
         $this->attackChoice = null;

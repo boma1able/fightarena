@@ -16,7 +16,7 @@
                 <div class="flex">
 
                     <div>
-                        <div id="helmet" class="relative w-[90px] h-[90px] border">
+                        <div id="helmet" class="relative w-[90px] h-[90px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['helmet']))
                                 @php
                                     $helmet = $equippedBySlot['helmet'];
@@ -32,10 +32,10 @@
                                     <img src="{{ asset($equippedBySlot['helmet']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['helmet']->name }}">
                                 </div>
                             @else
-                                <span class="text-gray-400 text-sm">Порожньо</span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/helmet.png') }}) center center no-repeat; background-size: cover;background-size: 75%; opacity: .3"></span>
                             @endif
                         </div>
-                        <div id="shoulders" class="relative mt-[-1px] w-[90px] h-[50px] border">
+                        <div id="shoulders" class="relative mt-[-1px] w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['shoulders']))
                                 @php
                                     $shoulders = $equippedBySlot['shoulders'];
@@ -51,10 +51,10 @@
                                     <img src="{{ asset($equippedBySlot['shoulders']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['shoulders']->name }}">
                                 </div>
                             @else
-                                <span class="text-gray-400 text-sm">Порожньо</span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/shoulders.png') }}) center center no-repeat; background-size: 80%; opacity: .3"></span>
                             @endif
                         </div>
-                        <div id="weapon" class="relative w-[90px] h-[90px] border">
+                        <div id="weapon" class="relative w-[90px] h-[90px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['weapon']))
                                 @php
                                     $weapon = $equippedBySlot['weapon'];
@@ -71,10 +71,10 @@
                                     <img src="{{ asset($equippedBySlot['weapon']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['weapon']->name }}">
                                 </div>
                             @else
-                                <span class="w-[90px] h-[90px] block"  style="background: url() center center no-repeat; background-size: cover;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/weapon.png') }}) center center no-repeat; background-size: 70%; opacity: .3"></span>
                             @endif
                         </div>
-                        <div id="armor" class="relative w-[90px] h-[120px] border">
+                        <div id="armor" class="relative w-[90px] h-[120px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['armor']))
                                 @php
                                     $armor = $equippedBySlot['armor'];
@@ -90,10 +90,10 @@
                                     <img src="{{ asset($equippedBySlot['armor']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['armor']->name }}">
                                 </div>
                             @else
-                                <span class="text-gray-400 text-sm">Порожньо</span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/armor.png') }}) center center no-repeat; background-size: cover; background-size: 85%; opacity: .3"></span>
                             @endif
                         </div>
-                        <div id="belt" class="relative w-[90px] h-[50px] border">
+                        <div id="belt" class="relative w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['belt']))
                                 @php
                                     $belt = $equippedBySlot['belt'];
@@ -109,7 +109,7 @@
                                     <img src="{{ asset($equippedBySlot['belt']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['belt']->name }}">
                                 </div>
                             @else
-                                <span class="text-gray-400 text-sm">Порожньо</span>
+                            <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/belt.png') }}) center center no-repeat; background-size: cover; transform: rotate(45deg); background-size: 60%; opacity: .3"></span>
                             @endif
                         </div>
                     </div>
@@ -120,12 +120,12 @@
                             <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                         </div>
                         <div id="avatar" class="w-[165px] h-[334px]" style="background: url({{ asset('images/avatar.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]"></div>
-                        <div id="banner" class="w-[165px] h-[50px] border"></div>
+                        <div id="banner" class="w-[165px] h-[50px]"></div>
                     </div>
 
                     <div>
-                        <div class="w-[90px] h-[90px] border">
-                            <div id="earrings" class="relative h-[30px] border">
+                        <div class="w-[90px] h-[90px]">
+                            <div id="earrings" class="relative h-[30px]" style="box-shadow: inset 0px 1px 5px 1px #5a5a5a36;">
                                 @if(isset($equippedBySlot['earrings']))
                                     @php
                                         $earrings = $equippedBySlot['earrings'];
@@ -141,10 +141,10 @@
                                         <img src="{{ asset($equippedBySlot['earrings']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['earrings']->name }}">
                                     </div>
                                 @else
-                                    <span class="text-gray-400 text-sm">Порожньо</span>
+                                    <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/earrings.png') }}) center center no-repeat; background-size: contain; opacity: .3"></span>
                                 @endif
                             </div>
-                            <div id="neckless" class="relative h-[30px] border">
+                            <div id="neckless" class="relative h-[30px]" style="box-shadow: inset 0px 1px 2px 1px #5a5a5a36;">
                                 @if(isset($equippedBySlot['neckless']))
                                 @php
                                     $neckless = $equippedBySlot['neckless'];
@@ -160,12 +160,12 @@
                                         <img src="{{ asset($equippedBySlot['neckless']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['neckless']->name }}">
                                     </div>
                                 @else
-                                    <span class="text-gray-400 text-sm">Порожньо</span>
+                                    <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/neckless.png') }}) center center no-repeat; background-size: contain; opacity: .3"></span>
                                 @endif
                             </div>
-                            <div class="flex h-[30px] border">
+                            <div class="flex h-[30px]">
                                 @foreach(['ring1', 'ring2', 'ring3'] as $ringSlot)
-                                    <div id="{{ $ringSlot }}" class="relative w-[30px] border">
+                                    <div id="{{ $ringSlot }}" class="relative w-[30px]" style="box-shadow: inset 0px 0px 1px 1px #5a5a5a36;">
                                         @if(isset($equippedBySlot[$ringSlot]))
                                             @php
                                                 $ring = $equippedBySlot[$ringSlot];
@@ -181,7 +181,7 @@
                                                 <img src="{{ asset($ring->image) }}" class="w-full h-full object-cover p-1" alt="{{ $ring->name }}">
                                             </div>
                                         @else
-                                            <span class="text-gray-400 text-xs">П</span>
+                                            <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/ring.png') }}) center center no-repeat; background-size: 80%; opacity: .3"></span>
                                         @endif
                                     </div>
                                 @endforeach
@@ -189,7 +189,7 @@
                             </div>
 
                         </div>
-                        <div id="arms" class="relative w-[90px] h-[50px] border">
+                        <div id="arms" class="relative w-[90px] h-[50px] p-[5px]" style="box-shadow: inset 0px 2px 4px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['arms']))
                                 @php
                                     $arms = $equippedBySlot['arms'];
@@ -205,10 +205,10 @@
                                     <img src="{{ asset($equippedBySlot['arms']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['arms']->name }}">
                                 </div>
                             @else
-                                <span class="text-gray-400 text-sm">Порожньо</span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/arms.png') }}) center center no-repeat; background-size: contain; opacity: .3"></span>
                             @endif
                         </div>
-                        <div id="shield" class="relative w-[90px] h-[90px] border">
+                        <div id="shield" class="relative w-[90px] h-[90px]" style="box-shadow: inset 0px 2px 5px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['shield']))
                                 @php
                                     $shield = $equippedBySlot['shield'];
@@ -224,10 +224,10 @@
                                     <img src="{{ asset($equippedBySlot['shield']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['shield']->name }}">
                                 </div>
                             @else
-                                <span class="text-gray-400 text-sm">Порожньо</span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/shield.png') }}) center center no-repeat; background-size: cover; background-size: 80%; opacity: .3"></span>
                             @endif
                         </div>
-                        <div id="legs" class="relative w-[90px] h-[120px] border">
+                        <div id="legs" class="relative w-[90px] h-[120px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['legs']))
                                 @php
                                     $legs = $equippedBySlot['legs'];
@@ -243,10 +243,10 @@
                                     <img src="{{ asset($equippedBySlot['legs']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['legs']->name }}">
                                 </div>
                             @else
-                                <span class="text-gray-400 text-sm">Порожньо</span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/legs.png') }}) center center no-repeat; background-size: 80%; opacity: .3"></span>
                             @endif
                         </div>
-                        <div id="boots" class="relative w-[90px] h-[50px] border">
+                        <div id="boots" class="relative w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['boots']))
                                 @php
                                     $boots = $equippedBySlot['boots'];
@@ -262,7 +262,7 @@
                                     <img src="{{ asset($equippedBySlot['boots']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['boots']->name }}">
                                 </div>
                             @else
-                                <span class="text-gray-400 text-sm">Порожньо</span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/boots.png') }}) center center no-repeat; background-size: contain; opacity: .3"></span>
                             @endif
                         </div>
                     </div>

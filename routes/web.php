@@ -3,11 +3,15 @@
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BattleController;
+use App\Http\Controllers\BattleHistoryController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ShopController;
+use App\Livewire\BattleHistoryPage;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 
@@ -30,3 +34,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/battle', [BattleController::class, 'index'])->name('battle');
     Route::get('/battle/stats', [BattleController::class, 'stats'])->name('battle.stats');
 });
+
+Route::get('/history', [BattleHistoryController::class, 'index'])->name('history');
