@@ -19,6 +19,9 @@
             <a href="{{ route('shop') }}" class="px-3 py-1 {{ request()->routeIs('shop') ? 'bg-blue-500 text-white' : 'text-gray-700' }}">
                 Магазин
             </a>
+            <a href="{{ route('forge') }}" class="px-3 py-1 {{ request()->routeIs('forge') ? 'bg-blue-500 text-white' : 'text-gray-700' }}">
+                Кузння
+            </a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="text-red-500 px-3 py-1">Вийти</button>

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->json('defense_by_zone')->nullable();
             $table->enum('type', [
                 'sword', 'axe', 'mace', 'knife',
-                'armor', 'helmet', 'shield', 'shoulders', 'belt', 'arms', 'legs', 'boots',
+                'armor', 'helmet', 'shield', 'arms', 'legs', 'boots',
                 'ring', 'earrings','neckless'])->nullable();
             $table->string('slot')->nullable();
             $table->json('bonuses')->nullable();

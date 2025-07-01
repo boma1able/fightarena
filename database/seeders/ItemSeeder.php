@@ -32,7 +32,7 @@ class ItemSeeder extends Seeder
             'name' => 'Шкіряний Дух Мандрівника',
             'required_level' => 1,
             'defense_by_zone' => [
-                'chest' => ['min' => 2, 'max' => 4],
+                'chest' => ['min' => 1, 'max' => 4],
                 'belly' => ['min' => 1, 'max' => 2]
             ],
             'buy_price' => 12,
@@ -51,7 +51,7 @@ class ItemSeeder extends Seeder
             'name' => 'Металевий Шолом Новачка',
             'required_level' => 1,
             'defense_by_zone' => [
-                'head' => ['min' => 1, 'max' => 3],
+                'head' => ['min' => 1, 'max' => 4],
             ],
             'buy_price' => 10,
             'sell_price' => 3,
@@ -62,43 +62,6 @@ class ItemSeeder extends Seeder
             'slot' => 'helmet',
             'image' => '/images/items/helmet/helmet-0.jpeg',
             'description' => 'Старий, трохи пом’ятий шолом зі сталі. Надійно прикриває голову від легких ударів, але залишає вуха холодними. Ідеальний для тих, хто тільки починає шлях воїна.',
-            'is_shop' => true,
-        ]);
-
-        Item::create([
-            'name' => 'Плечі Новобранця',
-            'required_level' => 1,
-            'defense_by_zone' => [
-                'head' => ['min' => 1, 'max' => 2],
-                'chest' => ['min' => 2, 'max' => 4],
-            ],
-            'buy_price' => 8,
-            'sell_price' => 2,
-            'bonuses' => ['strength' => 1],
-            'min_damage' => null,
-            'max_damage' => null,
-            'type' => 'shoulders',
-            'slot' => 'shoulders',
-            'image' => '/images/items/shoulders/shoulders-0.jpg',
-            'description' => 'Прості шкіряні наплічники, які забезпечують мінімальний захист плечей. Вони легкі, але вже дають відчуття справжнього захисту на полі бою.',
-            'is_shop' => true,
-        ]);
-
-        Item::create([
-            'name' => 'Пояс Злидаря',
-            'required_level' => 1,
-            'defense_by_zone' => [
-                'belt' => ['min' => 3, 'max' => 6],
-            ],
-            'buy_price' => 6,
-            'sell_price' => 2,
-            'bonuses' => ['endurance' => 1],
-            'min_damage' => null,
-            'max_damage' => null,
-            'type' => 'belt',
-            'slot' => 'belt',
-            'image' => '/images/items/belt/belt-0.jpg',
-            'description' => 'Старий потертий пояс, який ледве тримає штани. Все ж таки дає невеликий приріст витривалості.',
             'is_shop' => true,
         ]);
 
@@ -189,7 +152,7 @@ class ItemSeeder extends Seeder
             'required_level' => 1,
             'defense_by_zone' => [
                 'belt' => ['min' => 1, 'max' => 2],
-                'legs' => ['min' => 3, 'max' => 6],
+                'legs' => ['min' => 2, 'max' => 4],
             ],
             'buy_price' => 9,
             'sell_price' => 3,
@@ -207,7 +170,7 @@ class ItemSeeder extends Seeder
             'name' => 'Черевики Новачка',
             'required_level' => 1,
             'defense_by_zone' => [
-                'legs' => ['min' => 2, 'max' => 4],
+                'legs' => ['min' => 1, 'max' => 4],
             ],
             'buy_price' => 7,
             'sell_price' => 2,

@@ -2,10 +2,11 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
+use App\Models\Item;
 use App\Models\Monster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Component;
 
 class Battle extends Component
 {
@@ -13,6 +14,7 @@ class Battle extends Component
     public $monster;
 
     public array $equippedBySlot = [];
+    public array $monsterEquippedBySlot = [];
 
     public $is_in_battle = false;
     public $attackChoice = null;
@@ -43,12 +45,30 @@ class Battle extends Component
         }
 
         if (session()->has('battle_monster_id')) {
-            $this->monster = Monster::find(session('battle_monster_id'));
+            $this->monster = Monster::with('items')->find(session('battle_monster_id'));
         }
 
         if (!$this->monster) {
             $this->monster = $this->generateMonster($this->character->level);
             session(['battle_monster_id' => $this->monster->id]);
+        }
+
+        // Отримуємо екіпіровку монстра
+        $equippedItems = $this->monster->items->groupBy(function ($item) {
+            return $item->pivot->slot;
+        });
+
+        // Вказуємо всі слоти, які потрібно мати
+        $allSlots = [
+            'helmet', 'armor', 'boots', 'weapon', 'shield',
+            'legs', 'arms', 'earrings', 'neckless',
+            'ring1', 'ring2', 'ring3'
+        ];
+
+        // Формуємо масив екіпіровки монстра, щоб кожен слот був, навіть якщо null
+        $this->monsterEquippedBySlot = [];
+        foreach ($allSlots as $slot) {
+            $this->monsterEquippedBySlot[$slot] = $equippedItems[$slot][0] ?? null;
         }
 
         $this->character->is_in_battle = true;
@@ -75,7 +95,7 @@ class Battle extends Component
 
         $name = fake()->randomElement(config('monster_names'));
 
-        return Monster::create([
+        $monster = Monster::create([
             'name' => $name,
             'level' => $level,
             'gold' => rand(1, 7) + $level,
@@ -87,7 +107,109 @@ class Battle extends Component
             'endurance' => $baseStats['endurance'],
             'is_temporary' => true,
         ]);
+
+        // Додаємо предмети
+        if ($level > 0) {
+            $this->equipMonster($monster);
+        }
+
+        return $monster;
     }
+
+    public function equipMonster(Monster $monster): void
+    {
+        $allSlots = [
+            'helmet', 'armor', 'boots', 'weapon', 'shield', 'legs', 'arms', 'earrings', 'neckless',
+        ];
+
+        // Максимальна кількість предметів = 1 + level (але не більше ніж кількість слотів)
+        $maxItems = min(count($allSlots), max(1, $monster->level + 1));
+        $equippedCount = 0;
+
+        // Якщо рівень >= 3 — зброя обов'язково
+        if ($monster->level >= 3) {
+            $weapon = Item::query()
+                ->where('slot', 'weapon')
+                ->where('required_level', '<=', $monster->level)
+                ->inRandomOrder()
+                ->first();
+
+            if ($weapon) {
+                $monster->items()->attach($weapon->id, [
+                    'slot' => 'weapon',
+                    'is_broken' => false,
+                ]);
+                $equippedCount++;
+
+                foreach ($weapon->bonuses ?? [] as $stat => $value) {
+                    if (in_array($stat, ['strength', 'agility', 'intuition', 'endurance'])) {
+                        $monster->{$stat} += $value;
+                    }
+                }
+            }
+        }
+
+        // Вибираємо випадкові інші слоти (крім weapon, якщо вже є)
+        $randomSlots = collect($allSlots)
+            ->filter(fn($slot) => !($monster->level >= 3 && $slot === 'weapon'))
+            ->shuffle()
+            ->take($maxItems - $equippedCount);
+
+        foreach ($randomSlots as $slot) {
+            $item = Item::query()
+                ->where('slot', $slot)
+                ->where('required_level', '<=', $monster->level)
+                ->inRandomOrder()
+                ->first();
+
+            if ($item) {
+                $monster->items()->attach($item->id, [
+                    'slot' => $slot,
+                    'is_broken' => false,
+                ]);
+
+                foreach ($item->bonuses ?? [] as $stat => $value) {
+                    if (in_array($stat, ['strength', 'agility', 'intuition', 'endurance'])) {
+                        $monster->{$stat} += $value;
+                    }
+                }
+            }
+        }
+
+        // Додаємо кільця
+        for ($i = 1; $i <= 3; $i++) {
+            if ($equippedCount >= $maxItems) break;
+
+            $ringSlot = 'ring' . $i;
+
+            $item = Item::query()
+                ->where('slot', 'ring')
+                ->where('required_level', '<=', $monster->level)
+                ->inRandomOrder()
+                ->first();
+
+            if ($item) {
+                $monster->items()->attach($item->id, [
+                    'slot' => $ringSlot,
+                    'is_broken' => false,
+                ]);
+                $equippedCount++;
+
+                foreach ($item->bonuses ?? [] as $stat => $value) {
+                    if (in_array($stat, ['strength', 'agility', 'intuition', 'endurance'])) {
+                        $monster->{$stat} += $value;
+                    }
+                }
+            }
+        }
+
+        // Оновлюємо здоров’я
+        $monster->base_health = $monster->endurance * 6;
+        $monster->current_health = $monster->base_health;
+        $monster->save();
+    }
+
+
 
     public function fightStep()
     {
@@ -152,7 +274,7 @@ class Battle extends Component
                 if ($charDamage > 0){
                     $msg = "Ви вдарили " . $this->monster->name .  " у " . $possibleZones[$charAttack] . " і нанесли $charDamage шкоди.";
                 } else{
-                    $msg = "Ви вдарили " . $this->$monster->name . " у " . $possibleZones[$charAttack] . " але не нанесли жодної шкоди.";
+                    $msg = "Ви вдарили " . $this->monster->name . " у " . $possibleZones[$charAttack] . " але не нанесли жодної шкоди.";
                 }
                 if ($isCrit) $msg .= " Критичний удар!";
                 $this->messages[] = $msg;

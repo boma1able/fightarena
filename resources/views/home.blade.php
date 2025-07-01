@@ -29,24 +29,7 @@
                                     <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/helmet.png') }}) center center no-repeat; background-size: cover;background-size: 75%; opacity: .3"></span>
                                 @endif
                             </div>
-                            <div id="shoulders" class="relative mt-[-1px] w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
-                                @if(isset($equippedBySlot['shoulders']))
-                                    @php
-                                        $shoulders = $equippedBySlot['shoulders'];
-                                        $title = $shoulders->name . ' [' . $shoulders->required_level . ']' . "\n"
-                                            . 'Міцність: ' . $shoulders->pivot->current_durability . ' / ' . $shoulders->pivot->max_durability . "\n";
 
-                                        foreach ($shoulders->bonuses ?? [] as $stat => $value) {
-                                            $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
-                                        }
-                                    @endphp
-                                    <div class="w-[90px] h-[50px]" title="{{ trim($title) }}">
-                                        <img src="{{ asset($equippedBySlot['shoulders']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['shoulders']->name }}">
-                                    </div>
-                                @else
-                                    <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/shoulders.png') }}) center center no-repeat; background-size: 80%; opacity: .3"></span>
-                                @endif
-                            </div>
                             <div id="weapon" class="relative w-[90px] h-[90px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
                                 @if(isset($equippedBySlot['weapon']))
                                     @php
@@ -84,24 +67,7 @@
                                     <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/armor.png') }}) center center no-repeat; background-size: cover; background-size: 85%; opacity: .3"></span>
                                 @endif
                             </div>
-                            <div id="belt" class="relative w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
-                                @if(isset($equippedBySlot['belt']))
-                                    @php
-                                        $belt = $equippedBySlot['belt'];
-                                        $title = $belt->name . ' [' . $belt->required_level . ']' . "\n"
-                                            . 'Міцність: ' . $belt->pivot->current_durability . ' / ' . $belt->pivot->max_durability . "\n";
 
-                                        foreach ($belt->bonuses ?? [] as $stat => $value) {
-                                            $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
-                                        }
-                                    @endphp
-                                    <div class="w-[90px] h-[50px]" title="{{ trim($title) }}">
-                                        <img src="{{ asset($equippedBySlot['belt']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['belt']->name }}">
-                                    </div>
-                                @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/belt.png') }}) center center no-repeat; background-size: cover; transform: rotate(45deg); background-size: 60%; opacity: .3"></span>
-                                @endif
-                            </div>
                         </div>
                         <div class="w-[165px] h-full">
                             @livewire('health-regen')
@@ -300,13 +266,12 @@
                     <div class="h-[400] flex justify-end">
                         <img src="{{ asset('images/central-squere.jpg') }}" class="w-[auto] max-h-full" alt="image">
                     </div> --}}
+                    <div class="w-full flex justify-center py-5">
+                        <a href="{{ route('battle') }}" class="inline-block bg-blue-500 text-white px-4 py-2 hover:bg-blue-600">
+                            Перейти до бою
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <div class="w-full flex justify-center py-5">
-                <a href="{{ route('battle') }}" class="inline-block bg-blue-500 text-white px-4 py-2 hover:bg-blue-600">
-                    Перейти до бою
-                </a>
             </div>
 
             <div class="w-[600px] flex justify-center">

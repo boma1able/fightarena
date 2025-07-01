@@ -33,23 +33,31 @@
                         'agility' => 'Ловкість',
                         'intelligence' => 'Інтелект',
                         'endurance' => 'Витривалість',
+                        'head' => 'голови',
+                        'chest' => 'грудей',
+                        'belly' => 'живота',
+                        'belt' => 'пояса',
+                        'legs' => 'ніг'
                     ];
                 @endphp
                 @forelse($items as $item)
                     <div id="item-{{ $item->id }}" class="flex odd:bg-[#f9f9f9] p-2">
                         <div class="item flex flex-col w-[200px] items-center justify-center py-4">
-                            @php
-                                $heightClass = match(true) {
-                                    in_array($item->type, ['knife', 'sword', 'axe', 'mace', 'helmet', 'shield']) => 'h-[90px]',
-                                    in_array($item->type, ['armor', 'legs']) => 'h-[120px]',
-                                    in_array($item->type, ['shoulders', 'belt', 'arms', 'boots']) => 'h-[50px]',
-                                    in_array($item->type, ['earrings', 'neckless', 'ring']) => 'h-[30px]',
-                                    default => '',
-                                };
-                            @endphp
-                            <div class="{{ $item->type === 'ring' ? 'h-[30px]' : 'w-[90px]' }} {{ $heightClass }} shadow-md cursor-pointer" title="Купити">
-                                <img src="{{ asset($item->image) }}" class="w-full h-full object-cover" alt="{{ $item->name }}">
+
+                            <div wire:click="equipItem({{ $item->pivot->id }})" class="relative w-[60px] h-[90px]"
+                                style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                title="Екіпірувати">
+                                <img src="{{ asset('images/items/frame-gray.png') }}"
+                                    class="absolute w-[60px]"
+                                    style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    alt="{{ $item->name }}">
+                                <img src="{{ asset($item->image) }}"
+                                    class="absolute w-[60px]"
+                                    class="absolute w-[90px]"
+                                    style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
+                                    alt="img">
                             </div>
+
                         </div>
 
                         <div class="w-full flex flex-col p-2">
@@ -60,15 +68,24 @@
                             @foreach($item->bonuses ?? [] as $stat => $value)
                                 <p>{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
                             @endforeach
+                            @foreach($item->defense_by_zone as $zone => $range)
+                                <p>Броня {{ $labels_ua[$zone] ?? ucfirst($zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
+                            @endforeach
                             <p>Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
                             <p @class(['!text-red-500' => $character->level < $item->required_level])>
                                 {{ $character->level < $item->required_level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->required_level }}
                             </p>
                             <p class="mt-2 text-[14px] font-thin italic">{{ $item->description }}</p>
-                            <div class="flex mt-5">
-                                <div wire:click="buyItem({{ $item->id }})" class="cursor-pointer bg-green-500 px-2 py-1 hover:bg-green-400 text-white">
-                                    Купити за {{ $item->buy_price }} золота
-                                </div>
+                            <div class="flex">
+
+                                @if($character->gold < $item->buy_price)
+                                    <p class="mt-3"><span class="text-red-500 underline">Ціна: {{ $item->buy_price }}.</span> У вас недостатньо коштів!</p>
+                                @else
+                                    <div wire:click="buyItem({{ $item->id }})" class="cursor-pointer bg-green-500 hover:bg-green-400 text-white px-2 py-1">
+                                        Купити за {{ $item->buy_price }} золота
+                                    </div>
+                                @endif
+
                             </div>
                         </div>
                     </div>

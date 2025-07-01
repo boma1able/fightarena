@@ -16,7 +16,7 @@
                 $min = $armorByZone[$zone]['min'] ?? 0;
                 $max = $armorByZone[$zone]['max'] ?? 0;
             @endphp
-            <li>{{ $label }}: {{ $min }} – {{ $max }}</li>
+            <li>{{ $label }}: @if($min != 0){{ $min }} - @endif{{ $max }}</li>
         @endforeach
     </ul>
 </div>

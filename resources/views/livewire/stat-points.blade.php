@@ -22,6 +22,8 @@
                 @endif
             </li>
         @endforeach
-        <li class="mt-2 -ml-2"><p class="text-[14px] font-thin italic">Нерозподілені стати: @if($character->stat_points > 0)<span class=" ml-1">{{ $character->stat_points }}</span>@endif</p></li>
+        @if($character->stat_points > 0)
+            <li class="mt-2 -ml-2"><p class="text-[14px] font-thin italic">Нерозподілені стати: <span class=" ml-1">{{ $character->stat_points }}</span></p></li>
+        @endif
     </ul>
 </div>

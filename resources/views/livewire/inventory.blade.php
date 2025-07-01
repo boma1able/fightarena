@@ -2,9 +2,20 @@
 
     @php
         $slots = [
-            'helmet', 'sholders', 'weapon', 'armor', 'belt',
+            'helmet', 'weapon', 'armor',
             'earrings', 'neckless', 'ring1', 'ring2', 'ring3',
             'arms', 'shield', 'legs', 'boots'
+        ];
+        $labels_ua = [
+            'strength' => 'Сила',
+            'agility' => 'Ловкість',
+            'intelligence' => 'Інтелект',
+            'endurance' => 'Витривалість',
+            'head' => 'голови',
+            'chest' => 'грудей',
+            'belly' => 'живота',
+            'belt' => 'пояса',
+            'legs' => 'ніг'
         ];
     @endphp
 
@@ -35,25 +46,7 @@
                                 <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/helmet.png') }}) center center no-repeat; background-size: cover;background-size: 75%; opacity: .3"></span>
                             @endif
                         </div>
-                        <div id="shoulders" class="relative mt-[-1px] w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
-                            @if(isset($equippedBySlot['shoulders']))
-                                @php
-                                    $shoulders = $equippedBySlot['shoulders'];
-                                    $title = $shoulders->name . ' [' . $shoulders->required_level . ']' . "\n"
-                                        . 'Міцність: ' . $shoulders->pivot->current_durability . ' / ' . $shoulders->pivot->max_durability . "\n";
 
-                                    foreach ($shoulders->bonuses ?? [] as $stat => $value) {
-                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
-                                    }
-                                @endphp
-                                <button wire:click="unequipItem({{ $equippedBySlot['shoulders']->pivot->id }})" class="absolute w-full h-full left-0 top-0" title="{{ trim($title) }}"></button>
-                                <div class="w-[90px] h-[50px]">
-                                    <img src="{{ asset($equippedBySlot['shoulders']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['shoulders']->name }}">
-                                </div>
-                            @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/shoulders.png') }}) center center no-repeat; background-size: 80%; opacity: .3"></span>
-                            @endif
-                        </div>
                         <div id="weapon" class="relative w-[90px] h-[90px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
                             @if(isset($equippedBySlot['weapon']))
                                 @php
@@ -81,6 +74,10 @@
                                     $title = $armor->name . ' [' . $armor->required_level . ']' . "\n"
                                         . 'Міцність: ' . $armor->pivot->current_durability . ' / ' . $armor->pivot->max_durability . "\n";
 
+                                    foreach ($armor->defense_by_zone ?? [] as $zone => $range) {
+                                        $title .= 'Броня ' . ($labels_ua[$zone] ?? ucfirst($zone)) . ': ' . $range['min'] . '–' . $range['max'] . "\n";
+                                    }
+
                                     foreach ($armor->bonuses ?? [] as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
@@ -93,25 +90,7 @@
                                 <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/armor.png') }}) center center no-repeat; background-size: cover; background-size: 85%; opacity: .3"></span>
                             @endif
                         </div>
-                        <div id="belt" class="relative w-[90px] h-[50px]" style="box-shadow: inset 0px 2px 7px 1px #5a5a5a36;">
-                            @if(isset($equippedBySlot['belt']))
-                                @php
-                                    $belt = $equippedBySlot['belt'];
-                                    $title = $belt->name . ' [' . $belt->required_level . ']' . "\n"
-                                        . 'Міцність: ' . $belt->pivot->current_durability . ' / ' . $belt->pivot->max_durability . "\n";
 
-                                    foreach ($belt->bonuses ?? [] as $stat => $value) {
-                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
-                                    }
-                                @endphp
-                                <button wire:click="unequipItem({{ $equippedBySlot['belt']->pivot->id }})" class="absolute w-full h-full left-0 top-0" title="{{ trim($title) }}"></button>
-                                <div class="w-[90px] h-[50px]">
-                                    <img src="{{ asset($equippedBySlot['belt']->image) }}" class="w-full h-full object-cover p-1" alt="{{ $equippedBySlot['belt']->name }}">
-                                </div>
-                            @else
-                            <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/belt.png') }}) center center no-repeat; background-size: cover; transform: rotate(45deg); background-size: 60%; opacity: .3"></span>
-                            @endif
-                        </div>
                     </div>
                     <div class="w-[165px] h-full">
                         @livewire('health-regen')
@@ -313,7 +292,64 @@
                 </ul>
             </div>
 
+
+
             <div class="w-[700px] ml-[auto]">
+
+                <div class="flex gap-2">
+                    <div class="relative w-[60px] h-[90px]"
+                        style="background: #000 linear-gradient(0deg,rgb(224, 177, 48) 0%, rgba(82, 62, 8, 0.75) 80%)">
+                        <img src="{{ asset('images/items/frame-gold.png') }}"
+                            class="absolute w-[60px]"
+                            style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                            alt="">
+                        <img src="http://fight.test/images/items/knifes/knife-0.webp"
+                            class="absolute w-[60px]"
+                            class="absolute w-[90px]"
+                            style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
+                            alt="">
+                    </div>
+
+                    <div class="relative w-[60px] h-[90px]"
+                        style="background: #000 linear-gradient(0deg,rgb(60, 87, 165) 0%, rgba(19, 46, 120, 0.27) 80%)">
+                        <img src="{{ asset('images/items/frame-blue.png') }}"
+                            class="absolute w-[60px]"
+                            style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                            alt="">
+                        <img src="http://fight.test/images/items/knifes/knife-0.webp"
+                            class="absolute w-[60px]"
+                            class="absolute w-[90px]"
+                            style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
+                            alt="">
+                    </div>
+
+                    <div class="relative w-[60px] h-[90px]"
+                        style="background: #000 linear-gradient(0deg,rgb(5, 146, 5) 0%, rgba(0, 135, 0, 0.24) 80%)">
+                        <img src="{{ asset('images/items/frame-green.png') }}"
+                            class="absolute w-[60px]"
+                            style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                            alt="">
+                        <img src="http://fight.test/images/items/knifes/knife-0.webp"
+                            class="absolute w-[60px]"
+                            class="absolute w-[90px]"
+                            style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
+                            alt="">
+                    </div>
+
+                    <div class="relative w-[60px] h-[90px]"
+                        style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)">
+                        <img src="{{ asset('images/items/frame-gray.png') }}"
+                            class="absolute w-[60px]"
+                            style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                            alt="">
+                        <img src="http://fight.test/images/items/knifes/knife-0.webp"
+                            class="absolute w-[60px]"
+                            class="absolute w-[90px]"
+                            style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
+                            alt="">
+                    </div>
+                </div>
+
                 <h2 class="text-xl font-bold mb-2">Інвентар</h2>
 
                 <div
@@ -385,18 +421,21 @@
                     @forelse($inventory as $item)
                         <div id="item-{{ $item->id }}" class="flex odd:bg-[#f9f9f9] p-2">
                             <div class="item flex flex-col w-[200px] items-center justify-center py-4">
-                                @php
-                                    $heightClass = match(true) {
-                                        in_array($item->type, ['knife', 'sword', 'axe', 'mace', 'helmet', 'shield']) => 'h-[90px]',
-                                        in_array($item->type, ['armor', 'legs']) => 'h-[120px]',
-                                        in_array($item->type, ['shoulders', 'belt', 'arms', 'boots']) => 'h-[50px]',
-                                        in_array($item->type, ['earrings', 'neckless', 'ring']) => 'h-[30px]',
-                                        default => '',
-                                    };
-                                @endphp
-                                <div wire:click="equipItem({{ $item->pivot->id }})" class="{{ $item->type === 'ring' ? 'h-[30px]' : 'w-[90px]' }} {{ $heightClass }} shadow-md cursor-pointer" title="Екіпірувати">
-                                    <img src="{{ asset($item->image) }}" class="w-full h-full object-cover" alt="{{ $item->name }}">
+
+                                <div wire:click="equipItem({{ $item->pivot->id }})" class="relative w-[60px] h-[90px] cursor-pointer"
+                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                    title="Екіпірувати">
+                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                        class="absolute w-[60px]"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                        alt="{{ $item->name }}">
+                                    <img src="{{ asset($item->image) }}"
+                                        class="absolute w-[60px]"
+                                        class="absolute w-[90px]"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
+                                        alt="">
                                 </div>
+
                             </div>
 
                             <div class="w-full flex flex-col p-2">
@@ -405,7 +444,7 @@
                                     <p>Урон: {{ $item->min_damage }}–{{ $item->max_damage }}</p>
                                 @endif
                                 @foreach($item->defense_by_zone as $zone => $range)
-                                    <p>Броня {{ $labels_ua[$zone] ?? ucfirst($zone) }}: {{ $range['min'] }}–{{ $range['max'] }}</p>
+                                    <p>Броня {{ $labels_ua[$zone] ?? ucfirst($zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
                                 @endforeach
 
                                 @foreach($item->bonuses ?? [] as $stat => $value)

@@ -220,7 +220,7 @@ class Character extends Model
     public function equippedArmor()
     {
         return $this->equippedItems
-            ->whereIn('type', ['armor', 'helmet', 'boots', 'shoulders', 'belt', 'legs']);
+            ->whereIn('type', ['armor', 'helmet', 'boots', 'legs', 'arms']);
     }
 
     public function getBonusesAttribute(): array
@@ -228,7 +228,6 @@ class Character extends Model
         $bonuses = [];
 
         foreach ($this->equippedItems as $item) {
-            // Припустимо, $item->bonuses вже масив або null
             $itemBonuses = $item->bonuses ?? [];
 
             foreach ($itemBonuses as $stat => $value) {
@@ -322,7 +321,7 @@ class Character extends Model
     public function inventoryItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot'])
+            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot', 'is_broken'])
             ->wherePivot('location', 'inventory');
     }
 
