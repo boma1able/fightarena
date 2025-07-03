@@ -15,7 +15,7 @@ class Item extends Model
         'durability_current', 'durability_max',
         'bonuses', 'min_damage', 'max_damage', 'type', 'slot',
         'image', 'description', 'location', 'character_id',
-        'defense_by_zone', 'base_max_durability',
+        'defense_by_zone', 'base_max_durability', 'rarity',
     ];
 
     protected $casts = [

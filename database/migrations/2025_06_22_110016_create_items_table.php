@@ -25,6 +25,7 @@ return new class extends Migration
                 'armor', 'helmet', 'shield', 'arms', 'legs', 'boots',
                 'ring', 'earrings','neckless'])->nullable();
             $table->string('slot')->nullable();
+            $table->string('rarity')->default('common');
             $table->json('bonuses')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();

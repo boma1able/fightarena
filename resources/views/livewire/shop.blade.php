@@ -26,7 +26,43 @@
         </div>
 
         <div class="flex">
-            <div class="flex flex-col" style="width: calc(100% - 300px)">
+            {{-- shop filter --}}
+            <div class="w-[250px] mr-4 border-l border-r border-gray-100">
+                <div class="p-2 mb-4 bg-gray-100">
+                    <p>У вас {{ $character->gold }} золота</p>
+                </div>
+                <div class="flex flex-col gap-2">
+                    {{-- Кнопка "Усі товари" --}}
+                    <button
+                        wire:click="setFilter('all')"
+                        class="p-2 text-sm text-start border-b border-gray-100 {{ $filterType === 'all' ? 'font-semibold underline text-blue-600' : '' }}"
+                    >
+                        Усі товари
+                    </button>
+
+                    @foreach($allTypesGrouped as $groupName => $types)
+                        <div class="px-2 border-b border-gray-100">
+                            <div class="font-bold text-gray-700">{{ $groupName }}</div>
+                            <div class="flex gap-2 mt-1 flex-col">
+                                @if($types->isNotEmpty())
+                                    @foreach($types as $type)
+                                        <button
+                                            wire:click="setFilter('{{ $type }}')"
+                                            class="py-1 text-sm text-start {{ $filterType === $type ? 'font-semibold underline text-blue-600' : '' }}">
+                                            {{ ucfirst($type) }}
+                                        </button>
+                                    @endforeach
+                                @else
+                                    <button class="py-1 text-sm text-gray-400 cursor-default" disabled>-</button>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+            </div>
+
+            <div class="flex flex-col" style="width: calc(100% - 250px)">
                 @php
                     $labels_ua = [
                         'strength' => 'Сила',
@@ -75,7 +111,7 @@
                             <p @class(['!text-red-500' => $character->level < $item->required_level])>
                                 {{ $character->level < $item->required_level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->required_level }}
                             </p>
-                            <p class="mt-2 text-[14px] font-thin italic">{{ $item->description }}</p>
+                            <p class="mt-2 text-[14px] font-thin italic mb-2">{{ $item->description }}</p>
                             <div class="flex">
 
                                 @if($character->gold < $item->buy_price)
@@ -94,42 +130,7 @@
                 @endforelse
             </div>
 
-                {{-- shop filter --}}
-            <div class="w-[300px] ml-4 border-l border-r border-gray-100">
-                <div class="p-2 mb-4 bg-gray-100">
-                    <p>У вас {{ $character->gold }} золота</p>
-                </div>
-                <div class="flex flex-col gap-2 justify-end">
-                    {{-- Кнопка "Усі товари" --}}
-                    <button
-                        wire:click="setFilter('all')"
-                        class="p-2 text-sm text-end border-b border-gray-100 {{ $filterType === 'all' ? 'font-semibold underline text-blue-600' : '' }}"
-                    >
-                        Усі товари
-                    </button>
 
-                    @foreach($allTypesGrouped as $groupName => $types)
-                        <div class="px-2 text-end border-b border-gray-100">
-                            <div class="font-bold text-gray-700">{{ $groupName }}</div>
-
-                            <div class="flex flex-wrap gap-2 mt-1 justify-end flex-col">
-                                @if($types->isNotEmpty())
-                                    @foreach($types as $type)
-                                        <button
-                                            wire:click="setFilter('{{ $type }}')"
-                                            class="py-1 text-sm text-end {{ $filterType === $type ? 'font-semibold underline text-blue-600' : '' }}">
-                                            {{ ucfirst($type) }}
-                                        </button>
-                                    @endforeach
-                                @else
-                                    <button class="py-1 text-sm text-end text-gray-400 cursor-default" disabled>-</button>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-            </div>
         </div>
 
     </div>

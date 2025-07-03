@@ -3,7 +3,7 @@
     @php
         $slots = [
             'helmet', 'weapon', 'armor',
-            'earrings', 'neckless', 'ring1', 'ring2', 'ring3',
+            'neckless', 'ring1', 'ring2',
             'arms', 'shield', 'legs', 'boots'
         ];
         $labels_ua = [
@@ -22,25 +22,38 @@
     @if($character)
         <div class="flex mb-4 w-full gap-5">
 
-             {{-- 🔧 Ліва панель ремонту --}}
+             {{-- Ліва панель ремонту --}}
             <div class="w-1/3 bg-gray-50 p-4 rounded shadow">
                 <h2 class="text-xl font-bold mb-4">Кузня</h2>
 
                 @if($repairItem)
-                    <div class="border p-4 rounded bg-yellow-100">
-                        <p class="font-semibold">🔧 Обраний для ремонту:</p>
-                        <div class="text-center">
-                            <img src="{{ asset($repairItem->image) }}"
-                                class="w-20 h-20 object-contain mx-auto mb-2"
-                                alt="{{ $repairItem->name }}">
-                            <p class="text-sm text-gray-600">
-                                Міцність: {{ $repairItem->pivot->current_durability }} / {{ $repairItem->pivot->max_durability }}
-                            </p>
+                    <div class="flex flex-col border p-4 rounded bg-white text-center justify-center">
+                        <div class="flex relative items-center justify-center w-[68px] h-[98px] mx-[auto] mb-3"
+                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            >
+                                <div class="relative w-[60px] h-[90px]"
+                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                >
+                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                        class="absolute w-[60px]"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                        alt="">
+                                    <img src="{{ asset($repairItem->image) }}"
+                                        class="absolute w-[60px]"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
+                                        alt="">
+                            </div>
 
-                            <p>Ціна ремонту: <strong>{{ $this->repair_cost }} золота</strong></p>
+
                         </div>
-                        <button wire:click="repairSelected" class="mt-5 mr-2">Відремонтувати</button>
-                        <button wire:click="cancelRepair">Скасувати</button>
+                        <p class="text-sm text-gray-600">
+                            Міцність: {{ $repairItem->pivot->current_durability }} / {{ $repairItem->pivot->max_durability }}
+                        </p>
+                        <p>Ціна ремонту: <strong>{{ $this->repair_cost }} золота</strong></p>
+                        <div>
+                            <button wire:click="repairSelected" class="mt-5 mr-2">Відремонтувати</button>
+                            <button wire:click="cancelRepair">Скасувати</button>
+                        </div>
                     </div>
                 @endif
 
@@ -111,7 +124,7 @@
 
                                 <div wire:click="selectForRepair({{ $item->pivot->id }})" class="relative w-[60px] h-[90px] cursor-pointer"
                                     style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
-                                    title="Екіпірувати">
+                                    title="Обрати для ремонту">
                                     <img src="{{ asset('images/items/frame-gray.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"

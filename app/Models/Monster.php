@@ -179,10 +179,10 @@ public function totalPhysicalDefense(): array
     return ['min' => $totalMin, 'max' => $totalMax];
 }
 
-public function equippedItems()
-{
-    return $this->items()->wherePivot('slot', '!=', null);
-}
+    public function equippedItems()
+    {
+        return $this->items()->wherePivot('slot', '!=', null);
+    }
 
     public function items()
     {
@@ -190,12 +190,38 @@ public function equippedItems()
             ->withPivot('slot', 'current_durability', 'max_durability', 'is_broken');
     }
 
-    // public function getMaxDurabilityForItem(Item $item): int
-    // {
-    //     $baseDurability = $item->base_max_durability ?? 100;
-    //     $levelFactor = 1 + ($item->required_level * 0.1);
+    protected array $rarityChances = [
+        'common' => 60,
+        'uncommon' => 25,
+        'rare' => 10,
+        'legendary' => 5,
+    ];
 
-    //     return (int) round($baseDurability * $levelFactor);
-    // }
+    public function pickRarity(): string
+    {
+        $rand = random_int(1, 100);
+        $cumulative = 0;
+
+        foreach ($this->rarityChances as $rarity => $chance) {
+            $cumulative += $chance;
+            if ($rand <= $cumulative) {
+                return $rarity;
+            }
+        }
+
+        return 'common';
+    }
+
+    public function generateDrop(): ?Item
+    {
+        $item = Item::inRandomOrder()->first();
+        if (!$item) {
+            return null;
+        }
+
+        $rarity = $this->pickRarity();
+        $item->rarity = $rarity;
+        return $item;
+    }
 
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-3xl mx-auto py-6 px-4 space-y-6">
+    <div class="mx-auto py-6 px-4 space-y-6 bg-white rounded">
         <h1 class="text-3xl text-center font-bold text-gray-800">Результати бою</h1>
 
         @livewire('info-chat', ['character' => $character])

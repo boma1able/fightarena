@@ -24,6 +24,13 @@ class Battle extends Component
 
     public $messages = [];
 
+    protected array $rarityChances = [
+        'common' => 60,
+        'uncommon' => 25,
+        'rare' => 10,
+        'legendary' => 5,
+    ];
+
     public function mount()
     {
         $this->character = auth()->user()->character;
@@ -61,8 +68,8 @@ class Battle extends Component
         // Вказуємо всі слоти, які потрібно мати
         $allSlots = [
             'helmet', 'armor', 'boots', 'weapon', 'shield',
-            'legs', 'arms', 'earrings', 'neckless',
-            'ring1', 'ring2', 'ring3'
+            'legs', 'arms', 'neckless',
+            'ring1', 'ring2'
         ];
 
         // Формуємо масив екіпіровки монстра, щоб кожен слот був, навіть якщо null
@@ -73,6 +80,39 @@ class Battle extends Component
 
         $this->character->is_in_battle = true;
         $this->character->save();
+    }
+
+    public function pickRarity(): string
+    {
+        $rand = random_int(1, 100);
+        $cumulative = 0;
+
+        foreach ($this->rarityChances as $rarity => $chance) {
+            $cumulative += $chance;
+            if ($rand <= $cumulative) {
+                return $rarity;
+            }
+        }
+
+        return 'common'; // запасний варіант
+    }
+
+    public function generateDrop(): ?Item
+    {
+        // Беремо випадковий предмет з усіх доступних у магазині
+        $item = Item::inRandomOrder()->first();
+
+        if (!$item) {
+            return null; // предметів немає
+        }
+
+        // Генеруємо раритет
+        $rarity = $this->pickRarity();
+
+        // Динамічно додаємо властивість, щоб передати раритет, не змінюючи БД
+        $item->rarity = $rarity;
+
+        return $item;
     }
 
 
@@ -372,6 +412,20 @@ class Battle extends Component
             $this->character->log($result);
         } elseif ($this->monster->current_health <= 0) {
             $result = "Ви перемогли " . $this->monster->name . "!";
+
+            $drop = $this->monster->generateDrop();
+            if ($drop) {
+                $maxDurability = $this->character->getMaxDurabilityForItem($drop);
+                $this->character->inventoryItems()->attach($drop->id, [
+                    'current_durability' => $maxDurability,
+                    'max_durability' => $maxDurability,
+                    'slot' => null,
+                    'rarity' => $drop->rarity,
+                    'location' => 'inventory',
+                ]);
+                $this->character->log("Ви отримали предмет: {$drop->name} ({$drop->rarity})");
+            }
+
             $xpMultiplier = 1.2;
             $this->character->wins++;
             $this->character->log($result);

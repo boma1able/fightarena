@@ -3,28 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Arena</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+        h1, h2, h3, h4, h5,
+        nav, .inventory-filter, .item-name{
+            font-family: "MedievalSharp", cursive;
+        }
+        .gray{
+            background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)
+        }
+        .green{
+            background: #000 linear-gradient(0deg,rgb(5, 146, 5) 0%, rgba(0, 135, 0, 0.24) 80%)
+        }
+        .blue{
+            background: #000 linear-gradient(0deg,rgb(60, 87, 165) 0%, rgba(19, 46, 120, 0.27) 80%)
+        }
+        .gold{
+            background: #000 linear-gradient(0deg,rgb(224, 177, 48) 0%, rgba(82, 62, 8, 0.75) 80%)
+        }
+    </style>
     @livewireStyles
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-light text-[#27282a]">
-    <div class="w-full max-w-[1800px] container mx-auto p-4">
+    <div class="w-full max-w-[1800px] min-h-[100vh] container mx-auto p-4 bg-[#28292b]">
 
         <nav class="flex w-full justify-center items-center gap-4 mb-2">
-            <a href="{{ route('home') }}" class="px-3 py-1 {{ request()->routeIs('home') ? 'bg-blue-500 text-white' : 'text-gray-700' }}">
-                Головна
+            <a href="{{ route('home') }}" class="px-3 py-1 text-white {{ request()->routeIs('home') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
+                Home
             </a>
-            <a href="{{ route('inventory') }}" class="px-3 py-1 {{ request()->routeIs('inventory') ? 'bg-blue-500 text-white' : 'text-gray-700' }}">
-                Інвентар
+            <a href="{{ route('inventory') }}" class="px-3 py-1 text-white {{ request()->routeIs('inventory') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
+                Inventory
             </a>
-            <a href="{{ route('shop') }}" class="px-3 py-1 {{ request()->routeIs('shop') ? 'bg-blue-500 text-white' : 'text-gray-700' }}">
-                Магазин
+            <a href="{{ route('shop') }}" class="px-3 py-1 text-white {{ request()->routeIs('shop') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
+                Shop
             </a>
-            <a href="{{ route('forge') }}" class="px-3 py-1 {{ request()->routeIs('forge') ? 'bg-blue-500 text-white' : 'text-gray-700' }}">
-                Кузння
+            <a href="{{ route('forge') }}" class="px-3 py-1 text-white {{ request()->routeIs('forge') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
+                Forge
             </a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="text-red-500 px-3 py-1">Вийти</button>
+                <button type="submit" class="text-red-500 px-3 py-1">Quit</button>
             </form>
         </nav>
 

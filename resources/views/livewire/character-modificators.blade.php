@@ -1,5 +1,5 @@
 <div>
-    <h2 class="mb-2 mt-3 p-2 text-[14px] font-semibold bg-[#f9f9f9]">Модифікатори</h2>
+    <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9]">Modificators</h2>
     <ul class="px-2">
         {{-- <li><strong>Базовий урон:</strong> {{ $character->base_damage }}</li> --}}
         @if($damageRange)

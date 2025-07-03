@@ -1,5 +1,5 @@
 <div>
-    <h2 class="mb-2 mt-3 p-2 text-[14px] font-semibold bg-[#f9f9f9]">Броня</h2>
+    <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9]">Armor</h2>
     <ul class="px-2">
         @php
             $zoneLabels = [

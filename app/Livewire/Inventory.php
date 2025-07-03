@@ -49,7 +49,7 @@ class Inventory extends Component
         }
 
         if ($item->type === 'ring') {
-            $ringSlots = ['ring1', 'ring2', 'ring3'];
+            $ringSlots = ['ring1', 'ring2'];
 
             $occupied = $this->character->equippedItems()
                 ->whereIn('character_items.slot', $ringSlots)

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('max_durability')->default(10);
             $table->boolean('is_broken')->default(false);
             $table->string('slot')->nullable()->after('location');
+            $table->string('rarity')->default('common');
             $table->enum('location', ['inventory', 'equipped', 'shop'])->default('shop');
             $table->timestamps();
         });
