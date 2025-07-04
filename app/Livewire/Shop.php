@@ -88,6 +88,7 @@ class Shop extends Component
             'location' => 'inventory',
             'current_durability' => $maxDurability,
             'max_durability' => $maxDurability,
+            'rarity' => $item->rarity,
         ]);
 
         $this->dispatch('trigger-toast', [

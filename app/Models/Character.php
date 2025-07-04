@@ -56,6 +56,7 @@ class Character extends Model
                 'max_durability' => $maxDurability,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'rarity' => $item->rarity,
             ]);
         }
     }
@@ -328,7 +329,7 @@ class Character extends Model
     public function equippedItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability'])
+            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity'])
             ->wherePivot('location', 'equipped');
     }
 

@@ -159,7 +159,7 @@ class Battle extends Component
     public function equipMonster(Monster $monster): void
     {
         $allSlots = [
-            'helmet', 'armor', 'boots', 'weapon', 'shield', 'legs', 'arms', 'earrings', 'neckless',
+            'helmet', 'armor', 'boots', 'weapon', 'shield', 'legs', 'arms', 'neckless',
         ];
 
         // Максимальна кількість предметів = 1 + level (але не більше ніж кількість слотів)
@@ -178,6 +178,7 @@ class Battle extends Component
                 $monster->items()->attach($weapon->id, [
                     'slot' => 'weapon',
                     'is_broken' => false,
+                    'rarity' => $monster->pickRarity(),
                 ]);
                 $equippedCount++;
 
@@ -206,6 +207,7 @@ class Battle extends Component
                 $monster->items()->attach($item->id, [
                     'slot' => $slot,
                     'is_broken' => false,
+                    'rarity' => $monster->pickRarity(),
                 ]);
 
                 foreach ($item->bonuses ?? [] as $stat => $value) {
@@ -217,7 +219,7 @@ class Battle extends Component
         }
 
         // Додаємо кільця
-        for ($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             if ($equippedCount >= $maxItems) break;
 
             $ringSlot = 'ring' . $i;
@@ -232,6 +234,7 @@ class Battle extends Component
                 $monster->items()->attach($item->id, [
                     'slot' => $ringSlot,
                     'is_broken' => false,
+                    'rarity' => $monster->pickRarity(),
                 ]);
                 $equippedCount++;
 
@@ -248,7 +251,6 @@ class Battle extends Component
         $monster->current_health = $monster->base_health;
         $monster->save();
     }
-
 
 
     public function fightStep()

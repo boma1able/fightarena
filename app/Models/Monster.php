@@ -17,6 +17,7 @@ class Monster extends Model
         'level',
         'gold',
         'is_temporary',
+        'rarity',
     ];
 
     public function getBonusesAttribute(): array
@@ -187,7 +188,7 @@ public function totalPhysicalDefense(): array
     public function items()
     {
         return $this->belongsToMany(Item::class, 'monster_items')
-            ->withPivot('slot', 'current_durability', 'max_durability', 'is_broken');
+            ->withPivot('slot', 'current_durability', 'max_durability', 'is_broken', 'rarity');
     }
 
     protected array $rarityChances = [

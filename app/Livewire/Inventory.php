@@ -194,11 +194,6 @@ class Inventory extends Component
         }
         $inventory = $query->get();
 
-        \Log::debug('Поточний фільтр: ' . $this->filterType);
-        foreach ($inventory as $item) {
-            \Log::debug("Item: ID {$item->id}, Name: {$item->name}, Type: {$item->type}");
-        }
-
         $equippedBySlot = [];
         foreach ($character->equippedItems as $item) {
             $slot = $item->pivot->slot ?? 'unknown';

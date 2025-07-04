@@ -11,11 +11,17 @@
             'agility' => 'Ловкість',
             'intelligence' => 'Інтелект',
             'endurance' => 'Витривалість',
-            'head' => 'голови',
-            'chest' => 'грудей',
-            'belly' => 'живота',
-            'belt' => 'пояса',
-            'legs' => 'ніг'
+            'head' => 'Голови',
+            'chest' => 'Грудей',
+            'belly' => 'Живота',
+            'belt' => 'Пояса',
+            'legs' => 'Ніг',
+        ];
+        $rarityColors = [
+            'common' => 'gray',
+            'uncommon' => 'green',
+            'rare' => 'blue',
+            'legendary' => 'gold',
         ];
     @endphp
 
@@ -38,12 +44,13 @@
                                     foreach ($helmet->bonuses ?? [] as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
+                                    $rarityClass = $rarityColors[$equippedBySlot['helmet']->pivot->rarity] ?? 'gray';
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['helmet']->pivot->id }})" class="relative w-[60px] h-[90px]"
-                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                <div wire:click="unequipItem({{ $equippedBySlot['helmet']->pivot->id }})"
+                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
-                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="">
@@ -69,16 +76,16 @@
                                     foreach ($armor->defense_by_zone ?? [] as $zone => $range) {
                                         $title .= 'Броня ' . ($labels_ua[$zone] ?? ucfirst($zone)) . ': ' . $range['min'] . '–' . $range['max'] . "\n";
                                     }
-
                                     foreach ($armor->bonuses ?? [] as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
+                                    $rarityClass = $rarityColors[$equippedBySlot['armor']->pivot->rarity] ?? 'gray';
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['armor']->pivot->id }})" class="relative w-[60px] h-[90px]"
-                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                <div wire:click="unequipItem({{ $equippedBySlot['armor']->pivot->id }})"
+                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
-                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="">
@@ -103,12 +110,13 @@
                                     foreach ($arms->bonuses ?? [] as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
+                                    $rarityClass = $rarityColors[$equippedBySlot['arms']->pivot->rarity] ?? 'gray';
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['arms']->pivot->id }})" class="relative w-[60px] h-[90px]"
-                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                <div wire:click="unequipItem({{ $equippedBySlot['arms']->pivot->id }})"
+                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
-                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="">
@@ -133,12 +141,13 @@
                                     foreach ($legs->bonuses ?? [] as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
+                                    $rarityClass = $rarityColors[$equippedBySlot['legs']->pivot->rarity] ?? 'gray';
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['legs']->pivot->id }})" class="relative w-[60px] h-[90px]"
-                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                <div wire:click="unequipItem({{ $equippedBySlot['legs']->pivot->id }})"
+                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
-                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="">
@@ -163,12 +172,13 @@
                                     foreach ($boots->bonuses ?? [] as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
+                                    $rarityClass = $rarityColors[$equippedBySlot['boots']->pivot->rarity] ?? 'gray';
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['boots']->pivot->id }})" class="relative w-[60px] h-[90px]"
-                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                <div wire:click="unequipItem({{ $equippedBySlot['boots']->pivot->id }})"
+                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
-                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="">
@@ -199,20 +209,21 @@
                             style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['neckless']))
-                            @php
-                                $neckless = $equippedBySlot['neckless'];
-                                $title = $neckless->name . ' [' . $neckless->required_level . ']' . "\n"
-                                    . 'Міцність: ' . $neckless->pivot->current_durability . ' / ' . $neckless->pivot->max_durability . "\n";
+                                @php
+                                    $neckless = $equippedBySlot['neckless'];
+                                    $title = $neckless->name . ' [' . $neckless->required_level . ']' . "\n"
+                                        . 'Міцність: ' . $neckless->pivot->current_durability . ' / ' . $neckless->pivot->max_durability . "\n";
 
-                                foreach ($neckless->bonuses ?? [] as $stat => $value) {
-                                    $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
-                                }
-                            @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['neckless']->pivot->id }})" class="relative w-[60px] h-[90px]"
-                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                    foreach ($neckless->bonuses ?? [] as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+                                    $rarityClass = $rarityColors[$equippedBySlot['neckless']->pivot->rarity] ?? 'gray';
+                                @endphp
+                                <div wire:click="unequipItem({{ $equippedBySlot['neckless']->pivot->id }})"
+                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
-                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="">
@@ -240,12 +251,13 @@
                                             foreach ($ring->bonuses ?? [] as $stat => $value) {
                                                 $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                             }
+                                            $rarityClass = $rarityColors[$ring->pivot->rarity] ?? 'gray';
                                         @endphp
-                                        <div wire:click="unequipItem({{ $ring->pivot->id }})" class="relative w-[60px] h-[90px]"
-                                            style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                        <div wire:click="unequipItem({{ $ring->pivot->id }})"
+                                            class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                             title="{{ trim($title) }}"
                                             >
-                                            <img src="{{ asset('images/items/frame-gray.png') }}"
+                                            <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                                 class="absolute w-[60px]"
                                                 style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                                 alt="">
@@ -275,12 +287,13 @@
                                     foreach ($weapon->bonuses ?? [] as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
+                                    $rarityClass = $rarityColors[$equippedBySlot['weapon']->pivot->rarity] ?? 'gray';
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['weapon']->pivot->id }})" class="relative w-[60px] h-[90px]"
-                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                <div wire:click="unequipItem({{ $equippedBySlot['weapon']->pivot->id }})"
+                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
-                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="">
@@ -306,12 +319,13 @@
                                     foreach ($shield->bonuses ?? [] as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
+                                    $rarityClass = $rarityColors[$equippedBySlot['shield']->pivot->rarity] ?? 'gray';
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['shield']->pivot->id }})" class="relative w-[60px] h-[90px]"
-                                    style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)"
+                                <div wire:click="unequipItem({{ $equippedBySlot['shield']->pivot->id }})"
+                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
-                                    <img src="{{ asset('images/items/frame-gray.png') }}"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="">
@@ -374,60 +388,6 @@
 
             <div class="w-[700px] ml-[auto]">
 
-                <div class="flex gap-2">
-                    <div class="relative w-[60px] h-[90px]"
-                        style="background: #000 linear-gradient(0deg,rgb(224, 177, 48) 0%, rgba(82, 62, 8, 0.75) 80%)">
-                        <img src="{{ asset('images/items/frame-gold.png') }}"
-                            class="absolute w-[60px]"
-                            style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
-                            alt="">
-                        <img src="http://fight.test/images/items/knifes/knife-0.webp"
-                            class="absolute w-[60px]"
-                            class="absolute w-[90px]"
-                            style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
-                            alt="">
-                    </div>
-
-                    <div class="relative w-[60px] h-[90px]"
-                        style="background: #000 linear-gradient(0deg,rgb(60, 87, 165) 0%, rgba(19, 46, 120, 0.27) 80%)">
-                        <img src="{{ asset('images/items/frame-blue.png') }}"
-                            class="absolute w-[60px]"
-                            style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
-                            alt="">
-                        <img src="http://fight.test/images/items/knifes/knife-0.webp"
-                            class="absolute w-[60px]"
-                            class="absolute w-[90px]"
-                            style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
-                            alt="">
-                    </div>
-
-                    <div class="relative w-[60px] h-[90px]"
-                        style="background: #000 linear-gradient(0deg,rgb(5, 146, 5) 0%, rgba(0, 135, 0, 0.24) 80%)">
-                        <img src="{{ asset('images/items/frame-green.png') }}"
-                            class="absolute w-[60px]"
-                            style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
-                            alt="">
-                        <img src="http://fight.test/images/items/knifes/knife-0.webp"
-                            class="absolute w-[60px]"
-                            class="absolute w-[90px]"
-                            style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
-                            alt="">
-                    </div>
-
-                    <div class="relative w-[60px] h-[90px]"
-                        style="background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)">
-                        <img src="{{ asset('images/items/frame-gray.png') }}"
-                            class="absolute w-[60px]"
-                            style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
-                            alt="">
-                        <img src="http://fight.test/images/items/knifes/knife-0.webp"
-                            class="absolute w-[60px]"
-                            class="absolute w-[90px]"
-                            style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
-                            alt="">
-                    </div>
-                </div>
-
                 <h2 class="text-xl font-bold mb-2">Inventory</h2>
 
                 <div
@@ -483,28 +443,9 @@
                 </div>
 
                 <div class="flex flex-wrap flex-col min-h-[400]">
-                    @php
-                        $labels_ua = [
-                            'strength' => 'Сила',
-                            'agility' => 'Ловкість',
-                            'intelligence' => 'Інтелект',
-                            'endurance' => 'Витривалість',
-                            'head' => 'Голови',
-                            'chest' => 'Грудей',
-                            'belly' => 'Живота',
-                            'belt' => 'Пояса',
-                            'legs' => 'Ніг',
-                        ];
-                        $rarityColors = [
-                            'common' => 'gray',
-                            'uncommon' => 'green',
-                            'rare' => 'blue',
-                            'legendary' => 'gold',
-                        ];
-                    @endphp
                     @forelse($inventory as $item)
                         @php
-                            $rarityClass = $rarityColors[$item->pivot->rarity] ?? 'default-class';
+                            $rarityClass = $rarityColors[$item->pivot->rarity] ?? 'gray';
                         @endphp
                         <div id="item-{{ $item->id }}" class="flex odd:bg-[#f9f9f9] group transition-w duration-300 mb-[3px]">
 
@@ -558,7 +499,7 @@
                                 <div
                                     wire:click="equipItem({{ $item->pivot->id }})" class="{{ $rarityClass }} relative w-[60px] h-[90px] cursor-pointer"
                                     title="Екіпірувати">
-                                    <img src="{{ asset('images/items/frame-'.  ($rarityColors[$item->pivot->rarity] ?? 'gold') . '.png') }}"
+                                    <img src="{{ asset('images/items/frame-'.  ($rarityColors[$item->pivot->rarity] ?? 'gray') . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="{{ $item->name }}">
