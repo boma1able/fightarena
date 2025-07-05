@@ -229,7 +229,11 @@ class Character extends Model
         $bonuses = [];
 
         foreach ($this->equippedItems as $item) {
-            $itemBonuses = $item->bonuses ?? [];
+            $itemBonuses = $item->pivot->bonuses ?? [];
+
+            if (is_string($itemBonuses)) {
+                $itemBonuses = json_decode($itemBonuses, true) ?: [];
+            }
 
             foreach ($itemBonuses as $stat => $value) {
                 $bonuses[$stat] = ($bonuses[$stat] ?? 0) + $value;
@@ -259,7 +263,7 @@ class Character extends Model
             return false;
         }
 
-        // Ось тут правильне обчислення часу
+        // Обчислення часу
         $secondsPassed = $this->health_regeneration_started_at->diffInSeconds(now());
 
         $percentRecovered = min(100, ($secondsPassed / 10) * 100);
@@ -322,15 +326,16 @@ class Character extends Model
     public function inventoryItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot', 'is_broken', 'rarity'])
+            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot', 'is_broken', 'rarity', 'bonuses'])
             ->wherePivot('location', 'inventory');
     }
 
     public function equippedItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity'])
-            ->wherePivot('location', 'equipped');
+            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity', 'bonuses'])
+            ->wherePivot('location', 'equipped')
+            ->withCasts(['pivot.bonuses' => 'array']);
     }
 
     public function allItems()
@@ -367,8 +372,8 @@ class Character extends Model
                 continue;
             }
 
-            // 1% шанс на зношення
-            if (rand(1, 100) <= 1) {
+            // 3% шанс на зношення
+            if (rand(1, 100) <= 3) {
                 $newDurability = max(0, $pivot->current_durability - 1);
 
                 $updateData = ['current_durability' => $newDurability];

@@ -32,8 +32,8 @@ class Shop extends Component
     {
         return [
             'Зброя' => ['sword', 'axe', 'mace', 'knife'],
-            'Броня' => ['helmet', 'armor', 'legs', 'boots', 'belt', 'shoulders', 'shield', 'arms'],
-            'Біжутерія' => ['ring', 'neckless', 'earrings'],
+            'Броня' => ['helmet', 'armor', 'legs', 'boots', 'shield', 'arms'],
+            'Біжутерія' => ['ring', 'neckless'],
         ];
     }
 
@@ -89,6 +89,7 @@ class Shop extends Component
             'current_durability' => $maxDurability,
             'max_durability' => $maxDurability,
             'rarity' => $item->rarity,
+            'bonuses' => json_encode($item->bonuses ?? []),
         ]);
 
         $this->dispatch('trigger-toast', [

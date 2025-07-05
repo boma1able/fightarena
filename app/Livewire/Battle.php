@@ -2,8 +2,10 @@
 
 namespace App\Livewire;
 
+use \App\Helpers\ItemBonusGenerator;
 use App\Models\Item;
 use App\Models\Monster;
+use App\Services\DropService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -82,40 +84,6 @@ class Battle extends Component
         $this->character->save();
     }
 
-    public function pickRarity(): string
-    {
-        $rand = random_int(1, 100);
-        $cumulative = 0;
-
-        foreach ($this->rarityChances as $rarity => $chance) {
-            $cumulative += $chance;
-            if ($rand <= $cumulative) {
-                return $rarity;
-            }
-        }
-
-        return 'common'; // запасний варіант
-    }
-
-    public function generateDrop(): ?Item
-    {
-        // Беремо випадковий предмет з усіх доступних у магазині
-        $item = Item::inRandomOrder()->first();
-
-        if (!$item) {
-            return null; // предметів немає
-        }
-
-        // Генеруємо раритет
-        $rarity = $this->pickRarity();
-
-        // Динамічно додаємо властивість, щоб передати раритет, не змінюючи БД
-        $item->rarity = $rarity;
-
-        return $item;
-    }
-
-
     public function generateMonster(int $level): Monster
     {
         $baseStats = [
@@ -174,11 +142,12 @@ class Battle extends Component
                 ->inRandomOrder()
                 ->first();
 
+            $rarity = DropService::pickRarity();
             if ($weapon) {
                 $monster->items()->attach($weapon->id, [
                     'slot' => 'weapon',
                     'is_broken' => false,
-                    'rarity' => $monster->pickRarity(),
+                    'rarity' => $rarity,
                 ]);
                 $equippedCount++;
 
@@ -203,12 +172,16 @@ class Battle extends Component
                 ->inRandomOrder()
                 ->first();
 
+            $rarity = DropService::pickRarity();
+
             if ($item) {
                 $monster->items()->attach($item->id, [
                     'slot' => $slot,
                     'is_broken' => false,
-                    'rarity' => $monster->pickRarity(),
+                    'rarity' => $rarity,
                 ]);
+
+                $equippedCount++; // ДОДАЙ ЦЕ
 
                 foreach ($item->bonuses ?? [] as $stat => $value) {
                     if (in_array($stat, ['strength', 'agility', 'intuition', 'endurance'])) {
@@ -230,11 +203,12 @@ class Battle extends Component
                 ->inRandomOrder()
                 ->first();
 
+            $rarity = DropService::pickRarity();
             if ($item) {
                 $monster->items()->attach($item->id, [
                     'slot' => $ringSlot,
                     'is_broken' => false,
-                    'rarity' => $monster->pickRarity(),
+                    'rarity' => $rarity,
                 ]);
                 $equippedCount++;
 
@@ -418,13 +392,16 @@ class Battle extends Component
             $drop = $this->monster->generateDrop();
             if ($drop) {
                 $maxDurability = $this->character->getMaxDurabilityForItem($drop);
+
                 $this->character->inventoryItems()->attach($drop->id, [
                     'current_durability' => $maxDurability,
                     'max_durability' => $maxDurability,
                     'slot' => null,
                     'rarity' => $drop->rarity,
                     'location' => 'inventory',
+                    'bonuses' => json_encode($drop->bonuses),
                 ]);
+
                 $this->character->log("Ви отримали предмет: {$drop->name} ({$drop->rarity})");
             }
 

@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Item;
+use App\Services\DropService;
+use App\Services\ItemBonusService;
 use Illuminate\Database\Eloquent\Model;
 
 class Monster extends Model
@@ -21,25 +24,26 @@ class Monster extends Model
     ];
 
     public function getBonusesAttribute(): array
-{
-    $bonuses = [];
+    {
+        $bonuses = [];
 
-    $items = $this->equippedItems ?? collect();
+        $items = $this->equippedItems ?? collect();
 
-    foreach ($items as $item) {
-        $itemBonuses = $item->bonuses ?? [];
+        foreach ($items as $item) {
+            // отримуємо бонуси з PIVOT, не з ITEM
+            $itemBonuses = $item->pivot->bonuses ?? [];
 
-        if (is_string($itemBonuses)) {
-            $itemBonuses = json_decode($itemBonuses, true) ?: [];
+            if (is_string($itemBonuses)) {
+                $itemBonuses = json_decode($itemBonuses, true) ?: [];
+            }
+
+            foreach ($itemBonuses as $stat => $value) {
+                $bonuses[$stat] = ($bonuses[$stat] ?? 0) + $value;
+            }
         }
 
-        foreach ($itemBonuses as $stat => $value) {
-            $bonuses[$stat] = ($bonuses[$stat] ?? 0) + $value;
-        }
+        return $bonuses;
     }
-
-    return $bonuses;
-}
 
 
 public function getTotalStrengthAttribute(): int
@@ -191,38 +195,9 @@ public function totalPhysicalDefense(): array
             ->withPivot('slot', 'current_durability', 'max_durability', 'is_broken', 'rarity');
     }
 
-    protected array $rarityChances = [
-        'common' => 60,
-        'uncommon' => 25,
-        'rare' => 10,
-        'legendary' => 5,
-    ];
-
-    public function pickRarity(): string
-    {
-        $rand = random_int(1, 100);
-        $cumulative = 0;
-
-        foreach ($this->rarityChances as $rarity => $chance) {
-            $cumulative += $chance;
-            if ($rand <= $cumulative) {
-                return $rarity;
-            }
-        }
-
-        return 'common';
-    }
-
     public function generateDrop(): ?Item
     {
-        $item = Item::inRandomOrder()->first();
-        if (!$item) {
-            return null;
-        }
-
-        $rarity = $this->pickRarity();
-        $item->rarity = $rarity;
-        return $item;
+        return DropService::generateDrop(100, $this->level); // 50% шанс і рівень монстра
     }
 
 }

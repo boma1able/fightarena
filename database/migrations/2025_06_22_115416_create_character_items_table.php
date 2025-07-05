@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('character_id')->constrained()->onDelete('cascade');
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
+            $table->json('bonuses')->nullable();
+            $table->string('rarity')->default('common');
             $table->unsignedTinyInteger('current_durability')->default(10);
             $table->unsignedTinyInteger('max_durability')->default(10);
             $table->boolean('is_broken')->default(false);
             $table->string('slot')->nullable()->after('location');
-            $table->string('rarity')->default('common');
             $table->enum('location', ['inventory', 'equipped', 'shop'])->default('shop');
             $table->timestamps();
         });

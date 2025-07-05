@@ -7,7 +7,18 @@
     $characterExpPercent = 0;
     if ($character && $character->getExperienceToLevelUp() > 0) {
         $characterExpPercent = round(($character->experience / $character->getExperienceToLevelUp()) * 100);
-}
+    }
+    $labels_ua = [
+        'strength' => 'Сила',
+        'agility' => 'Ловкість',
+        'intuition' => 'Інтуїція',
+        'endurance' => 'Витривалість',
+        'head' => 'Голови',
+        'chest' => 'Грудей',
+        'belly' => 'Живота',
+        'belt' => 'Пояса',
+        'legs' => 'Ніг',
+    ];
     $rarityColors = [
         'common' => 'gray',
         'uncommon' => 'green',
@@ -36,8 +47,13 @@
                                     $title = $helmet->name . ' [' . $helmet->required_level . ']' . "\n"
                                         . 'Міцність: ' . $helmet->pivot->current_durability . ' / ' . $helmet->pivot->max_durability . "\n";
 
-                                    foreach ($helmet->bonuses ?? [] as $stat => $value) {
-                                        $title .= ucfirst($stat) . ': +' . $value . "\n";
+                                    $bonuses = $helmet->pivot->bonuses ?? [];
+                                    if (is_string($bonuses)) {
+                                        $bonuses = json_decode($bonuses, true) ?? [];
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$helmet->pivot->rarity] ?? 'gray';
                                 @endphp
@@ -69,7 +85,12 @@
                                     $title = $armor->name . ' [' . $armor->required_level . ']' . "\n"
                                         . 'Міцність: ' . $armor->pivot->current_durability . ' / ' . $armor->pivot->max_durability . "\n";
 
-                                    foreach ($armor->bonuses ?? [] as $stat => $value) {
+                                    $bonuses = $armor->pivot->bonuses ?? [];
+                                    if (is_string($bonuses)) {
+                                        $bonuses = json_decode($bonuses, true) ?? [];
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$armor->pivot->rarity] ?? 'gray';
@@ -102,7 +123,12 @@
                                     $title = $arms->name . ' [' . $arms->required_level . ']' . "\n"
                                         . 'Міцність: ' . $arms->pivot->current_durability . ' / ' . $arms->pivot->max_durability . "\n";
 
-                                    foreach ($arms->bonuses ?? [] as $stat => $value) {
+                                    $bonuses = $arms->pivot->bonuses ?? [];
+                                    if (is_string($bonuses)) {
+                                        $bonuses = json_decode($bonuses, true) ?? [];
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$arms->pivot->rarity] ?? 'gray';
@@ -135,7 +161,12 @@
                                     $title = $legs->name . ' [' . $legs->required_level . ']' . "\n"
                                         . 'Міцність: ' . $legs->pivot->current_durability . ' / ' . $legs->pivot->max_durability . "\n";
 
-                                    foreach ($legs->bonuses ?? [] as $stat => $value) {
+                                    $bonuses = $legs->pivot->bonuses ?? [];
+                                    if (is_string($bonuses)) {
+                                        $bonuses = json_decode($bonuses, true) ?? [];
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$legs->pivot->rarity] ?? 'gray';
@@ -168,7 +199,12 @@
                                     $title = $boots->name . ' [' . $boots->required_level . ']' . "\n"
                                         . 'Міцність: ' . $boots->pivot->current_durability . ' / ' . $boots->pivot->max_durability . "\n";
 
-                                    foreach ($boots->bonuses ?? [] as $stat => $value) {
+                                    $bonuses = $boots->pivot->bonuses ?? [];
+                                    if (is_string($bonuses)) {
+                                        $bonuses = json_decode($bonuses, true) ?? [];
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$boots->pivot->rarity] ?? 'gray';
@@ -241,7 +277,12 @@
                                     $title = $neckless->name . ' [' . $neckless->required_level . ']' . "\n"
                                         . 'Міцність: ' . $neckless->pivot->current_durability . ' / ' . $neckless->pivot->max_durability . "\n";
 
-                                    foreach ($neckless->bonuses ?? [] as $stat => $value) {
+                                    $bonuses = $neckless->pivot->bonuses ?? [];
+                                    if (is_string($bonuses)) {
+                                        $bonuses = json_decode($bonuses, true) ?? [];
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$neckless->pivot->rarity] ?? 'gray';
@@ -276,7 +317,12 @@
                                             $title = $ring->name . ' [' . $ring->required_level . ']' . "\n"
                                                 . 'Міцність: ' . $ring->pivot->current_durability . ' / ' . $ring->pivot->max_durability . "\n";
 
-                                            foreach ($ring->bonuses ?? [] as $stat => $value) {
+                                            $bonuses = $ring->pivot->bonuses ?? [];
+                                            if (is_string($bonuses)) {
+                                                $bonuses = json_decode($bonuses, true) ?? [];
+                                            }
+
+                                            foreach ($bonuses as $stat => $value) {
                                                 $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                             }
                                             $rarityClass = $rarityColors[$ring->pivot->rarity] ?? 'gray';
@@ -313,7 +359,12 @@
                                         . 'Урон: ' . $weapon->min_damage . '–' . $weapon->max_damage . "\n"
                                         . 'Міцність: ' . $weapon->pivot->current_durability . ' / ' . $weapon->pivot->max_durability . "\n";
 
-                                    foreach ($weapon->bonuses ?? [] as $stat => $value) {
+                                    $bonuses = $weapon->pivot->bonuses ?? [];
+                                    if (is_string($bonuses)) {
+                                        $bonuses = json_decode($bonuses, true) ?? [];
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$weapon->pivot->rarity] ?? 'gray';
@@ -346,7 +397,12 @@
                                     $title = $shield->name . ' [' . $shield->required_level . ']' . "\n"
                                         . 'Міцність: ' . $shield->pivot->current_durability . ' / ' . $shield->pivot->max_durability . "\n";
 
-                                    foreach ($shield->bonuses ?? [] as $stat => $value) {
+                                    $bonuses = $shield->pivot->bonuses ?? [];
+                                    if (is_string($bonuses)) {
+                                        $bonuses = json_decode($bonuses, true) ?? [];
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$shield->pivot->rarity] ?? 'gray';
@@ -449,26 +505,26 @@
                             >
                             @if(isset($monsterEquippedBySlot['helmet']))
                                 @php
-                                    $helmet = (object) $monsterEquippedBySlot['helmet'];
-                                    $helmet->pivot = isset($helmet->pivot) ? (object) $helmet->pivot : null;
+                                    $helmet = $monsterEquippedBySlot['helmet'];
+                                    $rarityClass = 'gray';
+                                    if ($helmet->pivot && isset($helmet->pivot->rarity)) {
+                                        $rarityClass = $rarityColors[$helmet->pivot->rarity] ?? 'gray';
+                                    }
 
                                     $title = $helmet->name . ' [' . $helmet->required_level . ']' . "\n";
-
                                     foreach ($helmet->bonuses ?? [] as $stat => $value) {
                                         $title .= ucfirst($stat) . ': +' . $value . "\n";
                                     }
-                                    $rarityClass = $rarityColors[$helmet->pivot->rarity] ?? 'gray';
                                 @endphp
-                                <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
-                                    >
+
+                                <div class="{{ $rarityClass }} relative w-[60px] h-[90px]" title="{{ trim($title) }}">
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
-                                        alt="">
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);" alt="">
                                     <img src="{{ asset($helmet->image) }}"
                                         class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35);
+                                                filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
                                         alt="">
                                 </div>
                             @else
@@ -485,25 +541,29 @@
                             @if(isset($monsterEquippedBySlot['armor']))
                                 @php
                                     $armor = (object) $monsterEquippedBySlot['armor'];
-                                    $armor->pivot = (object) $armor->pivot;
+                                    $armor->pivot = isset($armor->pivot) ? (object) $armor->pivot : null;
 
                                     $title = $armor->name . ' [' . $armor->required_level . ']' . "\n";
 
                                     foreach ($armor->bonuses ?? [] as $stat => $value) {
                                         $title .= ucfirst($stat) . ': +' . $value . "\n";
                                     }
-                                    $rarityClass = $rarityColors[$armor->pivot->rarity] ?? 'gray';
+
+                                    $rarityClass = 'gray';
+                                    if ($armor->pivot !== null && isset($armor->pivot->rarity)) {
+                                        $rarityClass = $rarityColors[$armor->pivot->rarity] ?? 'gray';
+                                    }
                                 @endphp
                                 <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
-                                    >
+                                    title="{{ trim($title) }}">
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                         alt="">
                                     <img src="{{ asset($armor->image) }}"
                                         class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35);
+                                                filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
                                         alt="">
                                 </div>
                             @else
@@ -519,14 +579,17 @@
                              @if(isset($monsterEquippedBySlot['arms']))
                                 @php
                                     $arms = (object) $monsterEquippedBySlot['arms'];
-                                    $arms->pivot = (object) $arms->pivot;
+                                    $arms->pivot = isset($arms->pivot) ? (object) $arms->pivot : null;
 
                                     $title = $arms->name . ' [' . $arms->required_level . ']' . "\n";
 
                                     foreach ($arms->bonuses ?? [] as $stat => $value) {
                                         $title .= ucfirst($stat) . ': +' . $value . "\n";
                                     }
-                                    $rarityClass = $rarityColors[$arms->pivot->rarity] ?? 'gray';
+                                    $rarityClass = 'gray';
+                                    if ($arms->pivot !== null && isset($arms->pivot->rarity)) {
+                                        $rarityClass = $rarityColors[$arms->pivot->rarity] ?? 'gray';
+                                    }
                                 @endphp
                                 <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
@@ -553,14 +616,17 @@
                             @if(isset($monsterEquippedBySlot['legs']))
                                 @php
                                     $legs = (object) $monsterEquippedBySlot['legs'];
-                                    $legs->pivot = (object) $legs->pivot;
+                                    $legs->pivot = isset($legs->pivot) ? (object) $legs->pivot : null;
 
                                     $title = $legs->name . ' [' . $legs->required_level . ']' . "\n";
 
                                     foreach ($legs->bonuses ?? [] as $stat => $value) {
                                         $title .= ucfirst($stat) . ': +' . $value . "\n";
                                     }
-                                    $rarityClass = $rarityColors[$legs->pivot->rarity] ?? 'gray';
+                                    $rarityClass = 'gray';
+                                    if ($legs->pivot !== null && isset($legs->pivot->rarity)) {
+                                        $rarityClass = $rarityColors[$legs->pivot->rarity] ?? 'gray';
+                                    }
                                 @endphp
                                 <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
@@ -587,14 +653,17 @@
                             @if(isset($monsterEquippedBySlot['boots']))
                                 @php
                                     $boots = (object) $monsterEquippedBySlot['boots'];
-                                    $boots->pivot = (object) $boots->pivot;
+                                    $boots->pivot = isset($boots->pivot) ? (object) $boots->pivot : null;
 
                                     $title = $boots->name . ' [' . $boots->required_level . ']' . "\n";
 
                                     foreach ($boots->bonuses ?? [] as $stat => $value) {
                                         $title .= ucfirst($stat) . ': +' . $value . "\n";
                                     }
-                                    $rarityClass = $rarityColors[$boots->pivot->rarity] ?? 'gray';
+                                    $rarityClass = 'gray';
+                                    if ($boots->pivot !== null && isset($boots->pivot->rarity)) {
+                                        $rarityClass = $rarityColors[$boots->pivot->rarity] ?? 'gray';
+                                    }
                                 @endphp
                                 <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
@@ -682,14 +751,17 @@
                             @if(isset($monsterEquippedBySlot['neckless']))
                                 @php
                                     $neckless = $monsterEquippedBySlot['neckless'];
-                                    $neckless->pivot = (object) $neckless->pivot;
+                                    $neckless->pivot = isset($neckless->pivot) ? (object) $neckless->pivot : null;
 
                                     $title = $neckless->name . ' [' . $neckless->required_level . ']' . "\n";
 
                                     foreach ($neckless->bonuses ?? [] as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
-                                    $rarityClass = $rarityColors[$neckless->pivot->rarity] ?? 'gray';
+                                    $rarityClass = 'gray';
+                                    if ($neckless->pivot !== null && isset($neckless->pivot->rarity)) {
+                                        $rarityClass = $rarityColors[$neckless->pivot->rarity] ?? 'gray';
+                                    }
                                 @endphp
                                 <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
@@ -716,14 +788,17 @@
                                     @if(isset($monsterEquippedBySlot[$ringSlot]))
                                         @php
                                             $ring = (object) $monsterEquippedBySlot[$ringSlot];
-                                            $ring->pivot = (object) $ring->pivot;
+                                            $ring->pivot = isset($ring->pivot) ? (object) $ring->pivot : null;
 
                                             $title = $ring->name . ' [' . $ring->required_level . ']' . "\n";
 
                                             foreach ($ring->bonuses ?? [] as $stat => $value) {
                                                 $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                             }
-                                            $rarityClass = $rarityColors[$ring->pivot->rarity] ?? 'gray';
+                                            $rarityClass = 'gray';
+                                            if ($ring->pivot !== null && isset($ring->pivot->rarity)) {
+                                                $rarityClass = $rarityColors[$ring->pivot->rarity] ?? 'gray';
+                                            }
                                         @endphp
                                         <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                             title="{{ trim($title) }}"
@@ -751,7 +826,7 @@
                             @if(isset($monsterEquippedBySlot['weapon']))
                                 @php
                                     $weapon = (object) $monsterEquippedBySlot['weapon'];
-                                    $weapon->pivot = (object) $weapon->pivot;
+                                    $weapon->pivot = isset($weapon->pivot) ? (object) $weapon->pivot : null;
 
                                     $title = $weapon->name . ' [' . $weapon->required_level . ']' . "\n"
                                         . 'Урон: ' . $weapon->min_damage . '–' . $weapon->max_damage . "\n";
@@ -759,7 +834,10 @@
                                     foreach ($weapon->bonuses ?? [] as $stat => $value) {
                                         $title .= ucfirst($stat) . ': +' . $value . "\n";
                                     }
-                                    $rarityClass = $rarityColors[$weapon->pivot->rarity] ?? 'gray';
+                                    $rarityClass = 'gray';
+                                    if ($weapon->pivot !== null && isset($weapon->pivot->rarity)) {
+                                        $rarityClass = $rarityColors[$weapon->pivot->rarity] ?? 'gray';
+                                    }
                                 @endphp
                                 <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
@@ -786,14 +864,17 @@
                             @if(isset($monsterEquippedBySlot['shield']))
                                 @php
                                     $shield = (object) $monsterEquippedBySlot['shield'];
-                                    $shield->pivot = (object) $shield->pivot;
+                                    $shield->pivot = isset($shield->pivot) ? (object) $shield->pivot : null;
 
                                     $title = $shield->name . ' [' . $shield->required_level . ']' . "\n";
 
                                     foreach ($shield->bonuses ?? [] as $stat => $value) {
                                         $title .= ucfirst($stat) . ': +' . $value . "\n";
                                     }
-                                    $rarityClass = $rarityColors[$shield->pivot->rarity] ?? 'gray';
+                                    $rarityClass = 'gray';
+                                    if ($shield->pivot !== null && isset($shield->pivot->rarity)) {
+                                        $rarityClass = $rarityColors[$shield->pivot->rarity] ?? 'gray';
+                                    }
                                 @endphp
                                 <div  class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"

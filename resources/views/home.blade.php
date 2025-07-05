@@ -1,5 +1,16 @@
 @extends('layouts.app')
 @php
+    $labels_ua = [
+        'strength' => 'Сила',
+        'agility' => 'Ловкість',
+        'intuition' => 'Інтуїція',
+        'endurance' => 'Витривалість',
+        'head' => 'Голови',
+        'chest' => 'Грудей',
+        'belly' => 'Живота',
+        'belt' => 'Пояса',
+        'legs' => 'Ніг',
+    ];
     $rarityColors = [
         'common' => 'gray',
         'uncommon' => 'green',
@@ -26,7 +37,12 @@
                                         $title = $helmet->name . ' [' . $helmet->required_level . ']' . "\n"
                                             . 'Міцність: ' . $helmet->pivot->current_durability . ' / ' . $helmet->pivot->max_durability . "\n";
 
-                                        foreach ($helmet->bonuses ?? [] as $stat => $value) {
+                                        $bonuses = $helmet->pivot->bonuses ?? [];
+                                        if (is_string($bonuses)) {
+                                            $bonuses = json_decode($bonuses, true) ?? [];
+                                        }
+
+                                        foreach ($bonuses as $stat => $value) {
                                             $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                         }
                                         $rarityClass = $rarityColors[$equippedBySlot['helmet']->pivot->rarity] ?? 'gray';
@@ -61,7 +77,12 @@
                                             $title .= 'Броня ' . ($labels_ua[$zone] ?? ucfirst($zone)) . ': ' . $range['min'] . '–' . $range['max'] . "\n";
                                         }
 
-                                        foreach ($armor->bonuses ?? [] as $stat => $value) {
+                                        $bonuses = $armor->pivot->bonuses ?? [];
+                                        if (is_string($bonuses)) {
+                                            $bonuses = json_decode($bonuses, true) ?? [];
+                                        }
+
+                                        foreach ($bonuses as $stat => $value) {
                                             $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                         }
                                         $rarityClass = $rarityColors[$equippedBySlot['armor']->pivot->rarity] ?? 'gray';
@@ -91,7 +112,12 @@
                                         $title = $arms->name . ' [' . $arms->required_level . ']' . "\n"
                                             . 'Міцність: ' . $arms->pivot->current_durability . ' / ' . $arms->pivot->max_durability . "\n";
 
-                                        foreach ($arms->bonuses ?? [] as $stat => $value) {
+                                        $bonuses = $arms->pivot->bonuses ?? [];
+                                        if (is_string($bonuses)) {
+                                            $bonuses = json_decode($bonuses, true) ?? [];
+                                        }
+
+                                        foreach ($bonuses as $stat => $value) {
                                             $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                         }
                                         $rarityClass = $rarityColors[$equippedBySlot['arms']->pivot->rarity] ?? 'gray';
@@ -121,7 +147,12 @@
                                         $title = $legs->name . ' [' . $legs->required_level . ']' . "\n"
                                             . 'Міцність: ' . $legs->pivot->current_durability . ' / ' . $legs->pivot->max_durability . "\n";
 
-                                        foreach ($legs->bonuses ?? [] as $stat => $value) {
+                                        $bonuses = $legs->pivot->bonuses ?? [];
+                                        if (is_string($bonuses)) {
+                                            $bonuses = json_decode($bonuses, true) ?? [];
+                                        }
+
+                                        foreach ($bonuses as $stat => $value) {
                                             $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                         }
                                         $rarityClass = $rarityColors[$equippedBySlot['legs']->pivot->rarity] ?? 'gray';
@@ -151,7 +182,12 @@
                                         $title = $boots->name . ' [' . $boots->required_level . ']' . "\n"
                                             . 'Міцність: ' . $boots->pivot->current_durability . ' / ' . $boots->pivot->max_durability . "\n";
 
-                                        foreach ($boots->bonuses ?? [] as $stat => $value) {
+                                        $bonuses = $boots->pivot->bonuses ?? [];
+                                        if (is_string($bonuses)) {
+                                            $bonuses = json_decode($bonuses, true) ?? [];
+                                        }
+
+                                        foreach ($bonuses as $stat => $value) {
                                             $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                         }
                                         $rarityClass = $rarityColors[$equippedBySlot['boots']->pivot->rarity] ?? 'gray';
@@ -195,7 +231,12 @@
                                     $title = $neckless->name . ' [' . $neckless->required_level . ']' . "\n"
                                         . 'Міцність: ' . $neckless->pivot->current_durability . ' / ' . $neckless->pivot->max_durability . "\n";
 
-                                    foreach ($neckless->bonuses ?? [] as $stat => $value) {
+                                    $bonuses = $neckless->pivot->bonuses ?? [];
+                                    if (is_string($bonuses)) {
+                                        $bonuses = json_decode($bonuses, true) ?? [];
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$equippedBySlot['neckless']->pivot->rarity] ?? 'gray';
@@ -228,7 +269,12 @@
                                                 $title = $ring->name . ' [' . $ring->required_level . ']' . "\n"
                                                     . 'Міцність: ' . $ring->pivot->current_durability . ' / ' . $ring->pivot->max_durability . "\n";
 
-                                                foreach ($ring->bonuses ?? [] as $stat => $value) {
+                                                $bonuses = $ring->pivot->bonuses ?? [];
+                                                if (is_string($bonuses)) {
+                                                    $bonuses = json_decode($bonuses, true) ?? [];
+                                                }
+
+                                                foreach ($bonuses as $stat => $value) {
                                                     $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                                 }
                                                 $rarityClass = $rarityColors[$equippedBySlot[$ringSlot]->pivot->rarity] ?? 'gray';
@@ -263,7 +309,12 @@
                                             . 'Урон: ' . $weapon->min_damage . '–' . $weapon->max_damage . "\n"
                                             . 'Міцність: ' . $weapon->pivot->current_durability . ' / ' . $weapon->pivot->max_durability . "\n";
 
-                                        foreach ($weapon->bonuses ?? [] as $stat => $value) {
+                                        $bonuses = $weapon->pivot->bonuses ?? [];
+                                        if (is_string($bonuses)) {
+                                            $bonuses = json_decode($bonuses, true) ?? [];
+                                        }
+
+                                        foreach ($bonuses as $stat => $value) {
                                             $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                         }
                                         $rarityClass = $rarityColors[$equippedBySlot['weapon']->pivot->rarity] ?? 'gray';
@@ -294,7 +345,12 @@
                                         $title = $shield->name . ' [' . $shield->required_level . ']' . "\n"
                                             . 'Міцність: ' . $shield->pivot->current_durability . ' / ' . $shield->pivot->max_durability . "\n";
 
-                                        foreach ($shield->bonuses ?? [] as $stat => $value) {
+                                        $bonuses = $shield->pivot->bonuses ?? [];
+                                        if (is_string($bonuses)) {
+                                            $bonuses = json_decode($bonuses, true) ?? [];
+                                        }
+
+                                        foreach ($bonuses as $stat => $value) {
                                             $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                         }
                                         $rarityClass = $rarityColors[$equippedBySlot['shield']->pivot->rarity] ?? 'gray';

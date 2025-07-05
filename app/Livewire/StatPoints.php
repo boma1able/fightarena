@@ -15,7 +15,8 @@ class StatPoints extends Component
 
     public function mount(Character $character)
     {
-        $this->character = $character;
+        $this->character = Character::with('equippedItems')->find($character->id);
+        // $this->character = $character;
     }
 
     public function incrementStat($stat)
@@ -44,7 +45,7 @@ class StatPoints extends Component
 
     public function render()
     {
-        $this->character = Character::find($this->character->id);
+        // $this->character = Character::with(['equippedItems'])->find($this->character->id);
 
         return view('livewire.stat-points', [
             'character' => $this->character,
