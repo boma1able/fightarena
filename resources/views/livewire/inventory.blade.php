@@ -8,7 +8,7 @@
         ];
         $labels_ua = [
             'strength' => 'Сила',
-            'agility' => 'Ловкість',
+            'agility' => 'Спритність',
             'intuition' => 'Інтуїція',
             'endurance' => 'Витривалість',
             'head' => 'Голови',
@@ -449,7 +449,7 @@
                                 : 'info';
 
                             show = true;
-                            setTimeout(() => show = false, 2000000);
+                            setTimeout(() => show = false, 1500);
                         });
                     "
                     x-show="show"
@@ -557,7 +557,7 @@
                             </div>
 
                             <div class="w-full flex flex-col p-2">
-                                <h3 class="font-semibold mb-1 item-name">{{ $item->name }} [{{ $item->required_level }}]</h3>
+                                <h3 class="font-semibold mb-1 item-name">{{ $item->name }} [{{ $item->pivot->level }}]</h3>
                                 @if($item->min_damage)
                                     <p>Урон: {{ $item->min_damage }}–{{ $item->max_damage }}</p>
                                 @endif
@@ -569,8 +569,8 @@
                                     <p>{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
                                 @endforeach
                                 <p>Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
-                                <p @class(['!text-red-500' => $character->level < $item->required_level])>
-                                    {{ $character->level < $item->required_level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->required_level }}
+                                <p @class(['!text-red-500' => $character->level < $item->pivot->level])>
+                                    {{ $character->level < $item->pivot->level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->pivot->level }}
                                 </p>
                                 <p class="mt-2 text-[14px] font-thin italic">{{ $item->description }}</p>
 

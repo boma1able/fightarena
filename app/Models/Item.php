@@ -36,6 +36,6 @@ class Item extends Model
     public function characters()
     {
         return $this->belongsToMany(Character::class, 'character_items')
-            ->withPivot('location', 'slot', 'current_durability', 'max_durability');
+            ->withPivot('location', 'slot', 'current_durability', 'max_durability', 'level');
     }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('character_id')->constrained()->onDelete('cascade');
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
+            $table->unsignedTinyInteger('level')->default(1);
             $table->json('bonuses')->nullable();
             $table->string('rarity')->default('common');
             $table->unsignedTinyInteger('current_durability')->default(10);

@@ -6,6 +6,7 @@ use \App\Helpers\ItemBonusGenerator;
 use App\Models\Item;
 use App\Models\Monster;
 use App\Services\DropService;
+use App\Services\ItemBonusService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -125,106 +126,90 @@ class Battle extends Component
     }
 
     public function equipMonster(Monster $monster): void
-    {
-        $allSlots = [
-            'helmet', 'armor', 'boots', 'weapon', 'shield', 'legs', 'arms', 'neckless',
-        ];
+{
+    $allSlots = [
+        'helmet', 'armor', 'boots', 'weapon', 'shield', 'legs', 'arms', 'neckless',
+        'ring1', 'ring2',
+    ];
 
-        // Максимальна кількість предметів = 1 + level (але не більше ніж кількість слотів)
-        $maxItems = min(count($allSlots), max(1, $monster->level + 1));
-        $equippedCount = 0;
+    $maxItems = min(count($allSlots), max(1, $monster->level + 1));
+    $equippedCount = 0;
+    $usedSlots = [];
 
-        // Якщо рівень >= 3 — зброя обов'язково
-        if ($monster->level >= 3) {
-            $weapon = Item::query()
-                ->where('slot', 'weapon')
-                ->where('required_level', '<=', $monster->level)
-                ->inRandomOrder()
-                ->first();
+    // Якщо рівень >= 3 — зброя обов'язково
+    if ($monster->level >= 3) {
+        $weapon = Item::query()
+            ->where('slot', 'weapon')
+            ->where('required_level', '<=', $monster->level)
+            ->inRandomOrder()
+            ->first();
 
-            $rarity = DropService::pickRarity();
-            if ($weapon) {
-                $monster->items()->attach($weapon->id, [
-                    'slot' => 'weapon',
-                    'is_broken' => false,
-                    'rarity' => $rarity,
-                ]);
-                $equippedCount++;
+        if ($weapon) {
+            $rarity = DropService::pickRarity($monster->level);
+            $bonuses = ItemBonusService::generate($rarity, 'weapon', $monster->level);
 
-                foreach ($weapon->bonuses ?? [] as $stat => $value) {
-                    if (in_array($stat, ['strength', 'agility', 'intuition', 'endurance'])) {
-                        $monster->{$stat} += $value;
-                    }
+            $monster->items()->attach($weapon->id, [
+                'slot' => 'weapon',
+                'rarity' => $rarity,
+                'bonuses' => json_encode($bonuses),
+                'level' => $monster->level,
+            ]);
+
+            $equippedCount++;
+            $usedSlots[] = 'weapon';
+
+            foreach ($bonuses as $stat => $value) {
+                if (in_array($stat, ['strength', 'agility', 'intuition', 'endurance'])) {
+                    $monster->{$stat} += $value;
                 }
             }
         }
-
-        // Вибираємо випадкові інші слоти (крім weapon, якщо вже є)
-        $randomSlots = collect($allSlots)
-            ->filter(fn($slot) => !($monster->level >= 3 && $slot === 'weapon'))
-            ->shuffle()
-            ->take($maxItems - $equippedCount);
-
-        foreach ($randomSlots as $slot) {
-            $item = Item::query()
-                ->where('slot', $slot)
-                ->where('required_level', '<=', $monster->level)
-                ->inRandomOrder()
-                ->first();
-
-            $rarity = DropService::pickRarity();
-
-            if ($item) {
-                $monster->items()->attach($item->id, [
-                    'slot' => $slot,
-                    'is_broken' => false,
-                    'rarity' => $rarity,
-                ]);
-
-                $equippedCount++; // ДОДАЙ ЦЕ
-
-                foreach ($item->bonuses ?? [] as $stat => $value) {
-                    if (in_array($stat, ['strength', 'agility', 'intuition', 'endurance'])) {
-                        $monster->{$stat} += $value;
-                    }
-                }
-            }
-        }
-
-        // Додаємо кільця
-        for ($i = 1; $i <= 2; $i++) {
-            if ($equippedCount >= $maxItems) break;
-
-            $ringSlot = 'ring' . $i;
-
-            $item = Item::query()
-                ->where('slot', 'ring')
-                ->where('required_level', '<=', $monster->level)
-                ->inRandomOrder()
-                ->first();
-
-            $rarity = DropService::pickRarity();
-            if ($item) {
-                $monster->items()->attach($item->id, [
-                    'slot' => $ringSlot,
-                    'is_broken' => false,
-                    'rarity' => $rarity,
-                ]);
-                $equippedCount++;
-
-                foreach ($item->bonuses ?? [] as $stat => $value) {
-                    if (in_array($stat, ['strength', 'agility', 'intuition', 'endurance'])) {
-                        $monster->{$stat} += $value;
-                    }
-                }
-            }
-        }
-
-        // Оновлюємо здоров’я
-        $monster->base_health = $monster->endurance * 6;
-        $monster->current_health = $monster->base_health;
-        $monster->save();
     }
+
+    // Вибираємо інші випадкові слоти (включаючи кільця)
+    $availableSlots = collect($allSlots)
+        ->filter(fn($slot) => !in_array($slot, $usedSlots))
+        ->shuffle()
+        ->take($maxItems - $equippedCount);
+
+    foreach ($availableSlots as $slot) {
+        // Для ring1/ring2 шукаємо item зі slot = 'ring'
+        $dbSlot = str_starts_with($slot, 'ring') ? 'ring' : $slot;
+
+        $item = Item::query()
+            ->where('slot', $dbSlot)
+            ->where('required_level', '<=', $monster->level)
+            ->inRandomOrder()
+            ->first();
+
+        if ($item) {
+            $rarity = DropService::pickRarity($monster->level);
+            $bonuses = ItemBonusService::generate($rarity, $item->slot, $monster->level);
+
+            $monster->items()->attach($item->id, [
+                'slot' => $slot,
+                'rarity' => $rarity,
+                'bonuses' => json_encode($bonuses),
+                'level' => $monster->level,
+            ]);
+
+            $equippedCount++;
+            $usedSlots[] = $slot;
+
+            foreach ($bonuses as $stat => $value) {
+                if (in_array($stat, ['strength', 'agility', 'intuition', 'endurance'])) {
+                    $monster->{$stat} += $value;
+                }
+            }
+        }
+    }
+
+    // Підрахунок HP після застосування бонусів
+    $monster->base_health = $monster->endurance * 6;
+    $monster->current_health = $monster->base_health;
+    $monster->save();
+}
+
 
 
     public function fightStep()
@@ -389,7 +374,7 @@ class Battle extends Component
         } elseif ($this->monster->current_health <= 0) {
             $result = "Ви перемогли " . $this->monster->name . "!";
 
-            $drop = $this->monster->generateDrop();
+            $drop = DropService::generateDrop(100, $this->monster->level);
             if ($drop) {
                 $maxDurability = $this->character->getMaxDurabilityForItem($drop);
 
@@ -400,9 +385,10 @@ class Battle extends Component
                     'rarity' => $drop->rarity,
                     'location' => 'inventory',
                     'bonuses' => json_encode($drop->bonuses),
+                    'level' => $drop->level,
                 ]);
 
-                $this->character->log("Ви отримали предмет: {$drop->name} ({$drop->rarity})");
+                $this->character->log("Ви отримали предмет: {$drop->name} [{$drop->level}] ({$drop->rarity})");
             }
 
             $xpMultiplier = 1.2;

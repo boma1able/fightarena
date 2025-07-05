@@ -192,12 +192,12 @@ public function totalPhysicalDefense(): array
     public function items()
     {
         return $this->belongsToMany(Item::class, 'monster_items')
-            ->withPivot('slot', 'current_durability', 'max_durability', 'is_broken', 'rarity');
+            ->withPivot('slot', 'rarity', 'bonuses', 'level');
     }
 
     public function generateDrop(): ?Item
     {
-        return DropService::generateDrop(100, $this->level); // 50% шанс і рівень монстра
+        return DropService::generateForMonster($this);
     }
 
 }

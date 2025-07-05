@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('monster_id')->constrained()->onDelete('cascade');
             $table->foreignId('item_id')->constrained('items')->onDelete('cascade');
-            $table->unsignedTinyInteger('current_durability')->default(10);
-            $table->unsignedTinyInteger('max_durability')->default(10);
-            $table->boolean('is_broken')->default(false);
+            $table->json('bonuses')->nullable();
+            $table->unsignedTinyInteger('level')->default(1);
             $table->string('slot')->nullable();
             $table->string('rarity')->default('common');
             $table->timestamps();

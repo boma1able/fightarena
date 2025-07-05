@@ -36,8 +36,10 @@ class Character extends Model
 
     public function getMaxDurabilityForItem(Item $item): int
     {
+        $level = $item->level ?? $item->required_level ?? 1;
+
         $baseDurability = $item->base_max_durability ?? 100;
-        $levelFactor = 1 + ($item->required_level * 0.1);
+        $levelFactor = 1 + ($level * 0.1);
 
         return (int) round($baseDurability * $levelFactor);
     }
@@ -326,14 +328,14 @@ class Character extends Model
     public function inventoryItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot', 'is_broken', 'rarity', 'bonuses'])
+            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot', 'is_broken', 'rarity', 'bonuses', 'level'])
             ->wherePivot('location', 'inventory');
     }
 
     public function equippedItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity', 'bonuses'])
+            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity', 'bonuses', 'level'])
             ->wherePivot('location', 'equipped')
             ->withCasts(['pivot.bonuses' => 'array']);
     }

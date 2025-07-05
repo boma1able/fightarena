@@ -511,9 +511,16 @@
                                         $rarityClass = $rarityColors[$helmet->pivot->rarity] ?? 'gray';
                                     }
 
-                                    $title = $helmet->name . ' [' . $helmet->required_level . ']' . "\n";
-                                    foreach ($helmet->bonuses ?? [] as $stat => $value) {
-                                        $title .= ucfirst($stat) . ': +' . $value . "\n";
+                                    $level = $helmet->pivot->level ?? $helmet->required_level;
+                                    $title = $helmet->name . ' [' . $level . ']' . "\n";
+                                    $bonuses = [];
+
+                                    if ($helmet->pivot !== null && !empty($helmet->pivot->bonuses)) {
+                                        $bonuses = json_decode($helmet->pivot->bonuses, true);
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                 @endphp
 
@@ -543,10 +550,17 @@
                                     $armor = (object) $monsterEquippedBySlot['armor'];
                                     $armor->pivot = isset($armor->pivot) ? (object) $armor->pivot : null;
 
-                                    $title = $armor->name . ' [' . $armor->required_level . ']' . "\n";
+                                    $level = $armor->pivot->level ?? $armor->required_level;
+                                    $title = $armor->name . ' [' . $level . ']' . "\n";
 
-                                    foreach ($armor->bonuses ?? [] as $stat => $value) {
-                                        $title .= ucfirst($stat) . ': +' . $value . "\n";
+                                    $bonuses = [];
+
+                                    if ($armor->pivot !== null && !empty($armor->pivot->bonuses)) {
+                                        $bonuses = json_decode($armor->pivot->bonuses, true);
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
 
                                     $rarityClass = 'gray';
@@ -581,11 +595,19 @@
                                     $arms = (object) $monsterEquippedBySlot['arms'];
                                     $arms->pivot = isset($arms->pivot) ? (object) $arms->pivot : null;
 
-                                    $title = $arms->name . ' [' . $arms->required_level . ']' . "\n";
+                                    $level = $arms->pivot->level ?? $arms->required_level;
+                                    $title = $arms->name . ' [' . $level . ']' . "\n";
 
-                                    foreach ($arms->bonuses ?? [] as $stat => $value) {
-                                        $title .= ucfirst($stat) . ': +' . $value . "\n";
+                                    $bonuses = [];
+
+                                    if ($arms->pivot !== null && !empty($arms->pivot->bonuses)) {
+                                        $bonuses = json_decode($arms->pivot->bonuses, true);
                                     }
+
+                                    foreach ($bonuses as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+
                                     $rarityClass = 'gray';
                                     if ($arms->pivot !== null && isset($arms->pivot->rarity)) {
                                         $rarityClass = $rarityColors[$arms->pivot->rarity] ?? 'gray';
@@ -618,11 +640,19 @@
                                     $legs = (object) $monsterEquippedBySlot['legs'];
                                     $legs->pivot = isset($legs->pivot) ? (object) $legs->pivot : null;
 
-                                    $title = $legs->name . ' [' . $legs->required_level . ']' . "\n";
+                                    $level = $legs->pivot->level ?? $legs->required_level;
+                                    $title = $legs->name . ' [' . $level . ']' . "\n";
 
-                                    foreach ($legs->bonuses ?? [] as $stat => $value) {
-                                        $title .= ucfirst($stat) . ': +' . $value . "\n";
+                                    $bonuses = [];
+
+                                    if ($legs->pivot !== null && !empty($legs->pivot->bonuses)) {
+                                        $bonuses = json_decode($legs->pivot->bonuses, true);
                                     }
+
+                                    foreach ($bonuses as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+
                                     $rarityClass = 'gray';
                                     if ($legs->pivot !== null && isset($legs->pivot->rarity)) {
                                         $rarityClass = $rarityColors[$legs->pivot->rarity] ?? 'gray';
@@ -655,11 +685,19 @@
                                     $boots = (object) $monsterEquippedBySlot['boots'];
                                     $boots->pivot = isset($boots->pivot) ? (object) $boots->pivot : null;
 
-                                    $title = $boots->name . ' [' . $boots->required_level . ']' . "\n";
+                                    $level = $boots->pivot->level ?? $boots->required_level;
+                                    $title = $boots->name . ' [' . $level . ']' . "\n";
 
-                                    foreach ($boots->bonuses ?? [] as $stat => $value) {
-                                        $title .= ucfirst($stat) . ': +' . $value . "\n";
+                                    $bonuses = [];
+
+                                    if ($boots->pivot !== null && !empty($boots->pivot->bonuses)) {
+                                        $bonuses = json_decode($boots->pivot->bonuses, true);
                                     }
+
+                                    foreach ($bonuses as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+
                                     $rarityClass = 'gray';
                                     if ($boots->pivot !== null && isset($boots->pivot->rarity)) {
                                         $rarityClass = $rarityColors[$boots->pivot->rarity] ?? 'gray';
@@ -753,11 +791,19 @@
                                     $neckless = $monsterEquippedBySlot['neckless'];
                                     $neckless->pivot = isset($neckless->pivot) ? (object) $neckless->pivot : null;
 
-                                    $title = $neckless->name . ' [' . $neckless->required_level . ']' . "\n";
+                                    $level = $neckless->pivot->level ?? $neckless->required_level;
+                                    $title = $neckless->name . ' [' . $level . ']' . "\n";
 
-                                    foreach ($neckless->bonuses ?? [] as $stat => $value) {
+                                    $bonuses = [];
+
+                                    if ($neckless->pivot !== null && !empty($neckless->pivot->bonuses)) {
+                                        $bonuses = json_decode($neckless->pivot->bonuses, true);
+                                    }
+
+                                    foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
+
                                     $rarityClass = 'gray';
                                     if ($neckless->pivot !== null && isset($neckless->pivot->rarity)) {
                                         $rarityClass = $rarityColors[$neckless->pivot->rarity] ?? 'gray';
@@ -790,11 +836,19 @@
                                             $ring = (object) $monsterEquippedBySlot[$ringSlot];
                                             $ring->pivot = isset($ring->pivot) ? (object) $ring->pivot : null;
 
-                                            $title = $ring->name . ' [' . $ring->required_level . ']' . "\n";
+                                            $level = $ring->pivot->level ?? $ring->required_level;
+                                            $title = $ring->name . ' [' . $level . ']' . "\n";
 
-                                            foreach ($ring->bonuses ?? [] as $stat => $value) {
+                                            $bonuses = [];
+
+                                            if ($ring->pivot !== null && !empty($ring->pivot->bonuses)) {
+                                                $bonuses = json_decode($ring->pivot->bonuses, true);
+                                            }
+
+                                            foreach ($bonuses as $stat => $value) {
                                                 $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                             }
+
                                             $rarityClass = 'gray';
                                             if ($ring->pivot !== null && isset($ring->pivot->rarity)) {
                                                 $rarityClass = $rarityColors[$ring->pivot->rarity] ?? 'gray';
@@ -828,12 +882,20 @@
                                     $weapon = (object) $monsterEquippedBySlot['weapon'];
                                     $weapon->pivot = isset($weapon->pivot) ? (object) $weapon->pivot : null;
 
-                                    $title = $weapon->name . ' [' . $weapon->required_level . ']' . "\n"
+                                    $level = $weapon->pivot->level ?? $weapon->required_level;
+                                    $title = $weapon->name . ' [' . $level . ']' . "\n"
                                         . 'Урон: ' . $weapon->min_damage . '–' . $weapon->max_damage . "\n";
 
-                                    foreach ($weapon->bonuses ?? [] as $stat => $value) {
-                                        $title .= ucfirst($stat) . ': +' . $value . "\n";
+                                    $bonuses = [];
+
+                                    if ($weapon->pivot !== null && !empty($weapon->pivot->bonuses)) {
+                                        $bonuses = json_decode($weapon->pivot->bonuses, true);
                                     }
+
+                                    foreach ($bonuses as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+
                                     $rarityClass = 'gray';
                                     if ($weapon->pivot !== null && isset($weapon->pivot->rarity)) {
                                         $rarityClass = $rarityColors[$weapon->pivot->rarity] ?? 'gray';
@@ -866,11 +928,19 @@
                                     $shield = (object) $monsterEquippedBySlot['shield'];
                                     $shield->pivot = isset($shield->pivot) ? (object) $shield->pivot : null;
 
-                                    $title = $shield->name . ' [' . $shield->required_level . ']' . "\n";
+                                    $level = $shield->pivot->level ?? $shield->required_level;
+                                    $title = $shield->name . ' [' . $level . ']' . "\n";
 
-                                    foreach ($shield->bonuses ?? [] as $stat => $value) {
-                                        $title .= ucfirst($stat) . ': +' . $value . "\n";
+                                    $bonuses = [];
+
+                                    if ($shield->pivot !== null && !empty($shield->pivot->bonuses)) {
+                                        $bonuses = json_decode($shield->pivot->bonuses, true);
                                     }
+
+                                    foreach ($bonuses as $stat => $value) {
+                                        $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
+                                    }
+
                                     $rarityClass = 'gray';
                                     if ($shield->pivot !== null && isset($shield->pivot->rarity)) {
                                         $rarityClass = $rarityColors[$shield->pivot->rarity] ?? 'gray';

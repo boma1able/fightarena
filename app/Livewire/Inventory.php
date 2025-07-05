@@ -35,12 +35,11 @@ class Inventory extends Component
     public function equipItem($pivotId)
     {
         $itemRow = DB::table('character_items')->find($pivotId);
-
         if (!$itemRow || $itemRow->location !== 'inventory') return;
 
         $item = Item::findOrFail($itemRow->item_id);
 
-        if ($this->character->level < $item->required_level) {
+        if ($this->character->level < $itemRow->level) {
             $this->dispatch('trigger-toast', [
                 'message' => 'Ваш рівень замалий для екіпірування цього предмета!',
                 'type' => 'error',

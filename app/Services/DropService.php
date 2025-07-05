@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Item;
+use App\Models\Monster;
+use App\Services\ItemBonusService;
 
 class DropService
 {
@@ -29,7 +31,7 @@ class DropService
         }
 
         $item = clone $item;
-
+        $item->level = $level;
         // Тут виклик сервісу генерації бонусів
         $rarity = self::pickRarity();
 
@@ -60,5 +62,10 @@ class DropService
         }
 
         return 'common';
+    }
+
+    public static function generateForMonster(Monster $monster): ?Item
+    {
+        return self::generateDrop(100, $monster->level);
     }
 }
