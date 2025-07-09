@@ -192,7 +192,7 @@ public function totalPhysicalDefense(): array
     public function items()
     {
         return $this->belongsToMany(Item::class, 'monster_items')
-            ->withPivot('slot', 'rarity', 'bonuses', 'level');
+            ->withPivot('slot', 'rarity', 'bonuses', 'level', 'sell_price');
     }
 
     public function generateDrop(): ?Item

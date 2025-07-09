@@ -151,8 +151,12 @@ class Inventory extends Component
             return;
         }
 
+        $pivotSellPrice = $itemRow->sell_price ?? null;
+        $sellPrice = $pivotSellPrice !== null ? $pivotSellPrice : $item->sell_price;
+        $sellPrice = $sellPrice ?? 1;
+
         // Додаємо золото персонажу
-        $character->gold += $item->sell_price ?? 1;
+        $character->gold += $sellPrice;
         $character->save();
 
         // Видаляємо рядок з character_items

@@ -572,6 +572,11 @@
                                 <p @class(['!text-red-500' => $character->level < $item->pivot->level])>
                                     {{ $character->level < $item->pivot->level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->pivot->level }}
                                 </p>
+                                @if($item->pivot->sell_price == null)
+                                    <p>Ціна продажу: {{ $item->sell_price }}</p>
+                                @else
+                                    <p>Ціна продажу: {{ $item->pivot->sell_price }}</p>
+                                @endif
                                 <p class="mt-2 text-[14px] font-thin italic">{{ $item->description }}</p>
 
                             </div>

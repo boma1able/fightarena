@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('level')->default(1);
             $table->string('slot')->nullable();
             $table->string('rarity')->default('common');
+            $table->unsignedInteger('sell_price')->nullable();
             $table->timestamps();
         });
     }

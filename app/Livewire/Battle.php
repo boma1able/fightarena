@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Monster;
 use App\Services\DropService;
 use App\Services\ItemBonusService;
+use App\Services\ItemPricingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
@@ -147,12 +148,14 @@ class Battle extends Component
         if ($weapon) {
             $rarity = DropService::pickRarity($monster->level);
             $bonuses = ItemBonusService::generate($rarity, 'weapon', $monster->level);
+            $price = ItemPricingService::calculate($bonuses, $rarity, $monster->level);
 
             $monster->items()->attach($weapon->id, [
                 'slot' => 'weapon',
                 'rarity' => $rarity,
                 'bonuses' => json_encode($bonuses),
                 'level' => $monster->level,
+                'sell_price' => $price,
             ]);
 
             $equippedCount++;
@@ -185,12 +188,14 @@ class Battle extends Component
         if ($item) {
             $rarity = DropService::pickRarity($monster->level);
             $bonuses = ItemBonusService::generate($rarity, $item->slot, $monster->level);
+            $price = ItemPricingService::calculate($bonuses, $rarity, $monster->level);
 
             $monster->items()->attach($item->id, [
                 'slot' => $slot,
                 'rarity' => $rarity,
                 'bonuses' => json_encode($bonuses),
                 'level' => $monster->level,
+                'sell_price' => $price,
             ]);
 
             $equippedCount++;
@@ -375,7 +380,9 @@ class Battle extends Component
             $result = "Ви перемогли " . $this->monster->name . "!";
 
             $drop = DropService::generateDrop(100, $this->monster->level);
+
             if ($drop) {
+                $price = ItemPricingService::calculate($drop->bonuses, $drop->rarity, $drop->level);
                 $maxDurability = $this->character->getMaxDurabilityForItem($drop);
 
                 $this->character->inventoryItems()->attach($drop->id, [
@@ -386,6 +393,7 @@ class Battle extends Component
                     'location' => 'inventory',
                     'bonuses' => json_encode($drop->bonuses),
                     'level' => $drop->level,
+                    'sell_price' => $price,
                 ]);
 
                 $this->character->log("Ви отримали предмет: {$drop->name} [{$drop->level}] ({$drop->rarity})");
