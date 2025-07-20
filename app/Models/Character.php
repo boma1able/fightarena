@@ -107,6 +107,10 @@ class Character extends Model
 
         $base = $this->base_damage;
 
+        if (!$weapon || $weapon->isBroken()) {
+            return ['min' => $base, 'max' => $base];
+        }
+
         $minDamage = ($weapon->min_damage ?? 0) + $base;
         $maxDamage = ($weapon->max_damage ?? 0) + $base;
 
@@ -183,6 +187,10 @@ class Character extends Model
         ];
 
         foreach ($this->equippedItems as $item) {
+             //Пропускаємо зламані предмети
+             if (method_exists($item, 'isBroken') && $item->isBroken()) {
+                continue;
+            }
             $defenseByZone = $item->defense_by_zone ?? [];
 
             foreach ($defenseByZone as $zone => $values) {
@@ -231,6 +239,11 @@ class Character extends Model
         $bonuses = [];
 
         foreach ($this->equippedItems as $item) {
+            // Ігноруємо зламані предмети
+            if (method_exists($item, 'isBroken') && $item->isBroken()) {
+                continue;
+            }
+
             $itemBonuses = $item->pivot->bonuses ?? [];
 
             if (is_string($itemBonuses)) {
@@ -251,7 +264,6 @@ class Character extends Model
         $bonus = $this->bonuses[$statKey] ?? 0;
         return $base + $bonus;
     }
-
 
     public function regenerateHealthDynamic(): bool
     {
@@ -309,7 +321,6 @@ class Character extends Model
             $this->save();
         }
     }
-
 
     public function getExperienceToLevelUp(): int
     {

@@ -37,7 +37,7 @@
                 <div class="flex">
                     <div class="flex flex-col" style="gap: 10px">
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-helmet.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['helmet']))
                                 @php
@@ -56,8 +56,9 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$helmet->pivot->rarity] ?? 'gray';
+                                    $isBroken = $helmet->pivot?->current_durability === 0;
                                 @endphp
-                                <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -75,7 +76,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-armor.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['armor']))
                                 @php
@@ -94,8 +95,9 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$armor->pivot->rarity] ?? 'gray';
+                                    $isBroken = $armor->pivot?->current_durability === 0;
                                 @endphp
-                                <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -113,7 +115,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-arms.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['arms']))
                                 @php
@@ -132,8 +134,9 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$arms->pivot->rarity] ?? 'gray';
+                                    $isBroken = $arms->pivot?->current_durability === 0;
                                 @endphp
-                                <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -151,7 +154,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-legs.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['legs']))
                                 @php
@@ -170,8 +173,9 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$legs->pivot->rarity] ?? 'gray';
+                                    $isBroken = $legs->pivot?->current_durability === 0;
                                 @endphp
-                                <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -189,7 +193,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-boots.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['boots']))
                                 @php
@@ -208,8 +212,9 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$boots->pivot->rarity] ?? 'gray';
+                                    $isBroken = $boots->pivot?->current_durability === 0;
                                 @endphp
-                                <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -236,7 +241,39 @@
                             <div class="absolute top-0 left-0 w-full text-center text-black z-[1]"></div>
                             <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                         </div>
-                        <div class="avatar w-[205px] h-[410px]" style="background: url({{ asset('images/avatar.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]"></div>
+                        <div class="relative avatar w-[205px] h-[410px] overflow-hidden group transition-left duration-300"
+                            style="background: url({{ asset('images/avatar-male.png') }}) center center no-repeat; background-size: cover;"
+                            title="{{ $character->user->name }} [{{ $character->level }}]
+                        ">
+                            @php
+                                $zoneLabels = [
+                                    'head' => 'Броня голови',
+                                    'chest' => 'Броня грудей',
+                                    'belly' => 'Броня живота',
+                                    'belt' => 'Броня пояса',
+                                    'legs' => 'Броня ніг',
+                                ];
+                            @endphp
+                            <div class="absolute bg-black/60 text-white w-full h-full overflow-auto py-2 top-0 -left-full ml-2 group-hover:left-[0] group-hover:ml-0 transition-w duration-300">
+
+                                <ul class="list-inside px-2">
+                                    <li>Сила: {{ $character->strength }}</li>
+                                    <li>Спритність: {{ $character->agility }}</li>
+                                    <li>Інтуіція: {{ $character->intuition }}</li>
+                                    <li>Витривалість: {{ $character->endurance }}</li>
+                                </ul>
+
+                                @livewire('character-modificators', ['character' => $character])
+                                @livewire('character-armor', ['character' => $character])
+
+                                <div class="flex flex-col items-center justify-center gap-1 absolute w-[8px] h-full right-0 top-0 text-white bg-black z-10">
+                                    <span class="bg-white w-[3px] h-[3px] rounded-[50%]"></span>
+                                    <span class="bg-white w-[3px] h-[3px] rounded-[50%]"></span>
+                                    <span class="bg-white w-[3px] h-[3px] rounded-[50%]"></span>
+                                </div>
+                            </div>
+
+                        </div>
                         <div
                             x-data="{
                                 showPlayerHit: false,
@@ -267,7 +304,7 @@
                     <div class="flex flex-col" style="gap: 10px">
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-neckless.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['neckless']))
                                 @php
@@ -286,8 +323,9 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$neckless->pivot->rarity] ?? 'gray';
+                                    $isBroken = $neckless->pivot?->current_durability === 0;
                                 @endphp
-                                <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -326,8 +364,9 @@
                                                 $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                             }
                                             $rarityClass = $rarityColors[$ring->pivot->rarity] ?? 'gray';
+                                            $isBroken = $ring->pivot?->current_durability === 0;
                                         @endphp
-                                        <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                        <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                             title="{{ trim($title) }}"
                                             >
                                             <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -348,7 +387,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-weapon.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['weapon']))
                                 @php
@@ -368,8 +407,9 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$weapon->pivot->rarity] ?? 'gray';
+                                    $isBroken = $weapon->pivot?->current_durability === 0;
                                 @endphp
-                                <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -387,7 +427,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-shield.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['shield']))
                                 @php
@@ -406,8 +446,9 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$shield->pivot->rarity] ?? 'gray';
+                                    $isBroken = $shield->pivot?->current_durability === 0;
                                 @endphp
-                                <div  class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                <div  class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -501,7 +542,7 @@
                 <div class="flex">
                     <div class="flex flex-col" style="gap: 10px">
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-helmet.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($monsterEquippedBySlot['helmet']))
                                 @php
@@ -543,7 +584,7 @@
 
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-armor.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($monsterEquippedBySlot['armor']))
                                 @php
@@ -588,7 +629,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-arms.png') }}) center center no-repeat; background-size: cover;"
                             >
                              @if(isset($monsterEquippedBySlot['arms']))
                                 @php
@@ -633,7 +674,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-legs.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($monsterEquippedBySlot['legs']))
                                 @php
@@ -646,7 +687,13 @@
                                     $bonuses = [];
 
                                     if ($legs->pivot !== null && !empty($legs->pivot->bonuses)) {
-                                        $bonuses = json_decode($legs->pivot->bonuses, true);
+                                        $decoded = json_decode($legs->pivot->bonuses, true);
+
+                                        // Раніше структура бонусів була просто {"strength": 1, "agility": 2, ...}
+                                        // Якщо зараз бонуси зберігаються як {"stats": {...}}, то можливо:
+                                        if (is_array($decoded)) {
+                                            $bonuses = $decoded['stats'] ?? $decoded;
+                                        }
                                     }
 
                                     foreach ($bonuses as $stat => $value) {
@@ -658,9 +705,10 @@
                                         $rarityClass = $rarityColors[$legs->pivot->rarity] ?? 'gray';
                                     }
                                 @endphp
+
                                 <div class="{{ $rarityClass }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
-                                    >
+                                >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
@@ -671,6 +719,7 @@
                                         alt="">
                                 </div>
                             @else
+
                                 <span class="block w-full h-full opacity-20"
                                       style="background: url({{ asset('images/empty-equipment/legs.png') }}) center center no-repeat; background-size: 80%;">
                                 </span>
@@ -678,7 +727,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-boots.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($monsterEquippedBySlot['boots']))
                                 @php
@@ -741,19 +790,42 @@
                             </div>
                         </div>
                         <div class="relative block w-full h-1 bg-gray-300"></div>
-                        <div id="avatar" class="w-[205px] h-[410px]"
-                            style="background: url({{ asset('images/avatar.jpg') }}) center center no-repeat; background-size: cover;"
+                        <div class="relative avatar w-[205px] h-[410px] overflow-hidden group transition-left duration-300"
+                            style="background: url({{ asset('images/avatar-male.png') }}) center center no-repeat; background-size: cover;"
                             title="{{ $monster->name }} [{{ $monster->level }}]">
-                        </div>
 
-                        <ul class="list-disc list-inside">
-                            <li><strong>Базовий урон:</strong> {{ $monster->total_damage_range['min'] ?? '0' }} - {{ $monster->total_damage_range['max'] ?? '0' }}</li>
-                            <li><strong>Критичний урон:</strong> {{ $monster->critical_damage_range['min'] ?? '0' }} - {{ $monster->critical_damage_range['max'] ?? '0' }}</li>
-                            <li>Крит: {{ $monster->crit_chance }}%</li>
-                            <li>Анти-крит: {{ $monster->anti_crit_chance }}%</li>
-                            <li>Ухил: {{ $monster->dodge_chance }}%</li>
-                            <li>Анті-ухил: {{ $monster->anti_dodge_chance }}%</li>
-                        </ul>
+                            <div class="absolute bg-black/60 text-white w-full h-full overflow-auto p-2 top-0 -left-full ml-2 group-hover:left-[0] group-hover:ml-0 transition-w duration-300">
+                                <ul class="list-inside">
+                                    <li>Сила: {{ $monster->strength }}</li>
+                                    <li>Спритність: {{ $monster->agility }}</li>
+                                    <li>Інтуіція: {{ $monster->intuition }}</li>
+                                    <li>Витривалість {{ $monster->endurance }}</li>
+                                    <li>Базовий урон: {{ $monster->total_damage_range['min'] ?? '0' }} - {{ $monster->total_damage_range['max'] ?? '0' }}</li>
+                                    <li>Критичний урон: {{ $monster->critical_damage_range['min'] ?? '0' }} - {{ $monster->critical_damage_range['max'] ?? '0' }}</li>
+                                    <li>Крит: {{ $monster->crit_chance }}%</li>
+                                    <li>Анти-крит: {{ $monster->anti_crit_chance }}%</li>
+                                    <li>Ухил: {{ $monster->dodge_chance }}%</li>
+                                    <li>Анті-ухил: {{ $monster->anti_dodge_chance }}%</li>
+                                    @php
+                                        $defenseByZone = $monster->totalDefenseByZone();
+                                    @endphp
+
+                                    @foreach($zoneLabels as $zone => $label)
+                                        @php
+                                            $min = $defenseByZone[$zone]['min'] ?? 0;
+                                            $max = $defenseByZone[$zone]['max'] ?? 0;
+                                        @endphp
+                                        <li>{{ $label }}: @if($min != 0){{ $min }} - @endif{{ $max }}</li>
+                                    @endforeach
+                                </ul>
+                                <div class="flex flex-col items-center justify-center gap-1 absolute w-[8px] h-full right-0 top-0 text-white bg-black z-10">
+                                    <span class="bg-white w-[3px] h-[3px] rounded-[50%]"></span>
+                                    <span class="bg-white w-[3px] h-[3px] rounded-[50%]"></span>
+                                    <span class="bg-white w-[3px] h-[3px] rounded-[50%]"></span>
+                                </div>
+                            </div>
+
+                        </div>
                         <div
                             x-data="{
                                 showMonsterHit: false,
@@ -784,7 +856,7 @@
                     <div class="flex flex-col" style="gap: 10px">
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-neckless.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($monsterEquippedBySlot['neckless']))
                                 @php
@@ -875,7 +947,7 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-weapon.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($monsterEquippedBySlot['weapon']))
                                 @php
@@ -915,13 +987,13 @@
                                 </div>
                             @else
                                 <span class="block w-full h-full opacity-20"
-                                    style="background: url({{ asset('images/empty-equipment/weapon.png') }}) center center no-repeat; background-size: 70%;">
+                                    style="background: url({{ asset('images/empty-equipment/empty-weapon.png') }}) center center no-repeat; background-size: 70%;">
                                 </span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-shield.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($monsterEquippedBySlot['shield']))
                                 @php
@@ -966,13 +1038,6 @@
                         </div>
 
                     </div>
-                </div>
-                <div>
-                    {{-- {{ $monster->strength }}<br>
-                    {{ $monster->agility }}<br>
-                    {{ $monster->intuition }}<br>
-                    {{ $monster->endurance }} --}}
-
                 </div>
             </div>
         </div>

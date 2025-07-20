@@ -38,4 +38,26 @@ class Item extends Model
         return $this->belongsToMany(Character::class, 'character_items')
             ->withPivot('location', 'slot', 'current_durability', 'max_durability', 'level');
     }
+
+    public function getDurabilityAdjustedSellPrice($pivot): float
+    {
+        $sellPrice = $pivot->sell_price ?? $this->sell_price ?? 1;
+
+        $current = $pivot->current_durability ?? null;
+        $max = $pivot->max_durability ?? null;
+
+        if ($current === null || $max === null || $max == 0) {
+            return round($sellPrice, 2);
+        }
+
+        $percent = $current / $max;
+
+        return round($sellPrice * $percent, 2);
+    }
+
+    public function isBroken()
+    {
+        return $this->pivot?->current_durability === 0;
+    }
+
 }

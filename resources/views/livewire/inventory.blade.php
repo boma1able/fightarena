@@ -9,7 +9,7 @@
         $labels_ua = [
             'strength' => 'Сила',
             'agility' => 'Спритність',
-            'intuition' => 'Інтуїція',
+            'intuition' => 'Інтуіція',
             'endurance' => 'Витривалість',
             'head' => 'Голови',
             'chest' => 'Грудей',
@@ -33,12 +33,12 @@
 
                     <div class="flex flex-col" style="gap: 10px">
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-helmet.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['helmet']))
                                 @php
                                     $helmet = $equippedBySlot['helmet'];
-                                    $title = $helmet->name . ' [' . $helmet->required_level . ']' . "\n"
+                                    $title = $helmet->name . ' [' . $helmet->pivot->level . ']' . "\n"
                                         . 'Міцність: ' . $helmet->pivot->current_durability . ' / ' . $helmet->pivot->max_durability . "\n";
 
                                     $bonuses = $helmet->pivot->bonuses ?? [];
@@ -50,9 +50,10 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$equippedBySlot['helmet']->pivot->rarity] ?? 'gray';
+                                    $isBroken = $helmet->pivot?->current_durability === 0;
                                 @endphp
                                 <div wire:click="unequipItem({{ $equippedBySlot['helmet']->pivot->id }})"
-                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -65,17 +66,17 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-helmet.png') }}) center center no-repeat; background-size: cover;"></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-armor.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['armor']))
                                 @php
                                     $armor = $equippedBySlot['armor'];
-                                    $title = $armor->name . ' [' . $armor->required_level . ']' . "\n"
+                                    $title = $armor->name . ' [' . $armor->pivot->level . ']' . "\n"
                                         . 'Міцність: ' . $armor->pivot->current_durability . ' / ' . $armor->pivot->max_durability . "\n";
 
                                     foreach ($armor->defense_by_zone ?? [] as $zone => $range) {
@@ -89,9 +90,10 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$equippedBySlot['armor']->pivot->rarity] ?? 'gray';
+                                    $isBroken = $armor->pivot?->current_durability === 0;
                                 @endphp
                                 <div wire:click="unequipItem({{ $equippedBySlot['armor']->pivot->id }})"
-                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -104,16 +106,16 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover; background-size: cover;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-armor.png') }}) center center no-repeat; background-size: cover; background-size: cover;"></span>
                             @endif
                         </div>
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-arms.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['arms']))
                                 @php
                                     $arms = $equippedBySlot['arms'];
-                                    $title = $arms->name . ' [' . $arms->required_level . ']' . "\n"
+                                    $title = $arms->name . ' [' . $arms->pivot->level . ']' . "\n"
                                         . 'Міцність: ' . $arms->pivot->current_durability . ' / ' . $arms->pivot->max_durability . "\n";
 
                                     $bonuses = $arms->pivot->bonuses ?? [];
@@ -125,9 +127,10 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$equippedBySlot['arms']->pivot->rarity] ?? 'gray';
+                                    $isBroken = $arms->pivot?->current_durability === 0;
                                 @endphp
                                 <div wire:click="unequipItem({{ $equippedBySlot['arms']->pivot->id }})"
-                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -140,16 +143,16 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-arms.png') }}) center center no-repeat; background-size: cover;"></span>
                             @endif
                         </div>
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-legs.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['legs']))
                                 @php
                                     $legs = $equippedBySlot['legs'];
-                                    $title = $legs->name . ' [' . $legs->required_level . ']' . "\n"
+                                    $title = $legs->name . ' [' . $legs->pivot->level . ']' . "\n"
                                         . 'Міцність: ' . $legs->pivot->current_durability . ' / ' . $legs->pivot->max_durability . "\n";
 
                                     $bonuses = $legs->pivot->bonuses ?? [];
@@ -161,9 +164,10 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$equippedBySlot['legs']->pivot->rarity] ?? 'gray';
+                                    $isBroken = $legs->pivot?->current_durability === 0;
                                 @endphp
                                 <div wire:click="unequipItem({{ $equippedBySlot['legs']->pivot->id }})"
-                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -176,16 +180,16 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover; "></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-legs.png') }}) center center no-repeat; background-size: cover; "></span>
                             @endif
                         </div>
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-boots.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['boots']))
                                 @php
                                     $boots = $equippedBySlot['boots'];
-                                    $title = $boots->name . ' [' . $boots->required_level . ']' . "\n"
+                                    $title = $boots->name . ' [' . $boots->pivot->level . ']' . "\n"
                                         . 'Міцність: ' . $boots->pivot->current_durability . ' / ' . $boots->pivot->max_durability . "\n";
 
                                     $bonuses = $boots->pivot->bonuses ?? [];
@@ -197,9 +201,10 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$equippedBySlot['boots']->pivot->rarity] ?? 'gray';
+                                    $isBroken = $boots->pivot?->current_durability === 0;
                                 @endphp
                                 <div wire:click="unequipItem({{ $equippedBySlot['boots']->pivot->id }})"
-                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -212,7 +217,7 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover; "></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-boots.png') }}) center center no-repeat; background-size: cover; "></span>
                             @endif
                         </div>
 
@@ -224,18 +229,18 @@
                             <div class="absolute top-0 left-0 w-full text-center text-black z-[1]"></div>
                             <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                         </div>
-                        <div class="avatar w-[205px] h-[410px]" style="background: url({{ asset('images/avatar.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]"></div>
+                        <div class="avatar w-[205px] h-[410px]" style="background: url({{ asset('images/avatar-male.png') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]"></div>
                         <div id="banner" class="w-[165px] h-[50px]"></div>
                     </div>
 
                     <div class="flex flex-col" style="gap: 10px">
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-neckless.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['neckless']))
                                 @php
                                     $neckless = $equippedBySlot['neckless'];
-                                    $title = $neckless->name . ' [' . $neckless->required_level . ']' . "\n"
+                                    $title = $neckless->name . ' [' . $neckless->pivot->level . ']' . "\n"
                                         . 'Міцність: ' . $neckless->pivot->current_durability . ' / ' . $neckless->pivot->max_durability . "\n";
 
                                     $bonuses = $neckless->pivot->bonuses ?? [];
@@ -247,9 +252,10 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$equippedBySlot['neckless']->pivot->rarity] ?? 'gray';
+                                    $isBroken = $neckless->pivot?->current_durability === 0;
                                 @endphp
                                 <div wire:click="unequipItem({{ $equippedBySlot['neckless']->pivot->id }})"
-                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -262,7 +268,7 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: contain;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-neckless.png') }}) center center no-repeat; background-size: contain;"></span>
                             @endif
                         </div>
                         <div class="flex flex-col w-[68px] gap-[10px]">
@@ -274,7 +280,7 @@
                                     @if(isset($equippedBySlot[$ringSlot]))
                                         @php
                                             $ring = $equippedBySlot[$ringSlot];
-                                            $title = $ring->name . ' [' . $ring->required_level . ']' . "\n"
+                                            $title = $ring->name . ' [' . $ring->pivot->level . ']' . "\n"
                                                 . 'Міцність: ' . $ring->pivot->current_durability . ' / ' . $ring->pivot->max_durability . "\n";
 
                                             $bonuses = $ring->pivot->bonuses ?? [];
@@ -286,9 +292,10 @@
                                                 $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                             }
                                             $rarityClass = $rarityColors[$ring->pivot->rarity] ?? 'gray';
+                                            $isBroken = $ring->pivot?->current_durability === 0;
                                         @endphp
                                         <div wire:click="unequipItem({{ $ring->pivot->id }})"
-                                            class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                            class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                             title="{{ trim($title) }}"
                                             >
                                             <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -309,12 +316,12 @@
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-weapon.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['weapon']))
                                 @php
                                     $weapon = $equippedBySlot['weapon'];
-                                    $title = $weapon->name . ' [' . $weapon->required_level . ']' . "\n"
+                                    $title = $weapon->name . ' [' . $weapon->pivot->level . ']' . "\n"
                                         . 'Урон: ' . $weapon->min_damage . '–' . $weapon->max_damage . "\n"
                                         . 'Міцність: ' . $weapon->pivot->current_durability . ' / ' . $weapon->pivot->max_durability . "\n";
 
@@ -327,11 +334,13 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$equippedBySlot['weapon']->pivot->rarity] ?? 'gray';
+                                    $isBroken = $weapon->pivot?->current_durability === 0;
                                 @endphp
                                 <div wire:click="unequipItem({{ $equippedBySlot['weapon']->pivot->id }})"
-                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                    class="{{ $rarityClass }} relative w-[60px] h-[90px] {{ $isBroken ? 'broken' : '' }}"
                                     title="{{ trim($title) }}"
                                     >
+
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
@@ -342,17 +351,17 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-weapon.png') }}) center center no-repeat; background-size: cover;"></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-shield.png') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['shield']))
                                 @php
                                     $shield = $equippedBySlot['shield'];
-                                    $title = $shield->name . ' [' . $shield->required_level . ']' . "\n"
+                                    $title = $shield->name . ' [' . $shield->pivot->level . ']' . "\n"
                                         . 'Міцність: ' . $shield->pivot->current_durability . ' / ' . $shield->pivot->max_durability . "\n";
 
                                     $bonuses = $shield->pivot->bonuses ?? [];
@@ -364,9 +373,10 @@
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
                                     $rarityClass = $rarityColors[$equippedBySlot['shield']->pivot->rarity] ?? 'gray';
+                                    $isBroken = $shield->pivot?->current_durability === 0;
                                 @endphp
                                 <div wire:click="unequipItem({{ $equippedBySlot['shield']->pivot->id }})"
-                                    class="{{ $rarityClass }} relative w-[60px] h-[90px]"
+                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -379,7 +389,7 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover; background-size: cover; "></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-shield.png') }}) center center no-repeat; background-size: cover; background-size: cover; "></span>
                             @endif
                         </div>
 
@@ -391,7 +401,7 @@
                 <h2 class="mb-2 mt-1 p-2 font-semibold bg-[#f9f9f9]">Characteristic</h2>
 
                 @php
-                    $stats = ['strength' => 'Сила', 'agility' => 'Спритність', 'intuition' => 'Інтуїція', 'endurance' => 'Витривалість'];
+                    $stats = ['strength' => 'Сила', 'agility' => 'Спритність', 'intuition' => 'Інтуіція', 'endurance' => 'Витривалість'];
                 @endphp
 
                 @livewire('stat-points', ['character' => $character])
@@ -539,9 +549,11 @@
                             </div>
 
                             <div class="item flex flex-col w-[200px] items-center justify-center py-4">
-
+                                @php
+                                    $isBroken = $item->pivot?->current_durability === 0;
+                                @endphp
                                 <div
-                                    wire:click="equipItem({{ $item->pivot->id }})" class="{{ $rarityClass }} relative w-[60px] h-[90px] cursor-pointer"
+                                    wire:click="equipItem({{ $item->pivot->id }})" class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px] cursor-pointer"
                                     title="Екіпірувати">
                                     <img src="{{ asset('images/items/frame-'.  ($rarityColors[$item->pivot->rarity] ?? 'gray') . '.png') }}"
                                         class="absolute w-[60px]"
@@ -568,15 +580,11 @@
                                 @foreach(json_decode($item->pivot->bonuses ?? '{}', true) as $stat => $value)
                                     <p>{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
                                 @endforeach
-                                <p>Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
+                                <p class="{{ $isBroken ? 'text-red-500 underline' : '' }}">Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
                                 <p @class(['!text-red-500' => $character->level < $item->pivot->level])>
                                     {{ $character->level < $item->pivot->level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->pivot->level }}
                                 </p>
-                                @if($item->pivot->sell_price == null)
-                                    <p>Ціна продажу: {{ $item->sell_price }}</p>
-                                @else
-                                    <p>Ціна продажу: {{ $item->pivot->sell_price }}</p>
-                                @endif
+                                <p>Ціна продажу: {{ number_format($item->getDurabilityAdjustedSellPrice($item->pivot), 2) }} золота</p>
                                 <p class="mt-2 text-[14px] font-thin italic">{{ $item->description }}</p>
 
                             </div>

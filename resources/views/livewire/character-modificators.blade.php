@@ -1,5 +1,7 @@
 <div>
-    <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9]">Modificators</h2>
+    @if (!request()->routeIs('battle'))
+        <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9]">Modificators</h2>
+    @endif
     <ul class="px-2">
         {{-- <li><strong>Базовий урон:</strong> {{ $character->base_damage }}</li> --}}
         @if($damageRange)

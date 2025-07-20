@@ -33,6 +33,11 @@ class CharacterArmor extends Component
         $this->armorByZone = [];
 
         foreach ($this->character->equippedArmor() as $item) {
+            // Пропускаємо зламані предмети
+            if (method_exists($item, 'isBroken') && $item->isBroken()) {
+                continue;
+            }
+
             // Бонуси (сила, витривалість і т.д.)
             if (is_array($item->bonuses)) {
                 foreach ($item->bonuses as $key => $value) {

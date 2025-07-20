@@ -151,12 +151,10 @@ class Inventory extends Component
             return;
         }
 
-        $pivotSellPrice = $itemRow->sell_price ?? null;
-        $sellPrice = $pivotSellPrice !== null ? $pivotSellPrice : $item->sell_price;
-        $sellPrice = $sellPrice ?? 1;
+        $finalSellPrice = $item->getDurabilityAdjustedSellPrice($itemRow);
 
         // Додаємо золото персонажу
-        $character->gold += $sellPrice;
+        $character->gold += $finalSellPrice;
         $character->save();
 
         // Видаляємо рядок з character_items
@@ -168,7 +166,7 @@ class Inventory extends Component
 
         $this->dispatch('statUpdated');
         $this->dispatch('trigger-toast', [
-            'message' => 'Предмет продано!',
+            'message' => 'Предмет продано за ' . number_format($finalSellPrice, 2) . ' золота!',
             'type' => 'success',
         ]);
     }

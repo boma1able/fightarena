@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('stat_points')->default(3);
             $table->integer('level')->default(0);
             $table->unsignedBigInteger('experience')->default(0);
-            $table->unsignedBigInteger('gold')->default(0);
+            $table->decimal('gold', 10, 2)->default(0);
             $table->unsignedInteger('wins')->default(0);
             $table->unsignedInteger('losses')->default(0);
             $table->unsignedInteger('draws')->default(0);

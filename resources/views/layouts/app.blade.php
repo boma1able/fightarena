@@ -21,6 +21,9 @@
         .gold{
             background: #000 linear-gradient(0deg,rgb(224, 177, 48) 0%, rgba(82, 62, 8, 0.75) 80%)
         }
+        .broken{
+            filter: sepia(1) saturate(10) hue-rotate(-25deg) brightness(1)
+        }
     </style>
     @livewireStyles
     <script src="https://cdn.tailwindcss.com"></script>

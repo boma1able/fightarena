@@ -114,11 +114,12 @@ class Forge extends Component
         // Знімаємо золото лише раз
         $this->character->decrement('gold', $repairCost);
 
-        // Відновлюємо міцність до максимуму (числове значення)
+        // Відновлюємо міцність до максимуму
         DB::table('character_items')
             ->where('id', $this->repairItem->pivot->id)
             ->update([
                 'current_durability' => $this->repairItem->pivot->max_durability,
+                'is_broken' => 0,
             ]);
 
         // Звільняємо слот "repair"
@@ -150,12 +151,14 @@ class Forge extends Component
             return 0;
         }
 
-        $buyPrice = $this->repairItem->buy_price;
-        $maxRepairCost = $buyPrice * 0.9; // максимум 90% від вартості
-        $damagePercent = 1 - ($current / $max); // пошкодженість
+        // Беремо ціну з pivot
+        $sellPrice = $this->repairItem->pivot->sell_price ?? $this->repairItem->sell_price;
+        $maxRepairCost = $sellPrice * 0.9;
+        $damagePercent = 1 - ($current / $max);
 
-        return floor($maxRepairCost * $damagePercent);
+        return round($maxRepairCost * $damagePercent, 2);
     }
+
 
     public function cancelRepair()
     {
