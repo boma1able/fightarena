@@ -30,7 +30,7 @@
 
              {{-- Ліва панель ремонту --}}
             <div class="w-1/3 bg-gray-50 p-4 rounded shadow">
-                <h2 class="text-xl font-bold mb-4">Кузня</h2>
+                <h2 class="text-xl text-center font-bold mb-4">Кузня</h2>
 
                 @if($repairItem)
                     @php
@@ -76,7 +76,7 @@
                 @else
                     <div class="flex flex-col border p-4 rounded bg-white text-center justify-center">
                         <div class="flex relative items-center justify-center w-[68px] h-[98px] mx-[auto] mb-3"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/anvil.png') }}) center center no-repeat; background-size: cover;"
                             >
                                 <div class="relative w-[60px] h-[90px]"></div>
                         </div>

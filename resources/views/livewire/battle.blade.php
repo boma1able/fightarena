@@ -242,7 +242,7 @@
                             <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                         </div>
                         <div class="relative avatar w-[205px] h-[410px] overflow-hidden group transition-left duration-300"
-                            style="background: url({{ asset('images/avatar-male.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/avatar-male-full.jpg') }}) center center no-repeat; background-size: cover;"
                             title="{{ $character->user->name }} [{{ $character->level }}]
                         ">
                             @php
@@ -791,7 +791,7 @@
                         </div>
                         <div class="relative block w-full h-1 bg-gray-300"></div>
                         <div class="relative avatar w-[205px] h-[410px] overflow-hidden group transition-left duration-300"
-                            style="background: url({{ asset('images/avatar-male.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/avatar-male-full.jpg') }}) center center no-repeat; background-size: cover;"
                             title="{{ $monster->name }} [{{ $monster->level }}]">
 
                             <div class="absolute bg-black/60 text-white w-full h-full overflow-auto p-2 top-0 -left-full ml-2 group-hover:left-[0] group-hover:ml-0 transition-w duration-300">

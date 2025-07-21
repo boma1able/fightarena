@@ -229,7 +229,7 @@
                             <div class="absolute top-0 left-0 w-full text-center text-black z-[1]"></div>
                             <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                         </div>
-                        <div class="avatar w-[205px] h-[410px]" style="background: url({{ asset('images/avatar-male.png') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]"></div>
+                        <div class="avatar w-[205px] h-[410px]" style="background: url({{ asset('images/avatar-male-full.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]"></div>
                         <div id="banner" class="w-[165px] h-[50px]"></div>
                     </div>
 
