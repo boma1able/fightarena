@@ -16,7 +16,8 @@ class CharacterModificators extends Component
 
     public function refreshStats()
     {
-        $this->character->refresh();
+        // $this->character->refresh();
+        $this->character = $this->character->fresh(['equippedItems']);
     }
 
     public function render()

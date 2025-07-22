@@ -100,19 +100,23 @@ class Character extends Model
             return in_array($item->type, ['sword', 'axe', 'knife', 'mace']);
         });
 
-        if (!$weapon) {
-            $base = $this->base_damage;
-            return ['min' => $base, 'max' => $base];
-        }
-
         $base = $this->base_damage;
 
-        if (!$weapon || $weapon->isBroken()) {
+        if (!$weapon) {
             return ['min' => $base, 'max' => $base];
         }
 
-        $minDamage = ($weapon->min_damage ?? 0) + $base;
-        $maxDamage = ($weapon->max_damage ?? 0) + $base;
+        if ($weapon->isBroken()) {
+            return ['min' => $base, 'max' => $base];
+        }
+
+        // Беремо min_damage та max_damage з pivot, якщо вони існують і не null,
+        // інакше беремо з основної моделі Item
+        $minDamage = $weapon->pivot->min_damage ?? $weapon->min_damage ?? 0;
+        $maxDamage = $weapon->pivot->max_damage ?? $weapon->max_damage ?? 0;
+
+        $minDamage += $base;
+        $maxDamage += $base;
 
         return ['min' => $minDamage, 'max' => $maxDamage];
     }
@@ -339,14 +343,14 @@ class Character extends Model
     public function inventoryItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot', 'is_broken', 'rarity', 'bonuses', 'level', 'sell_price'])
+            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot', 'is_broken', 'rarity', 'bonuses', 'level', 'sell_price', 'min_damage', 'max_damage',])
             ->wherePivot('location', 'inventory');
     }
 
     public function equippedItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity', 'bonuses', 'level'])
+            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity', 'bonuses', 'level', 'sell_price', 'min_damage', 'max_damage',])
             ->wherePivot('location', 'equipped')
             ->withCasts(['pivot.bonuses' => 'array']);
     }

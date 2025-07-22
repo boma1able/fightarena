@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use \App\Helpers\ItemBonusGenerator;
+// use \App\Helpers\ItemBonusGenerator;
 use App\Models\Item;
 use App\Models\Monster;
 use App\Services\DropService;
@@ -383,12 +383,17 @@ class Battle extends Component
         } elseif ($this->monster->current_health <= 0) {
             $result = "Ви перемогли " . $this->monster->name . "!";
 
-            $drop = DropService::generateDrop(100, $this->monster->level);
-
             if ($this->character->level >= 1) {  // Перевірка рівня персонажа
                 $drop = DropService::generateDrop(100, $this->monster->level);
 
                 if ($drop) {
+                    // Динамічний урон для зброї
+                    if ($drop->type === 'weapon') {
+                        [$minDamage, $maxDamage] = WeaponDamageService::getDamageRange($drop->type, $drop->level);
+                        $drop->min_damage = $minDamage;
+                        $drop->max_damage = $maxDamage;
+                    }
+
                     $price = ItemPricingService::calculate($drop->bonuses, $drop->rarity, $drop->level);
                     $maxDurability = $this->character->getMaxDurabilityForItem($drop);
 
@@ -401,6 +406,8 @@ class Battle extends Component
                         'bonuses' => json_encode($drop->bonuses),
                         'level' => $drop->level,
                         'sell_price' => $price,
+                        'min_damage' => $drop->min_damage,
+                        'max_damage' => $drop->max_damage,
                     ]);
 
                     $this->character->log("Ви отримали предмет: {$drop->name} [{$drop->level}] ({$drop->rarity})");
@@ -410,7 +417,8 @@ class Battle extends Component
             $xpMultiplier = 1.2;
             $this->character->wins++;
             $this->character->log($result);
-        } else {
+        }
+        else {
             $result = null;
             $xpMultiplier = 0;
         }

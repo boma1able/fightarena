@@ -60,4 +60,14 @@ class Item extends Model
         return $this->pivot?->current_durability === 0;
     }
 
+    public function getMinDamage(int $level): ?int
+    {
+        return $this->damage_ranges[$level]['min'] ?? null;
+    }
+
+    public function getMaxDamage(int $level): ?int
+    {
+        return $this->damage_ranges[$level]['max'] ?? null;
+    }
+
 }
