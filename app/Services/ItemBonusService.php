@@ -16,9 +16,9 @@ class ItemBonusService
 
         $bonusRanges = [
             'common' => [1, 1],
-            'uncommon' => [1, 2],
-            'rare' => [2, 3],
-            'legendary' => [3, 4],
+            'uncommon' => [2, 2],
+            'rare' => [3, 3],
+            'legendary' => [4, 5],
         ];
 
         $range = $bonusRanges[$rarity] ?? [1, 1];

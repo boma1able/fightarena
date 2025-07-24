@@ -24,7 +24,7 @@ class DropService
         $item = Item::query()
             ->where('is_shop', true)
             ->inRandomOrder()
-            ->where('slot', 'weapon') ///////////////////////////////// temp
+            //->where('slot', 'weapon') ///////////////////////////////// temp
             ->first();
 
         if (!$item) {
@@ -73,12 +73,10 @@ class DropService
 
     public static function generateWeaponDamage(string $type, int $level): array
     {
-        // dd(config("weapon_damage.$type"));
-        // dd(config('weapon_damage'));
         $ranges = config("weapon_damage.$type");
 
         if (!$ranges) {
-            return ['min' => 1, 'max' => 1]; // дефолт, якщо конфігу нема
+            return ['min' => 1, 'max' => 1];
         }
 
         foreach ($ranges as $range) {

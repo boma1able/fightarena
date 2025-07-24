@@ -95,6 +95,18 @@
         });
     </script>
 
+<script>
+    Livewire.on('tooltip-hide', () => {
+        setTimeout(() => {
+            Livewire.dispatch('really-clear-tooltip');
+        }, 300);
+    });
+
+    Livewire.on('really-clear-tooltip', () => {
+        Livewire.find(/* component id */).call('clearTooltip');
+    });
+</script>
+
 
 </body>
 </html>

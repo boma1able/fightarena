@@ -23,13 +23,14 @@ class ItemPricingService
         }
 
         $rarityMultiplier = match ($rarity) {
-            'common' => 1.0,
-            'uncommon' => 1.3,
-            'rare' => 1.7,
-            'legendary' => 2.5,
-            default => 1.0,
+            'common' => 0.5,
+            'uncommon' => 0.75,
+            'rare' => 1.0,
+            'legendary' => 1.5,
+            default => 0.5,
         };
 
         return ceil(($bonusCount * 15 + $power * 8 + $level * 3) * $rarityMultiplier);
     }
+
 }

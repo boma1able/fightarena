@@ -31,7 +31,11 @@
             <div class="flex flex-col w-full max-w-[362px]">
                 <div class="flex">
 
-                    <div class="flex flex-col" style="gap: 10px">
+                    <div
+                        class="flex flex-col"
+                        style="gap: 10px"
+                        x-data="{ tooltip: '', show: false, x: 0, y: 0 }"
+                    >
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
                             style="background: url({{ asset('images/empty-equipment/empty-helmet.png') }}) center center no-repeat; background-size: cover;"
                             >
@@ -52,9 +56,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['helmet']->pivot->rarity] ?? 'gray';
                                     $isBroken = $helmet->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['helmet']->pivot->id }})"
+                                <div
+                                    wire:click="unequipItem({{ $equippedBySlot['helmet']->pivot->id }})"
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
@@ -92,9 +98,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['armor']->pivot->rarity] ?? 'gray';
                                     $isBroken = $armor->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['armor']->pivot->id }})"
+                                <div
+                                    wire:click="unequipItem({{ $equippedBySlot['armor']->pivot->id }})"
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
@@ -130,9 +138,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['ring1']->pivot->rarity] ?? 'gray';
                                     $isBroken = $ring1->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['ring1']->pivot->id }})"
+                                <div
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
+                                    wire:click="unequipItem({{ $equippedBySlot['ring1']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
@@ -177,9 +187,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['weapon']->pivot->rarity] ?? 'gray';
                                     $isBroken = $weapon->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['weapon']->pivot->id }})"
+                                <div
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
+                                    wire:click="unequipItem({{ $equippedBySlot['weapon']->pivot->id }})"
                                     class="{{ $rarityClass }} relative w-[60px] h-[90px] {{ $isBroken ? 'broken' : '' }}"
-                                    title="{{ trim($title) }}"
                                     >
 
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -216,9 +228,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['legs']->pivot->rarity] ?? 'gray';
                                     $isBroken = $legs->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['legs']->pivot->id }})"
+                                <div
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
+                                    wire:click="unequipItem({{ $equippedBySlot['legs']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
@@ -242,8 +256,28 @@
                             <div class="absolute top-0 left-0 w-full text-center text-black z-[1]"></div>
                             <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                         </div>
-                        <div class="avatar w-[205px] h-[410px]" style="background: url({{ asset('images/avatar-female-full.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]"></div>
+                        <div class="relative avatar w-[205px] h-[410px] mt-1" style="background: url({{ asset('images/avatar-female-full.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]">
+                            <div
+                                class="tooltip-container w-[205px] h-[410px] absolute top-0 bg-black/70 text-white p-4
+                                    transition-all duration-300 ease-in-out transform
+                                    @if(!$hoveredItemTooltip)
+                                       opacity-0 pointer-events-none
+                                    @else
+                                        opacity-100
+                                    @endif"
+                                    {{-- style="background: url({{ asset('images/items/item-back.png') }}) center center no-repeat; background-size: cover;" --}}
+                            >
+                                {!! nl2br(e($hoveredItemTooltip)) !!}
+
+                            </div>
+                            <img
+                                class="absolute top-0 left-0 scale-[1.02]"
+                                src="{{ asset('images/cover-frame.png') }}"
+                                alt=""
+                            >
+                        </div>
                         <div id="banner" class="w-[165px] h-[50px]"></div>
+
                     </div>
 
                     <div class="flex flex-col" style="gap: 10px">
@@ -267,9 +301,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['neckless']->pivot->rarity] ?? 'gray';
                                     $isBroken = $neckless->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['neckless']->pivot->id }})"
+                                <div
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
+                                    wire:click="unequipItem({{ $equippedBySlot['neckless']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
@@ -305,9 +341,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['arms']->pivot->rarity] ?? 'gray';
                                     $isBroken = $arms->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['arms']->pivot->id }})"
+                                <div
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
+                                    wire:click="unequipItem({{ $equippedBySlot['arms']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
@@ -343,9 +381,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['ring2']->pivot->rarity] ?? 'gray';
                                     $isBroken = $ring2->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['ring2']->pivot->id }})"
+                                <div
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
+                                    wire:click="unequipItem({{ $equippedBySlot['ring2']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
@@ -381,9 +421,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['shield']->pivot->rarity] ?? 'gray';
                                     $isBroken = $shield->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['shield']->pivot->id }})"
+                                <div
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
+                                    wire:click="unequipItem({{ $equippedBySlot['shield']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
@@ -419,9 +461,11 @@
                                     $rarityClass = $rarityColors[$equippedBySlot['boots']->pivot->rarity] ?? 'gray';
                                     $isBroken = $boots->pivot?->current_durability === 0;
                                 @endphp
-                                <div wire:click="unequipItem({{ $equippedBySlot['boots']->pivot->id }})"
+                                <div
+                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
+                                    wire:mouseleave="hideTooltip"
+                                    wire:click="unequipItem({{ $equippedBySlot['boots']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"

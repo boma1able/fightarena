@@ -12,6 +12,7 @@ class Inventory extends Component
     public $characterExpPercent = 0;
     public $allTypes = [];
     public string $filterType = 'all';
+    public string $hoveredItemTooltip = '';
 
     public function mount()
     {
@@ -216,4 +217,15 @@ class Inventory extends Component
             'filterType' => $this->filterType,
         ])->layout('layouts.app');
     }
+
+    public function showTooltip(string $text): void
+    {
+        $this->hoveredItemTooltip = $text;
+    }
+
+    public function hideTooltip(): void
+    {
+        $this->hoveredItemTooltip = '';
+    }
+
 }
