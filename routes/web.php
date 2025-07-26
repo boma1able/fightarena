@@ -11,11 +11,6 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
-
-Route::get('/', function () {
-    return view('home');
-})->name('home');
-
 Route::get('/', [HomeController::class, 'index'])->middleware('auth')->name('home');
 Route::get('/inventory', [InventoryController::class, 'index'])->middleware('auth')->name('inventory');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');

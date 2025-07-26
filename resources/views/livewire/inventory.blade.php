@@ -250,7 +250,7 @@
 
                     </div>
                     <div class="w-[205px] h-full mx-[10px]">
-                        <h2 class="block w-full text-center mb-3"><strong>{{ $character->user->name }}</strong> [{{ $character->level }}]</h2>
+                        <h2 class="block w-full text-center mb-3 text-xl"><strong>{{ $character->user->name }}</strong> [{{ $character->level }}]</h2>
                         @livewire('health-regen')
                         <div class="relative block w-full h-1 bg-gray-300 cursor-pointer" title="Досвід: {{ $character->experience }} / {{ $character->getExperienceToLevelUp() }}">
                             <div class="absolute top-0 left-0 w-full text-center text-black z-[1]"></div>
@@ -258,7 +258,7 @@
                         </div>
                         <div class="relative avatar w-[205px] h-[410px] mt-1" style="background: url({{ asset('images/avatar-female-full.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]">
                             <div
-                                class="tooltip-container w-[205px] h-[410px] absolute top-0 bg-black/70 text-white p-4
+                                class="absolute z-10 tooltip-container w-[205px] h-[410px] absolute top-0 bg-black/70 text-white p-4
                                     transition-all duration-300 ease-in-out transform
                                     @if(!$hoveredItemTooltip)
                                        opacity-0 pointer-events-none
@@ -275,6 +275,61 @@
                                 src="{{ asset('images/cover-frame.png') }}"
                                 alt=""
                             >
+
+                            @if(isset($equippedBySlot['helmet']))
+                                @php
+                                    $helmet = $equippedBySlot['helmet'];
+                                    $helmetPath = $helmet['image'] ?? null;
+
+                                    if ($helmetPath) {
+                                        $helmetFile = pathinfo($helmetPath, PATHINFO_FILENAME);
+                                        $helmetWeared = asset('images/items/helmet/' . $helmetFile . '-equipped.png');
+                                    } else {
+                                        $helmetWeared = null;
+                                    }
+                                @endphp
+
+                                <div class="equipped-helmet w-[205px] h-[101px]"
+                                    style="background: url({{ $helmetWeared }}) center center no-repeat; background-size: cover;"
+                                ></div>
+                            @endif
+
+                            @if(isset($equippedBySlot['shield']))
+                                @php
+                                    $shield = $equippedBySlot['shield'];
+                                    $shieldPath = $shield['image'] ?? null;
+
+                                    if ($shieldPath) {
+                                        $shieldFile = pathinfo($shieldPath, PATHINFO_FILENAME);
+                                        $shieldEquipped = asset('images/items/shield/' . $shieldFile . '-equipped.png');
+                                    } else {
+                                        $shieldEquipped = null;
+                                    }
+                                @endphp
+
+                                <div class="absolute equipped-shield w-[205px] h-[170px] top-[25%]"
+                                    style="background: url({{ $shieldEquipped }}) center center no-repeat; background-size: cover;"
+                                ></div>
+                            @endif
+
+                            @if(isset($equippedBySlot['weapon']))
+                                @php
+                                    $weapon = $equippedBySlot['weapon'];
+                                    $weaponPath = $weapon['image'] ?? null;
+
+                                    if ($weaponPath) {
+                                        $weaponFile = pathinfo($weaponPath, PATHINFO_FILENAME);
+                                        $weaponEquipped = asset('images/items/knifes/' . $weaponFile . '-equipped.png');
+                                    } else {
+                                        $weaponEquipped = null;
+                                    }
+                                @endphp
+
+                                <div class="absolute eequipped-weapon w-[205px] h-[100px] top-[22%]"
+                                    style="background: url({{ $weaponEquipped }}) center center no-repeat; background-size: cover;"
+                                ></div>
+                            @endif
+
                         </div>
                         <div id="banner" class="w-[165px] h-[50px]"></div>
 
@@ -486,7 +541,7 @@
             </div>
 
             <div class="min-w-[320px]">
-                <h2 class="mb-2 mt-1 p-2 font-semibold bg-[#f9f9f9]">Characteristic</h2>
+                <h2 class="mb-2 p-2 font-semibold bg-[#f9f9f9] text-xl">Характеристика</h2>
 
                 @php
                     $stats = ['strength' => 'Сила', 'agility' => 'Спритність', 'intuition' => 'Інтуіція', 'endurance' => 'Витривалість'];
@@ -494,7 +549,7 @@
 
                 @livewire('stat-points', ['character' => $character])
 
-                <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9]">Information</h2>
+                <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9] text-xl">Інформація</h2>
                 <ul class="mb-2 px-2">
                     <li>Рівень:</> {{ $character->level }} ({{ $character->experience }} / {{ $character->getExperienceToLevelUp() }})</li>
                     <li>Золото:</> {{ $character->gold }}</li>
@@ -504,7 +559,7 @@
 
                 @livewire('character-armor', ['character' => $character])
 
-                <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9]">Battle statistics</h2>
+                <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9] text-xl">Статистика боїв</h2>
                 @php
                     $totalFights = $character->wins + $character->losses + $character->draws;
 
@@ -530,7 +585,7 @@
 
             <div class="w-[700px] ml-[auto]">
 
-                <h2 class="text-xl font-bold mb-2">Inventory</h2>
+                <h2 class="mb-2 p-2 font-semibold bg-[#f9f9f9] text-xl">Інвентар</h2>
 
                 <div
                     x-data="{ show: false, message: '', type: 'info' }"
@@ -657,23 +712,23 @@
                             </div>
 
                             <div class="w-full flex flex-col p-2">
-                                <h3 class="font-semibold mb-1 item-name">{{ $item->name }} [{{ $item->pivot->level }}]</h3>
+                                <h3 class="font-semibold mb-1 item-name text-xl">{{ $item->name }} [{{ $item->pivot->level }}]</h3>
                                 @if($item->pivot->min_damage)
-                                    <p>Урон: {{ $item->pivot->min_damage }}–{{ $item->pivot->max_damage }}</p>
+                                    <p class="text-sm">Урон: {{ $item->pivot->min_damage }}–{{ $item->pivot->max_damage }}</p>
                                 @endif
                                 @foreach($item->defense_by_zone as $zone => $range)
-                                    <p>Броня {{ $labels_ua[$zone] ?? ucfirst($zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
+                                    <p class="text-sm">Броня {{ $labels_ua[$zone] ?? ucfirst($zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
                                 @endforeach
 
                                 @foreach(json_decode($item->pivot->bonuses ?? '{}', true) as $stat => $value)
-                                    <p>{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
+                                    <p class="text-sm">{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
                                 @endforeach
-                                <p class="{{ $isBroken ? 'text-red-500 underline' : '' }}">Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
-                                <p @class(['!text-red-500' => $character->level < $item->pivot->level])>
+                                <p class="{{ $isBroken ? 'text-red-500 underline text-md' : 'text-sm' }}">Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
+                                <p @class(['!text-sm', '!text-red-500' => $character->level < $item->pivot->level])>
                                     {{ $character->level < $item->pivot->level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->pivot->level }}
                                 </p>
-                                <p>Ціна продажу: {{ number_format($item->getDurabilityAdjustedSellPrice($item->pivot), 2) }} золота</p>
-                                <p class="mt-2 text-[14px] font-thin italic">{{ $item->description }}</p>
+                                <p class="text-sm">Ціна продажу: {{ number_format($item->getDurabilityAdjustedSellPrice($item->pivot), 2) }} золота</p>
+                                <p class="mt-2 text-[14px] font-thin italic text-sm min-h-[65px]">{{ $item->description }}</p>
                             </div>
 
                         </div>

@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <title>Arena</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
-        h1, h2, h3, h4, h5,
-        nav, .inventory-filter, .item-name{
-            font-family: "MedievalSharp", cursive;
+        @import url('https://fonts.googleapis.com/css2?family=Forum&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+        *{
+            font-family: "Roboto", sans-serif;
         }
+        h1, h2, h3, h4, h5,
+        nav, a, .inventory-filter, .item-name, .char-stats .monster-stats,
+        button, .btn, .battle-info{
+            font-family: "Forum", serif!important;
+        }
+
         .gray{
             background: #000 linear-gradient(0deg,rgb(97, 97, 97) 0%, rgba(118, 118, 118, 0.13) 80%)
         }
@@ -31,24 +36,30 @@
 <body class="bg-gray-100 font-light text-[#27282a]">
     <div class="w-full max-w-[1800px] min-h-[100vh] container mx-auto p-4 bg-[#28292b]">
 
+       <div class="flex">
         <nav class="flex w-full justify-center items-center gap-4 mb-2">
             <a href="{{ route('home') }}" class="px-3 py-1 text-white {{ request()->routeIs('home') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
-                Home
+                Головна
             </a>
             <a href="{{ route('inventory') }}" class="px-3 py-1 text-white {{ request()->routeIs('inventory') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
-                Inventory
+                Інвентар
             </a>
             <a href="{{ route('shop') }}" class="px-3 py-1 text-white {{ request()->routeIs('shop') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
-                Shop
+                Магазин
             </a>
             <a href="{{ route('forge') }}" class="px-3 py-1 text-white {{ request()->routeIs('forge') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
-                Forge
+                Кузня
             </a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="text-red-500 px-3 py-1">Quit</button>
+                <button type="submit" class="text-red-500 px-3 py-1">Вихід</button>
             </form>
         </nav>
+        <p class="text-white">{{ app()->getLocale() }} - {{ __('messages.welcome') }}</p>
+        <div>
+            @livewire('lang-switcher')
+        </div>
+       </div>
 
         @yield('content')
     </div>

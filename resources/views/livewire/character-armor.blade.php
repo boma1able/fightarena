@@ -1,6 +1,6 @@
 <div>
     @if (!request()->routeIs('battle'))
-        <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9]">Armor</h2>
+        <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9] text-xl">Броня</h2>
     @endif
     <ul class="px-2">
         @php

@@ -263,7 +263,7 @@
                                     'legs' => 'Броня ніг',
                                 ];
                             @endphp
-                            <div class="absolute bg-black/60 text-white w-full h-full overflow-auto py-2 top-0 -left-full ml-2 group-hover:left-[0] group-hover:ml-0 transition-w duration-300">
+                            <div class="char-stats absolute bg-black/60 text-white w-full h-full overflow-auto py-2 top-0 -left-full ml-2 group-hover:left-[0] group-hover:ml-0 transition-w duration-300">
 
                                 <ul class="list-inside px-2">
                                     <li>Сила: {{ $character->strength }}</li>
@@ -305,7 +305,7 @@
                                 'text-blue-500': playerHitType === 'dodge'
                             }"
                         >
-                            <span x-text="playerHitMessage"></span>
+                            <span class="battle-info" x-text="playerHitMessage"></span>
                         </div>
 
                     </div>
@@ -521,7 +521,7 @@
                     x-init="setTimeout(() => show = false, 2000)"
                     x-show="show"
                     x-transition
-                    class="fixed top-5 right-5 bg-red-100 border-l-4 p-4 border-red-500 text-red-700 mb-4 text-[14px]"
+                    class="fixed !battle-info top-5 right-5 bg-red-100 border-l-4 p-4 border-red-500 text-red-700 mb-4 text-[14px]"
                 >
                     {{ session('message') }}
                 </div>
@@ -531,10 +531,10 @@
 
                 <div class="flex">
                     <div class="w-1/2">
-                        <h3 class="font-semibold mb-2 bg-gray-100 p-1">Атакувати</h3>
+                        <h3 class="font-semibold mb-2 bg-gray-100 p-1 text-xl">Атакувати</h3>
                         <div>
                             @foreach(['head' => 'Голову', 'chest' => 'Груди', 'belly' => 'Живіт', 'belt' => 'Пояс', 'legs' => 'Ноги'] as $key => $label)
-                                <label class="block mr-3 mb-1">
+                                <label class="block mr-3 mb-1 text-sm">
                                     <input type="radio" wire:model="attackChoice" name="attackChoice" value="{{ $key }}">
                                     {{ $label }}
                                 </label>
@@ -543,7 +543,7 @@
                     </div>
 
                     <div class="w-1/2">
-                        <h3 class="font-semibold mb-2 bg-gray-100 p-1">Захищатись</h3>
+                        <h3 class="font-semibold mb-2 bg-gray-100 p-1 text-xl">Захищатись</h3>
                         @php
                             $defenseOptions = [
                                 'head_chest' => 'Захищати голову та груди',
@@ -555,7 +555,7 @@
                         @endphp
                         <div>
                             @foreach($defenseOptions as $key => $label)
-                                <label class="block mr-3 mb-1">
+                                <label class="block mr-3 mb-1 text-sm">
                                     <input type="radio" wire:model="defenseChoice" name="defenseChoice" value="{{ $key }}">
                                     {{ $label }}
                                 </label>
@@ -776,8 +776,6 @@
                                     if ($legs->pivot !== null && !empty($legs->pivot->bonuses)) {
                                         $decoded = json_decode($legs->pivot->bonuses, true);
 
-                                        // Раніше структура бонусів була просто {"strength": 1, "agility": 2, ...}
-                                        // Якщо зараз бонуси зберігаються як {"stats": {...}}, то можливо:
                                         if (is_array($decoded)) {
                                             $bonuses = $decoded['stats'] ?? $decoded;
                                         }
@@ -837,7 +835,7 @@
                             title="{{ $monster->name }} [{{ $monster->level }}]">
 
                             <div class="absolute bg-black/60 text-white w-full h-full overflow-auto p-2 top-0 -left-full ml-2 group-hover:left-[0] group-hover:ml-0 transition-w duration-300">
-                                <ul class="list-inside">
+                                <ul class="monster-stats list-inside">
                                     <li>Сила: {{ $monster->strength }}</li>
                                     <li>Спритність: {{ $monster->agility }}</li>
                                     <li>Інтуіція: {{ $monster->intuition }}</li>
@@ -890,7 +888,7 @@
                                 'text-blue-500': monsterHitType === 'dodge'
                             }"
                         >
-                            <span x-text="monsterHitMessage"></span>
+                            <span class="battle-info" x-text="monsterHitMessage"></span>
                         </div>
 
                     </div>

@@ -5,6 +5,6 @@
 
 <div class="w-full text-sm space-y-1 {{ $chatHeightClass }} overflow-auto p-3 bg-[#f9f9f9] my-5">
     @foreach($lines as $line)
-        <div class="text-gray-700">{{ $line }}</div>
+        <p class="text-gray-700">{{ $line }}</p>
     @endforeach
 </div>

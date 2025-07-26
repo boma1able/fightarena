@@ -30,7 +30,7 @@
 
              {{-- Ліва панель ремонту --}}
             <div class="w-1/3 bg-gray-50 p-4 rounded shadow">
-                <h2 class="text-xl text-center font-bold mb-4">Кузня</h2>
+                <h2 class="mb-2 p-2 font-semibold bg-[#f9f9f9] text-xl text-center">Кузня</h2>
 
                 @if($repairItem)
                     @php
@@ -87,7 +87,7 @@
 
             <div class="w-[700px] ml-[auto]">
 
-                <h2 class="text-xl font-bold mb-2">Інвентар</h2>
+                <h2 class="mb-2 p-2 font-semibold bg-[#f9f9f9] text-xl">Інвентар</h2>
 
                 <div
                     x-data="{ show: false, message: '', type: 'info' }"

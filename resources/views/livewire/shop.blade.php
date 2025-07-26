@@ -35,21 +35,21 @@
                     {{-- Кнопка "Усі товари" --}}
                     <button
                         wire:click="setFilter('all')"
-                        class="p-2 text-sm text-start border-b border-gray-100 {{ $filterType === 'all' ? 'font-semibold underline text-blue-600' : '' }}"
+                        class="p-2 text-sm text-start border-b border-gray-100 {{ $filterType === 'all' ? 'font-semibold text-blue-600' : '' }}"
                     >
-                        Усі товари
+                    &mdash; Усі товари
                     </button>
 
                     @foreach($allTypesGrouped as $groupName => $types)
                         <div class="px-2 border-b border-gray-100">
-                            <div class="font-bold text-gray-700">{{ $groupName }}</div>
+                            <h3 class="font-bold text-gray-700 bg-gray-100 p-1">{{ $groupName }}</h3>
                             <div class="flex gap-2 mt-1 flex-col">
                                 @if($types->isNotEmpty())
                                     @foreach($types as $type)
                                         <button
                                             wire:click="setFilter('{{ $type }}')"
-                                            class="py-1 text-sm text-start {{ $filterType === $type ? 'font-semibold underline text-blue-600' : '' }}">
-                                            {{ ucfirst($type) }}
+                                            class="py-1 text-sm text-start {{ $filterType === $type ? 'font-semibold text-blue-600' : '' }}">
+                                            &mdash; {{ ucfirst($type) }}
                                         </button>
                                     @endforeach
                                 @else
@@ -97,27 +97,27 @@
                         </div>
 
                         <div class="w-full flex flex-col p-2">
-                            <h3 class="font-semibold mb-1">{{ $item->name }} [{{ $item->required_level }}]</h3>
+                            <h3 class="font-semibold mb-1 text-xl">{{ $item->name }} [{{ $item->required_level }}]</h3>
                             @if($item->min_damage)
-                                <p>Урон: {{ $item->min_damage }}–{{ $item->max_damage }}</p>
+                                <p class="text-sm">Урон: {{ $item->min_damage }}–{{ $item->max_damage }}</p>
                             @endif
                             @foreach($item->bonuses ?? [] as $stat => $value)
-                                <p>{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
+                                <p class="text-sm">{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
                             @endforeach
                             @foreach($item->defense_by_zone as $zone => $range)
-                                <p>Броня {{ $labels_ua[$zone] ?? ucfirst($zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
+                                <p class="text-sm">Броня {{ $labels_ua[$zone] ?? ucfirst($zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
                             @endforeach
-                            <p>Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
-                            <p @class(['!text-red-500' => $character->level < $item->required_level])>
+                            <p class="text-sm">Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
+                            <p @class(['text-sm', '!text-red-500' => $character->level < $item->required_level])>
                                 {{ $character->level < $item->required_level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->required_level }}
                             </p>
-                            <p class="mt-2 text-[14px] font-thin italic mb-2">{{ $item->description }}</p>
+                            <p class="mt-2 text-[14px] font-thin italic mb-2 text-sm">{{ $item->description }}</p>
                             <div class="flex">
 
                                 @if($character->gold < $item->buy_price)
                                     <p class="mt-3"><span class="text-red-500 underline">Ціна: {{ $item->buy_price }}.</span> У вас недостатньо коштів!</p>
                                 @else
-                                    <div wire:click="buyItem({{ $item->id }})" class="cursor-pointer bg-green-500 hover:bg-green-400 text-white px-2 py-1">
+                                    <div wire:click="buyItem({{ $item->id }})" class="btn cursor-pointer bg-green-500 hover:bg-green-400 text-white px-2 py-1">
                                         Купити за {{ $item->buy_price }} золота
                                     </div>
                                 @endif

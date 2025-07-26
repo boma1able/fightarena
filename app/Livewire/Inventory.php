@@ -105,6 +105,7 @@ class Inventory extends Component
             ->update(['location' => 'inventory', 'slot' => null]);
 
         $this->refreshCharacter();
+        $this->hideTooltip();
         $this->dispatch('trigger-toast', ['message' => 'Предмет знято!', 'type' => 'success']);
     }
 

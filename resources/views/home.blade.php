@@ -430,7 +430,7 @@
                 </div>
 
                 <div class="w-[320px]">
-                    <h2 class="mb-2 mt-1 p-2 text-[14px] font-semibold bg-[#f9f9f9]">Характеристики</h2>
+                    <h2 class="mb-2 mt-1 p-2 font-semibold bg-[#f9f9f9] text-xl">Характеристики</h2>
 
                     @php
                         $stats = ['strength' => 'Сила', 'agility' => 'Спритність', 'intuition' => 'Інтуїція', 'endurance' => 'Витривалість'];
@@ -438,7 +438,7 @@
 
                     @livewire('stat-points', ['character' => $character])
 
-                    <h2 class="mb-2 mt-3 p-2 text-[14px] font-semibold bg-[#f9f9f9]">Інформація</h2>
+                    <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9] text-xl">Інформація</h2>
                     <ul class="mb-2 px-2">
                         <li>Рівень:</> {{ $character->level }}</li>
                         <li>Золото:</> {{ $character->gold }}</li>
@@ -449,7 +449,7 @@
 
                     @livewire('character-armor', ['character' => $character])
 
-                    <h2 class="mb-2 mt-3 p-2 text-[14px] font-semibold bg-[#f9f9f9]">Статистика боїв</h2>
+                    <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9] text-xl">Статистика боїв</h2>
                     @php
                         $totalFights = $character->wins + $character->losses + $character->draws;
 
