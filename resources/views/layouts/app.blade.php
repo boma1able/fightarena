@@ -36,29 +36,35 @@
 <body class="bg-gray-100 font-light text-[#27282a]">
     <div class="w-full max-w-[1800px] min-h-[100vh] container mx-auto p-4 bg-[#28292b]">
 
-       <div class="flex">
+       <div class="flex items-center">
         <nav class="flex w-full justify-center items-center gap-4 mb-2">
             <a href="{{ route('home') }}" class="px-3 py-1 text-white {{ request()->routeIs('home') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
-                Головна
+                {{ __('messages.home') }}
             </a>
             <a href="{{ route('inventory') }}" class="px-3 py-1 text-white {{ request()->routeIs('inventory') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
-                Інвентар
+                {{ __('messages.inventory') }}
             </a>
             <a href="{{ route('shop') }}" class="px-3 py-1 text-white {{ request()->routeIs('shop') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
-                Магазин
+                {{ __('messages.shop') }}
             </a>
             <a href="{{ route('forge') }}" class="px-3 py-1 text-white {{ request()->routeIs('forge') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
-                Кузня
+                {{ __('messages.forge') }}
             </a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="text-red-500 px-3 py-1">Вихід</button>
+                <button type="submit" class="text-red-500 px-3 py-1">{{ __('messages.quit') }}</button>
             </form>
         </nav>
-        <p class="text-white">{{ app()->getLocale() }} - {{ __('messages.welcome') }}</p>
-        <div>
-            @livewire('lang-switcher')
-        </div>
+        @php
+            $showLangSwitcherRoutes = ['home', 'inventory', 'forge', 'shop'];
+        @endphp
+
+        @if(in_array(request()->route()->getName(), $showLangSwitcherRoutes))
+            <div>
+                @livewire('lang-switcher')
+            </div>
+        @endif
+
        </div>
 
         @yield('content')

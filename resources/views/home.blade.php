@@ -234,7 +234,7 @@
                                 <div class="absolute top-0 left-0 w-full text-center text-black z-[1]"></div>
                                 <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                             </div>
-                            <div class="avatar w-[205px] h-[410px]" style="background: url({{ asset('images/avatar-male-full.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]"></div>
+                            <div class="avatar w-[205px] h-[410px]" style="background: url({{ asset('images/avatar-' . $character->user->gender . '-full.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]"></div>
                             <div id="banner" class="w-[165px] h-[50px]"></div>
                         </div>
 
@@ -430,7 +430,7 @@
                 </div>
 
                 <div class="w-[320px]">
-                    <h2 class="mb-2 mt-1 p-2 font-semibold bg-[#f9f9f9] text-xl">Характеристики</h2>
+                    <h2 class="mb-2 mt-1 p-2 font-semibold bg-[#f9f9f9] text-xl">{{ __('messages.characteristic') }}</h2>
 
                     @php
                         $stats = ['strength' => 'Сила', 'agility' => 'Спритність', 'intuition' => 'Інтуїція', 'endurance' => 'Витривалість'];
@@ -438,18 +438,18 @@
 
                     @livewire('stat-points', ['character' => $character])
 
-                    <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9] text-xl">Інформація</h2>
+                    <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9] text-xl">{{ __('messages.information') }}</h2>
                     <ul class="mb-2 px-2">
-                        <li>Рівень:</> {{ $character->level }}</li>
-                        <li>Золото:</> {{ $character->gold }}</li>
-                        <li>Досвід: {{ $character->experience }} / {{ $character->getExperienceToLevelUp() }}</li>
+                        <li>{{ __('messages.level') }}: {{ $character->level }}</li>
+                        <li>{{ __('messages.gold') }}: {{ $character->gold }}</li>
+                        <li>{{ __('messages.experience') }}: {{ $character->experience }} / {{ $character->getExperienceToLevelUp() }}</li>
                     </ul>
 
                     @livewire('character-modificators', ['character' => $character])
 
                     @livewire('character-armor', ['character' => $character])
 
-                    <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9] text-xl">Статистика боїв</h2>
+                    <h2 class="mb-2 mt-3 p-2 font-semibold bg-[#f9f9f9] text-xl">{{ __('messages.battleStatistics') }}</h2>
                     @php
                         $totalFights = $character->wins + $character->losses + $character->draws;
 
@@ -461,15 +461,15 @@
                             $percentWins = $percentLosses = $percentDraws = 0;
                         }
                     @endphp
-                    <div class="flex w-full h-2 overflow-hidden cursor-pointer" title="Перемоги: {{ $character->wins }}&#10;Нічиї: {{ $character->draws }}&#10;Програші: {{ $character->losses }}">
+                    <div class="flex w-full h-2 overflow-hidden cursor-pointer" title="{{ __('messages.wins') }}: {{ $character->wins }}&#10;{{ __('messages.draws') }}: {{ $character->draws }}&#10;{{ __('messages.looses') }}: {{ $character->losses }}">
                         <div class="bg-green-500" style="width: {{ $percentWins }}%"></div>
                         <div class="bg-gray-300" style="width: {{ $percentDraws }}%"></div>
                         <div class="bg-red-500" style="width: {{ $percentLosses }}%"></div>
                     </div>
                     <ul class="my-2 px-2">
-                        <li>Перемоги: {{ $character->wins }}</li>
-                        <li>Програші: {{ $character->losses }}</li>
-                        <li>Нічиї: {{ $character->draws }}</li>
+                        <li>{{ __('messages.wins') }}: {{ $character->wins }}</li>
+                        <li>{{ __('messages.looses') }}: {{ $character->losses }}</li>
+                        <li>{{ __('messages.draws') }}: {{ $character->draws }}</li>
                     </ul>
                 </div>
 
@@ -480,7 +480,7 @@
                     </div> --}}
                     <div class="w-full flex justify-center py-5">
                         <a href="{{ route('battle') }}" class="inline-block bg-blue-500 text-white px-4 py-2 hover:bg-blue-600">
-                            Перейти до бою
+                            {{ __('messages.toFight') }}
                         </a>
                     </div>
                 </div>
@@ -492,7 +492,7 @@
 
 
         @else
-            <p>У вас ще немає персонажа.</p>
+            <p>{{ __('messages.noChar') }}.</p>
         @endif
     </div>
 @endsection

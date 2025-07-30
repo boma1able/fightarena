@@ -19,7 +19,7 @@ class InfoChat extends Component
     public function loadLogs()
     {
         $character = auth()->user()->character;
-        $filePath = "logs/character_{$character->id}.log";
+        $filePath = "logs/character_{$character->user->name}-{$character->id}.log";
 
         if (Storage::disk('local')->exists($filePath)) {
             $allLines = explode("\n", Storage::disk('local')->get($filePath));

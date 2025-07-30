@@ -23,7 +23,7 @@ class AuthController extends Controller
             return redirect()->intended('/'); // або route('home')
         }
 
-        return back()->with('error', 'Невірний email або пароль.');
+        return back()->with('error', __('messages.auth_failed'));
     }
 
     public function logout(Request $request)

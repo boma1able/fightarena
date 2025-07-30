@@ -26,7 +26,7 @@ class Character extends Model
     protected static function booted(): void
     {
         static::deleting(function (Character $character) {
-            $filePath = "logs/character_{$character->id}.log";
+            $filePath = "logs/character_{$user->name}-{$character->id}.log";
 
             if (Storage::disk('local')->exists($filePath)) {
                 Storage::disk('local')->delete($filePath);
@@ -394,11 +394,17 @@ class Character extends Model
                 $newDurability = max(0, $pivot->current_durability - 1);
 
                 $updateData = ['current_durability' => $newDurability];
-                $msg = "{$item->name} зазнав шкоди [залишилось $newDurability / $pivot->max_durability].";
+                // $msg = "{$item->name} зазнав шкоди [залишилось $newDurability / $pivot->max_durability].";
+                $msg = __('messages.item_damaged', [
+                    'name' => $item->name,
+                    'new' => $newDurability,
+                    'max' => $pivot->max_durability,
+                ]);
 
                 if ($newDurability === 0) {
                     $updateData['is_broken'] = true;
-                    $msg = "Предмет {$item->name} зламався!";
+                    // $msg = "Предмет {$item->name} зламався!";
+                    $msg = __('messages.item_broken', ['name' => $item->name]);
                 }
 
                 \DB::table('character_items')
@@ -416,7 +422,7 @@ class Character extends Model
         $timestamp = now()->format('H:i:s');
         $line = "[$timestamp] $message";
 
-        $filePath = "logs/character_{$this->id}.log";
+        $filePath = "logs/character_{$this->user->name}-{$this->id}.log";
         Storage::disk('local')->append($filePath, $line);
     }
 }

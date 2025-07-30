@@ -108,7 +108,9 @@ class Battle extends Component
             $baseStats[$randomStat]++;
         }
 
-        $name = fake()->randomElement(config('monster_names'));
+        // $name = fake()->randomElement(config('monster_names'));
+        $monsterNames = __('monster_names');
+        $name = fake()->randomElement($monsterNames);
 
         $monster = Monster::create([
             'name' => $name,
@@ -234,7 +236,14 @@ class Battle extends Component
             'legs_head' => ['legs', 'head'],
         ];
 
-        $possibleZones = ['head' => 'Голову', 'chest' => 'Груди', 'belly' => 'Живіт', 'belt' => 'Пояс', 'legs' => 'Ноги'];
+        // $possibleZones = ['head' => 'Голову', 'chest' => 'Груди', 'belly' => 'Живіт', 'belt' => 'Пояс', 'legs' => 'Ноги'];
+        $possibleZones = [
+            'head' => __('messages.chat_head'),
+            'chest' => __('messages.chat_chest'),
+            'belly' => __('messages.chat_belly'),
+            'belt' => __('messages.chat_belt'),
+            'legs' => __('messages.chat_legs'),
+        ];
 
         $charAttack = $this->attackChoice;
         $charDefenseZones = $defenseMap[$this->defenseChoice] ?? [];
@@ -246,10 +255,19 @@ class Battle extends Component
 
         // --- Удар по монстру ---
         if (in_array($charAttack, $monsterDefenseZones)) {
-            $msg = $this->monster->name . " заблокував ваш удар у " . $possibleZones[$charAttack] . ".";
+            // $msg = $this->monster->name . " заблокував ваш удар у " . $possibleZones[$charAttack] . ".";
+            $msg = __('messages.monster_blocked', [
+                'name' => $this->monster->name,
+                'zone' => $possibleZones[$charAttack],
+            ]);
             $this->messages[] = $msg;
             $this->character->log($msg);
-            $this->dispatch('showHit', ['message' => 'Блок!', 'target' => 'monster', 'type' => 'block']);
+            // $this->dispatch('showHit', ['message' => 'Блок!', 'target' => 'monster', 'type' => 'block']);
+            $this->dispatch('showHit', [
+                'message' => __('messages.block'),
+                'target' => 'monster',
+                'type' => 'block',
+            ]);
         } else {
             $range = $this->character->totalDamageRange;
             $charDamage = rand($range['min'], $range['max']);
@@ -266,10 +284,19 @@ class Battle extends Component
             $charDamage = max(0, $charDamage - $monsterArmorAvg);
 
             if (rand(1, 100) <= $this->monster->dodge_chance - $this->character->anti_dodge_chance) {
-                $msg = $this->monster->name . " ухилився від вашого удару у " . $possibleZones[$charAttack] . ".";
+                // $msg = $this->monster->name . " ухилився від вашого удару у " . $possibleZones[$charAttack] . ".";
+                $msg = __('messages.dodged_attack', [
+                    'name' => $this->monster->name,
+                    'zone' => $possibleZones[$charAttack],
+                ]);
                 $this->messages[] = $msg;
                 $this->character->log($msg);
-                $this->dispatch('showHit', ['message' => "Ухил", 'target' => 'monster', 'type' => 'dodge']);
+                // $this->dispatch('showHit', ['message' => "Ухил", 'target' => 'monster', 'type' => 'dodge']);
+                $this->dispatch('showHit', [
+                    'message' => __('messages.dodge'),
+                    'target' => 'monster',
+                    'type' => 'dodge',
+                ]);
             } else {
                 $isCrit = rand(1, 10000) <= ($this->character->crit_chance - $this->monster->anti_crit_chance) * 100;
                 if ($isCrit) {
@@ -280,39 +307,69 @@ class Battle extends Component
                 $this->monster->current_health = max(0, $this->monster->current_health - $charDamage);
                 $this->monster->save();
 
-                if ($charDamage > 0){
-                    $msg = "Ви вдарили " . $this->monster->name .  " у " . $possibleZones[$charAttack] . " і нанесли $charDamage шкоди.";
-                } else{
-                    $msg = "Ви вдарили " . $this->monster->name . " у " . $possibleZones[$charAttack] . " але не нанесли жодної шкоди.";
+                // if ($charDamage > 0){
+                //     $msg = "Ви вдарили " . $this->monster->name .  " у " . $possibleZones[$charAttack] . " і нанесли $charDamage шкоди.";
+                // } else{
+                //     $msg = "Ви вдарили " . $this->monster->name . " у " . $possibleZones[$charAttack] . " але не нанесли жодної шкоди.";
+                // }
+                if ($charDamage > 0) {
+                    $msg = __('messages.hit_damage', [
+                        'name' => $this->monster->name,
+                        'zone' => $possibleZones[$charAttack],
+                        'damage' => $charDamage,
+                    ]);
+                } else {
+                    $msg = __('messages.hit_no_damage', [
+                        'name' => $this->monster->name,
+                        'zone' => $possibleZones[$charAttack],
+                    ]);
                 }
-                if ($isCrit) $msg .= " Критичний удар!";
+                // if ($isCrit) $msg .= " Критичний удар!";
+                if ($isCrit) {
+                    $msg .= ' ' . __('messages.critical_hit');
+                }
                 $this->messages[] = $msg;
                 $this->character->log($msg);
 
-                if ($charDamage > 0){
-                    $this->dispatch('showHit', [
-                        'message' => "-{$charDamage} хп",
-                        'target' => 'monster',
-                        'type' => $isCrit ? 'crit' : 'hit',
-                    ]);
-                }else{
-                    $this->dispatch('showHit', [
-                        'message' => "0 хп",
-                        'target' => 'monster',
-                        'type' => $isCrit ? 'crit' : 'hit',
-                    ]);
-                }
+                // if ($charDamage > 0){
+                //     $this->dispatch('showHit', [
+                //         'message' => "-{$charDamage} хп",
+                //         'target' => 'monster',
+                //         'type' => $isCrit ? 'crit' : 'hit',
+                //     ]);
+                // }else{
+                //     $this->dispatch('showHit', [
+                //         'message' => "0 хп",
+                //         'target' => 'monster',
+                //         'type' => $isCrit ? 'crit' : 'hit',
+                //     ]);
+                // }
+                $amount = $charDamage > 0 ? $charDamage : 0;
+                $this->dispatch('showHit', [
+                    'message' => __('messages.hp_damage', ['amount' => $amount]),
+                    'target' => 'monster',
+                    'type' => $isCrit ? 'crit' : 'hit',
+                ]);
 
             }
         }
 
         // --- Удар по персонажу ---
         if (in_array($monsterAttack, $charDefenseZones)) {
-            $msg = "Ви заблокували удар " . $this->monster->name . " у " . $possibleZones[$monsterAttack] . ".";
+            // $msg = "Ви заблокували удар " . $this->monster->name . " у " . $possibleZones[$monsterAttack] . ".";
+            $msg = __('messages.you_blocked', [
+                'name' => $this->monster->name,
+                'zone' => $possibleZones[$monsterAttack],
+            ]);
             $this->messages[] = $msg;
             $this->character->log($msg);
 
-            $this->dispatch('showHit', ['message' => "Блок!", 'target' => 'player', 'type' => 'block']);
+            // $this->dispatch('showHit', ['message' => "Блок!", 'target' => 'player', 'type' => 'block']);
+            $this->dispatch('showHit', [
+                'message' => __('messages.block'),
+                'target' => 'player',
+                'type' => 'block',
+            ]);
         } else {
             $range = $this->monster->totalDamageRange ?? ['min' => $this->monster->base_damage, 'max' => $this->monster->base_damage];
             $monsterDamage = rand($range['min'], $range['max']);
@@ -324,11 +381,20 @@ class Battle extends Component
             $monsterDamage = max(0, $monsterDamage - $armorAvg);
 
             if (rand(1, 100) <= $this->character->dodge_chance - $this->monster->anti_dodge_chance) {
-                $msg = "Ви ухилилися від удару " . $this->monster->name . " у " . $possibleZones[$monsterAttack] . ".";
+                // $msg = "Ви ухилилися від удару " . $this->monster->name . " у " . $possibleZones[$monsterAttack] . ".";
+                $msg = __('messages.your_dodged_attack', [
+                    'name' => $this->monster->name,
+                    'zone' => $possibleZones[$monsterAttack],
+                ]);
                 $this->messages[] = $msg;
                 $this->character->log($msg);
 
-                $this->dispatch('showHit', ['message' => "Ухил", 'target' => 'player', 'type' => 'dodge']);
+                // $this->dispatch('showHit', ['message' => "Ухил", 'target' => 'player', 'type' => 'dodge']);
+                $this->dispatch('showHit', [
+                    'message' => __('messages.dodge'),
+                    'target' => 'player',
+                    'type' => 'dodge',
+                ]);
             } else {
                 $isCrit = rand(1, 10000) <= ($this->monster->crit_chance - $this->character->anti_crit_chance) * 100;
                 if ($isCrit) {
@@ -339,28 +405,49 @@ class Battle extends Component
                 $this->character->current_health = max(0, $this->character->current_health - $monsterDamage);
                 $this->character->save();
 
-                if ($monsterDamage > 0){
-                    $msg = $this->monster->name . " вдарив вас у " . $possibleZones[$monsterAttack] . " і наніс $monsterDamage шкоди.";
-                } else{
-                    $msg = $this->monster->name . " вдарив вас у " . $possibleZones[$monsterAttack] . " але не наніс жодної шкоди.";
+                // if ($monsterDamage > 0){
+                //     $msg = $this->monster->name . " вдарив вас у " . $possibleZones[$monsterAttack] . " і наніс $monsterDamage шкоди.";
+                // } else{
+                //     $msg = $this->monster->name . " вдарив вас у " . $possibleZones[$monsterAttack] . " але не наніс жодної шкоди.";
+                // }
+                if ($monsterDamage > 0) {
+                    $msg = __('messages.monster_hit_damage', [
+                        'name' => $this->monster->name,
+                        'zone' => $possibleZones[$monsterAttack],
+                        'damage' => $monsterDamage,
+                    ]);
+                } else {
+                    $msg = __('messages.monster_hit_no_damage', [
+                        'name' => $this->monster->name,
+                        'zone' => $possibleZones[$monsterAttack],
+                    ]);
                 }
-                if ($isCrit) $msg .= " Критичний удар!";
+                // if ($isCrit) $msg .= " Критичний удар!";
+                if ($isCrit) {
+                    $msg .= ' ' . __('messages.critical_hit');
+                }
                 $this->messages[] = $msg;
                 $this->character->log($msg);
 
-                if ($monsterDamage > 0) {
-                    $this->dispatch('showHit', [
-                        'message' => "-{$monsterDamage} хп",
-                        'target' => 'player',
-                        'type' => $isCrit ? 'crit' : 'hit',
-                    ]);
-                }else{
-                    $this->dispatch('showHit', [
-                        'message' => "0 хп",
-                        'target' => 'player',
-                        'type' => $isCrit ? 'crit' : 'hit',
-                    ]);
-                }
+                // if ($monsterDamage > 0) {
+                //     $this->dispatch('showHit', [
+                //         'message' => "-{$monsterDamage} хп",
+                //         'target' => 'player',
+                //         'type' => $isCrit ? 'crit' : 'hit',
+                //     ]);
+                // }else{
+                //     $this->dispatch('showHit', [
+                //         'message' => "0 хп",
+                //         'target' => 'player',
+                //         'type' => $isCrit ? 'crit' : 'hit',
+                //     ]);
+                // }
+                $amount = $monsterDamage > 0 ? $monsterDamage : 0;
+                $this->dispatch('showHit', [
+                    'message' => __('messages.hp_damage', ['amount' => $amount]),
+                    'target' => 'player',
+                    'type' => $isCrit ? 'crit' : 'hit',
+                ]);
             }
         }
 
@@ -371,17 +458,20 @@ class Battle extends Component
         $this->character->wearDownEquippedItems();
 
         if ($this->character->current_health <= 0 && $this->monster->current_health <= 0) {
-            $result = "Нічия! Обидва опоненти впали.";
+            // $result = "Нічия! Обидва опоненти впали.";
+            $result = __('messages.battle_draw');
             $xpMultiplier = 0;
             $this->character->draws++;
             $this->character->log($result);
         } elseif ($this->character->current_health <= 0) {
-            $result = "Ви програли бій!";
+            // $result = "Ви програли бій!";
+            $result = __('messages.you_lost');
             $xpMultiplier = 0.5;
             $this->character->losses++;
             $this->character->log($result);
         } elseif ($this->monster->current_health <= 0) {
-            $result = "Ви перемогли " . $this->monster->name . "!";
+            // $result = "Ви перемогли " . $this->monster->name . "!";
+            $result = __('messages.you_won', ['name' => $this->monster->name]);
 
             if ($this->character->level >= 1) {  // Перевірка рівня персонажа
                 $drop = DropService::generateDrop(100, $this->monster->level);
@@ -410,7 +500,12 @@ class Battle extends Component
                         'max_damage' => $drop->max_damage,
                     ]);
 
-                    $this->character->log("Ви отримали предмет: {$drop->name} [{$drop->level}] ({$drop->rarity})");
+                    // $this->character->log("Ви отримали предмет: {$drop->name} [{$drop->level}] ({$drop->rarity})");
+                    $this->character->log(__('messages.item_received', [
+                        'name' => __('items.' . $drop->key . '.name'),
+                        'level' => $drop->level,
+                        'rarity' => $drop->rarity,
+                    ]));
                 }
             }
 
@@ -442,7 +537,8 @@ class Battle extends Component
 
             if ($xpGained > 0) {
                 $this->character->gainExperience($xpGained);
-                $this->character->log("Ви отримали $xpGained досвіду!");
+                // $this->character->log("Ви отримали $xpGained досвіду!");
+                $this->character->log(__('messages.xp_gained', ['xp' => $xpGained]));
             }
 
             $newLevel = $this->character->level;
@@ -452,7 +548,8 @@ class Battle extends Component
                 $goldGained = $this->monster->gold ?? 0;
                 $this->character->gold += $goldGained;
                 $this->character->save();
-                $this->character->log("Ви здобули $goldGained золотих монет!");
+                // $this->character->log("Ви здобули $goldGained золотих монет!");
+                $this->character->log(__('messages.gold_gained', ['amount' => $goldGained]));
             }
 
             $this->resetBattle();

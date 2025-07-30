@@ -13,7 +13,7 @@ class ItemSeeder extends Seeder
     public function run(): void
     {
         Item::create([
-            'name' => 'Гострий Зуб',
+            'key' => 'sharp_tooth',
             'required_level' => 1,
             'defense_by_zone' => [],
             'buy_price' => 15,
@@ -24,13 +24,12 @@ class ItemSeeder extends Seeder
             'type' => 'knife',
             'slot' => 'weapon',
             'rarity' => 'common',
-            'image' => '/images/items/knifes/knife-0.webp',
-            'description' => 'Дешевий ніж з грубо обробленої сталі, який підійде для різання, кидання або відчаю, але не для серйозної битви.',
+            'image' => '/images/items/knifes/knife-1.webp',
             'is_shop' => true,
         ]);
 
         Item::create([
-            'name' => 'Топор учня мʼясника',
+            'key' => 'butcher_apprentice_axe',
             'required_level' => 1,
             'defense_by_zone' => [],
             'buy_price' => 24,
@@ -42,12 +41,11 @@ class ItemSeeder extends Seeder
             'slot' => 'weapon',
             'rarity' => 'common',
             'image' => '/images/items/axe/axe-1.png',
-            'description' => 'Грубий бойовий топор, викуваний з важкого заліза. Недбалий баланс і тупе лезо не роблять його ідеальним, але в руках відчайдушного може завдати смертельного удару.',
             'is_shop' => true,
         ]);
 
         Item::create([
-            'name' => 'Шкіряний Дух Мандрівника',
+            'key' => 'leather_spirit',
             'required_level' => 1,
             'defense_by_zone' => [
                 'chest' => ['min' => 1, 'max' => 4],
@@ -62,12 +60,11 @@ class ItemSeeder extends Seeder
             'slot' => 'armor',
             'rarity' => 'common',
             'image' => '/images/items/torso/torso-1.png',
-            'description' => 'Проста, але надійна броня з грубої шкіри, яку носять мисливці, початківці та ті, кому треба легкий захист без зайвого тягаря. Пахне дьогтем і пригодами.',
             'is_shop' => true,
         ]);
 
         Item::create([
-            'name' => 'Металевий Шолом Новачка',
+            'key' => 'metal_helmet',
             'required_level' => 1,
             'defense_by_zone' => [
                 'head' => ['min' => 1, 'max' => 4],
@@ -81,12 +78,11 @@ class ItemSeeder extends Seeder
             'slot' => 'helmet',
             'rarity' => 'common',
             'image' => '/images/items/helmet/helmet-1.png',
-            'description' => 'Старий, трохи пом’ятий шолом зі сталі. Надійно прикриває голову від легких ударів, але залишає вуха холодними. Ідеальний для тих, хто тільки починає шлях воїна.',
             'is_shop' => true,
         ]);
 
         Item::create([
-            'name' => 'Амулет Початківця',
+            'key' => 'beginner_amulet',
             'required_level' => 1,
             'defense_by_zone' => [],
             'buy_price' => 7,
@@ -98,12 +94,11 @@ class ItemSeeder extends Seeder
             'slot' => 'neckless',
             'rarity' => 'common',
             'image' => '/images/items/neckless/neckless-1.png',
-            'description' => 'Простий дерев’яний амулет на шкіряній нитці. Допомагає трішки більше щастити в бою.',
             'is_shop' => true,
         ]);
 
         Item::create([
-            'name' => 'Кільце Практиканта',
+            'key' => 'apprentice_ring',
             'required_level' => 1,
             'defense_by_zone' => [],
             'buy_price' => 5,
@@ -115,12 +110,11 @@ class ItemSeeder extends Seeder
             'slot' => 'ring',
             'rarity' => 'common',
             'image' => '/images/items/ring/ring-1.png',
-            'description' => 'Легке металеве кільце. Його носять новачки, що прагнуть пришвидшити свої рухи.',
             'is_shop' => true,
         ]);
 
         Item::create([
-            'name' => 'Рукавиці Робітника',
+            'key' => 'worker_gloves',
             'required_level' => 1,
             'defense_by_zone' => [
                 'belly' => ['min' => 1, 'max' => 3],
@@ -134,12 +128,11 @@ class ItemSeeder extends Seeder
             'slot' => 'arms',
             'rarity' => 'common',
             'image' => '/images/items/arms/arms-1.png',
-            'description' => 'Шкіряні рукавиці з мозолями. Служать скромним, але надійним захистом для рук.',
             'is_shop' => true,
         ]);
 
         Item::create([
-            'name' => 'Дерев’яний Щит Початківця',
+            'key' => 'wooden_shield',
             'required_level' => 1,
             'defense_by_zone' => [],
             'buy_price' => 26,
@@ -151,12 +144,11 @@ class ItemSeeder extends Seeder
             'slot' => 'shield',
             'rarity' => 'common',
             'image' => '/images/items/shield/shield-1.png',
-            'description' => 'Простий щит з дуба. Може витримати кілька ударів і подарувати відчуття безпеки.',
             'is_shop' => true,
         ]);
 
         Item::create([
-            'name' => 'Штани Учня',
+            'key' => 'apprentice_pants',
             'required_level' => 1,
             'defense_by_zone' => [
                 'belt' => ['min' => 1, 'max' => 2],
@@ -171,12 +163,11 @@ class ItemSeeder extends Seeder
             'slot' => 'legs',
             'rarity' => 'common',
             'image' => '/images/items/legs/legs-1.png',
-            'description' => 'Зношені штани з грубого полотна. Не захистять від меча, але не сковують рухів.',
             'is_shop' => true,
         ]);
 
         Item::create([
-            'name' => 'Черевики Новачка',
+            'key' => 'novice_boots',
             'required_level' => 1,
             'defense_by_zone' => [
                 'legs' => ['min' => 1, 'max' => 4],
@@ -190,7 +181,6 @@ class ItemSeeder extends Seeder
             'slot' => 'boots',
             'rarity' => 'common',
             'image' => '/images/items/boots/boots-1.png',
-            'description' => 'Легкі черевики зі старої шкіри. Допомагають швидше бігати та краще триматися на ногах.',
             'is_shop' => true,
         ]);
 

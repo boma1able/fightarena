@@ -1,6 +1,6 @@
 <div class="flex flex-wrap bg-white p-6 rounded shadow-md">
     <div class="w-full">
-        <h2 class="text-xl text-center font-bold mb-4">Магазин</h2>
+        <h2 class="text-xl text-center font-bold mb-4">{{ __('messages.shop') }}</h2>
 
         <div
             x-data="{ show: false, message: '', type: 'info' }"
@@ -29,27 +29,27 @@
             {{-- shop filter --}}
             <div class="w-[250px] mr-4 border-l border-r border-gray-100">
                 <div class="p-2 mb-4 bg-gray-100">
-                    <p>У вас {{ $character->gold }} золота</p>
+                    <p>{{ __('messages.youHave') }} {{ $character->gold }} {{ __('messages.gold') }}</p>
                 </div>
                 <div class="flex flex-col gap-2">
-                    {{-- Кнопка "Усі товари" --}}
+
                     <button
                         wire:click="setFilter('all')"
                         class="p-2 text-sm text-start border-b border-gray-100 {{ $filterType === 'all' ? 'font-semibold text-blue-600' : '' }}"
                     >
-                    &mdash; Усі товари
+                    &mdash; {{ __('messages.allProducts') }}
                     </button>
 
                     @foreach($allTypesGrouped as $groupName => $types)
                         <div class="px-2 border-b border-gray-100">
-                            <h3 class="font-bold text-gray-700 bg-gray-100 p-1">{{ $groupName }}</h3>
+                            <h3 class="font-bold text-gray-700 bg-gray-100 p-1">{{ __('filters.groups.' . $groupName) }}</h3>
                             <div class="flex gap-2 mt-1 flex-col">
                                 @if($types->isNotEmpty())
                                     @foreach($types as $type)
                                         <button
                                             wire:click="setFilter('{{ $type }}')"
                                             class="py-1 text-sm text-start {{ $filterType === $type ? 'font-semibold text-blue-600' : '' }}">
-                                            &mdash; {{ ucfirst($type) }}
+                                            &mdash; {{ __('filters.types.' . $type) }}
                                         </button>
                                     @endforeach
                                 @else
@@ -58,24 +58,12 @@
                             </div>
                         </div>
                     @endforeach
+
                 </div>
 
             </div>
 
             <div class="flex flex-col" style="width: calc(100% - 250px)">
-                @php
-                    $labels_ua = [
-                        'strength' => 'Сила',
-                        'agility' => 'Ловкість',
-                        'intelligence' => 'Інтелект',
-                        'endurance' => 'Витривалість',
-                        'head' => 'голови',
-                        'chest' => 'грудей',
-                        'belly' => 'живота',
-                        'belt' => 'пояса',
-                        'legs' => 'ніг'
-                    ];
-                @endphp
                 @forelse($items as $item)
                     <div id="item-{{ $item->id }}" class="flex odd:bg-[#f9f9f9] p-2">
                         <div class="item flex flex-col w-[200px] items-center justify-center py-4">
@@ -97,36 +85,40 @@
                         </div>
 
                         <div class="w-full flex flex-col p-2">
-                            <h3 class="font-semibold mb-1 text-xl">{{ $item->name }} [{{ $item->required_level }}]</h3>
+                            <h3 class="font-semibold mb-1 text-xl">{{ __('items.' . $item->key . '.name') }} [{{ $item->required_level }}]</h3>
                             @if($item->min_damage)
-                                <p class="text-sm">Урон: {{ $item->min_damage }}–{{ $item->max_damage }}</p>
+                                <p class="text-sm">{{ __('messages.damage') }}: {{ $item->min_damage }}–{{ $item->max_damage }}</p>
                             @endif
-                            @foreach($item->bonuses ?? [] as $stat => $value)
-                                <p class="text-sm">{{ $labels_ua[$stat] ?? ucfirst($stat) }}: +{{ $value }}</p>
-                            @endforeach
                             @foreach($item->defense_by_zone as $zone => $range)
-                                <p class="text-sm">Броня {{ $labels_ua[$zone] ?? ucfirst($zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
+                                <p class="text-sm">{{ __('messages.' . $zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
                             @endforeach
-                            <p class="text-sm">Міцність: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
+                            @foreach($item->bonuses ?? [] as $stat => $value)
+                                <p class="text-sm">{{ __('messages.' . $stat) }}: +{{ $value }}</p>
+                            @endforeach
+                            <p class="text-sm">{{ __('messages.durability') }}: {{ $item->pivot->current_durability }} / {{ $item->pivot->max_durability }}</p>
                             <p @class(['text-sm', '!text-red-500' => $character->level < $item->required_level])>
-                                {{ $character->level < $item->required_level ? 'Мінімальний рівень: ' : 'Рівень: ' }}{{ $item->required_level }}
+                                {{ $character->level < $item->required_level ? __('messages.min_level') : __('messages.level') }}: {{ $item->required_level }}
                             </p>
-                            <p class="mt-2 text-[14px] font-thin italic mb-2 text-sm">{{ $item->description }}</p>
-                            <div class="flex">
+                            <p class="mt-2 text-[14px] font-thin italic mb-2 text-sm">{{ __('items.' . $item->key . '.description') }}</p>
 
+                            <div class="flex items-center gap-2">
                                 @if($character->gold < $item->buy_price)
-                                    <p class="mt-3"><span class="text-red-500 underline">Ціна: {{ $item->buy_price }}.</span> У вас недостатньо коштів!</p>
+                                    <p class="mt-3 text-sm text-red-600">
+                                        <span class="underline">{{ __('messages.price') }}: {{ $item->buy_price }}</span>.
+                                        {{ __('messages.not_enough_gold') }}
+                                    </p>
                                 @else
-                                    <div wire:click="buyItem({{ $item->id }})" class="btn cursor-pointer bg-green-500 hover:bg-green-400 text-white px-2 py-1">
-                                        Купити за {{ $item->buy_price }} золота
+                                    <div wire:click="buyItem({{ $item->id }})"
+                                         class="btn cursor-pointer bg-green-500 hover:bg-green-400 text-white text-sm px-3 py-1 rounded">
+                                        {{ __('messages.buy_for_gold', ['price' => $item->buy_price]) }}
                                     </div>
                                 @endif
-
                             </div>
+
                         </div>
                     </div>
                 @empty
-                    <p class="text-gray-500">Магазин порожній.</p>
+                    <p class="text-gray-500">{{ __('messages.shopIsEmpty') }}.</p>
                 @endforelse
             </div>
 

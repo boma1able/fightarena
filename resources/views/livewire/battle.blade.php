@@ -44,7 +44,8 @@
                                     $helmet = (object) $equippedBySlot['helmet'];
                                     $helmet->pivot = (object) $helmet->pivot;
 
-                                    $title = $helmet->name . ' [' . $helmet->required_level . ']' . "\n"
+                                    $itemName = __('items.' . $helmet->key . '.name');
+                                    $title = $itemName . ' [' . $helmet->required_level . ']' . "\n"
                                         . 'Міцність: ' . $helmet->pivot->current_durability . ' / ' . $helmet->pivot->max_durability . "\n";
 
                                     $bonuses = $helmet->pivot->bonuses ?? [];
@@ -55,12 +56,13 @@
                                     foreach ($bonuses as $stat => $value) {
                                         $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                     }
+
                                     $rarityClass = $rarityColors[$helmet->pivot->rarity] ?? 'gray';
                                     $isBroken = $helmet->pivot?->current_durability === 0;
                                 @endphp
+
                                 <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
-                                    title="{{ trim($title) }}"
-                                    >
+                                    title="{{ trim($title) }}">
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
                                         class="absolute w-[60px]"
                                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
@@ -82,8 +84,9 @@
                                 @php
                                     $armor = (object) $equippedBySlot['armor'];
                                     $armor->pivot = (object) $armor->pivot;
+                                    $itemName = __('items.' . $armor->key . '.name');
 
-                                    $title = $armor->name . ' [' . $armor->required_level . ']' . "\n"
+                                    $title = $itemName . ' [' . $armor->required_level . ']' . "\n"
                                         . 'Міцність: ' . $armor->pivot->current_durability . ' / ' . $armor->pivot->max_durability . "\n";
 
                                     $bonuses = $armor->pivot->bonuses ?? [];
@@ -121,8 +124,9 @@
                                 @php
                                     $ring1 = (object) $equippedBySlot['ring1'];
                                     $ring1->pivot = (object) $ring1->pivot;
+                                    $itemName = __('items.' . $ring1->key . '.name');
 
-                                    $title = $ring1->name . ' [' . $ring1->required_level . ']' . "\n"
+                                    $title = $itemName . ' [' . $ring1->required_level . ']' . "\n"
                                         . 'Міцність: ' . $ring1->pivot->current_durability . ' / ' . $ring1->pivot->max_durability . "\n";
 
                                     $bonuses = $ring1->pivot->bonuses ?? [];
@@ -160,8 +164,8 @@
                                 @php
                                     $weapon = (object) $equippedBySlot['weapon'];
                                     $weapon->pivot = (object) $weapon->pivot;
-
-                                    $title = $weapon->name;
+                                    $itemName = __('items.' . $weapon->key . '.name');
+                                    $title = $itemName;
 
                                     $level = $weapon->pivot->level ?? $weapon->level;
                                     $minDamage = $weapon->pivot->min_damage ?? $weapon->min_damage;
@@ -208,8 +212,9 @@
                                 @php
                                     $legs = (object) $equippedBySlot['legs'];
                                     $legs->pivot = (object) $legs->pivot;
+                                    $itemName = __('items.' . $legs->key . '.name');
 
-                                    $title = $legs->name . ' [' . $legs->required_level . ']' . "\n"
+                                    $title = $itemName . ' [' . $legs->required_level . ']' . "\n"
                                         . 'Міцність: ' . $legs->pivot->current_durability . ' / ' . $legs->pivot->max_durability . "\n";
 
                                     $bonuses = $legs->pivot->bonuses ?? [];
@@ -251,7 +256,7 @@
                             <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                         </div>
                         <div class="relative avatar w-[205px] h-[410px] overflow-hidden group transition-left duration-300"
-                            style="background: url({{ asset('images/avatar-male-full.jpg') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/avatar-' . $character->user->gender . '-full.jpg') }}) center center no-repeat; background-size: cover;"
                             title="{{ $character->user->name }} [{{ $character->level }}]
                         ">
                             @php
@@ -266,10 +271,10 @@
                             <div class="char-stats absolute bg-black/60 text-white w-full h-full overflow-auto py-2 top-0 -left-full ml-2 group-hover:left-[0] group-hover:ml-0 transition-w duration-300">
 
                                 <ul class="list-inside px-2">
-                                    <li>Сила: {{ $character->strength }}</li>
-                                    <li>Спритність: {{ $character->agility }}</li>
-                                    <li>Інтуіція: {{ $character->intuition }}</li>
-                                    <li>Витривалість: {{ $character->endurance }}</li>
+                                    <li>{{ __('messages.strength') }}: {{ $character->strength }}</li>
+                                    <li>{{ __('messages.agility') }}: {{ $character->agility }}</li>
+                                    <li>{{ __('messages.intuition') }}: {{ $character->intuition }}</li>
+                                    <li>{{ __('messages.endurance') }}: {{ $character->endurance }}</li>
                                 </ul>
 
                                 @livewire('character-modificators', ['character' => $character])
@@ -319,8 +324,9 @@
                                 @php
                                     $neckless = (object) $equippedBySlot['neckless'];
                                     $neckless->pivot = (object) $neckless->pivot;
+                                    $itemName = __('items.' . $neckless->key . '.name');
 
-                                    $title = $neckless->name . ' [' . $neckless->required_level . ']' . "\n"
+                                    $title = $itemName . ' [' . $neckless->required_level . ']' . "\n"
                                         . 'Міцність: ' . $neckless->pivot->current_durability . ' / ' . $neckless->pivot->max_durability . "\n";
 
                                     $bonuses = $neckless->pivot->bonuses ?? [];
@@ -358,8 +364,9 @@
                                 @php
                                     $arms = (object) $equippedBySlot['arms'];
                                     $arms->pivot = (object) $arms->pivot;
+                                    $itemName = __('items.' . $arms->key . '.name');
 
-                                    $title = $arms->name . ' [' . $arms->required_level . ']' . "\n"
+                                    $title = $itemName . ' [' . $arms->required_level . ']' . "\n"
                                         . 'Міцність: ' . $arms->pivot->current_durability . ' / ' . $arms->pivot->max_durability . "\n";
 
                                     $bonuses = $arms->pivot->bonuses ?? [];
@@ -396,8 +403,9 @@
                                 @php
                                     $ring2 = (object) $equippedBySlot['ring2'];
                                     $ring2->pivot = (object) $ring2->pivot;
+                                    $itemName = __('items.' . $ring2->key . '.name');
 
-                                    $title = $ring2->name . ' [' . $ring2->required_level . ']' . "\n"
+                                    $title = $itemName . ' [' . $ring2->required_level . ']' . "\n"
                                         . 'Міцність: ' . $ring2->pivot->current_durability . ' / ' . $ring2->pivot->max_durability . "\n";
 
                                     $bonuses = $ring2->pivot->bonuses ?? [];
@@ -435,8 +443,9 @@
                                 @php
                                     $shield = (object) $equippedBySlot['shield'];
                                     $shield->pivot = (object) $shield->pivot;
+                                    $itemName = __('items.' . $shield->key . '.name');
 
-                                    $title = $shield->name . ' [' . $shield->required_level . ']' . "\n"
+                                    $title = $itemName . ' [' . $shield->required_level . ']' . "\n"
                                         . 'Міцність: ' . $shield->pivot->current_durability . ' / ' . $shield->pivot->max_durability . "\n";
 
                                     $bonuses = $shield->pivot->bonuses ?? [];
@@ -474,8 +483,9 @@
                                 @php
                                     $boots = (object) $equippedBySlot['boots'];
                                     $boots->pivot = (object) $boots->pivot;
+                                    $itemName = __('items.' . $boots->key . '.name');
 
-                                    $title = $boots->name . ' [' . $boots->required_level . ']' . "\n"
+                                    $title = $itemName . ' [' . $boots->required_level . ']' . "\n"
                                         . 'Міцність: ' . $boots->pivot->current_durability . ' / ' . $boots->pivot->max_durability . "\n";
 
                                     $bonuses = $boots->pivot->bonuses ?? [];
@@ -513,7 +523,7 @@
 
         <div class="w-[600px] bg-white p-4 rounded shadow">
 
-            <h2 class="text-center mb-5 text-bold text-[20px]">Бій розпочався!</h2>
+            <h2 class="text-center mb-5 text-bold text-[20px]">{{ __('fight.battleBigan') }}!</h2>
 
             @if(session('message'))
                 <div
@@ -531,42 +541,55 @@
 
                 <div class="flex">
                     <div class="w-1/2">
-                        <h3 class="font-semibold mb-2 bg-gray-100 p-1 text-xl">Атакувати</h3>
+                        <h3 class="font-semibold mb-2 bg-gray-100 p-1 text-xl">{{ __('fight.attack') }}</h3>
+                        @php
+                            $attackZones = [
+                                'head' => ['uk' => 'Голову', 'en' => 'Head'],
+                                'chest' => ['uk' => 'Груди', 'en' => 'Chest'],
+                                'belly' => ['uk' => 'Живіт', 'en' => 'Belly'],
+                                'belt' => ['uk' => 'Пояс', 'en' => 'Waist'],
+                                'legs' => ['uk' => 'Ноги', 'en' => 'Legs'],
+                            ];
+                        @endphp
+
                         <div>
-                            @foreach(['head' => 'Голову', 'chest' => 'Груди', 'belly' => 'Живіт', 'belt' => 'Пояс', 'legs' => 'Ноги'] as $key => $label)
+                            @foreach($attackZones as $key => $labels)
                                 <label class="block mr-3 mb-1 text-sm">
                                     <input type="radio" wire:model="attackChoice" name="attackChoice" value="{{ $key }}">
-                                    {{ $label }}
+                                    {{ __('fight.'.$key) }}
                                 </label>
                             @endforeach
                         </div>
+
                     </div>
 
                     <div class="w-1/2">
-                        <h3 class="font-semibold mb-2 bg-gray-100 p-1 text-xl">Захищатись</h3>
+                        <h3 class="font-semibold mb-2 bg-gray-100 p-1 text-xl">{{ __('fight.defending') }}</h3>
                         @php
                             $defenseOptions = [
-                                'head_chest' => 'Захищати голову та груди',
-                                'chest_belly' => 'Захищати груди та живіт',
-                                'belly_belt' => 'Захищати живіт та пояс',
-                                'belt_legs' => 'Захищати пояс та ноги',
-                                'legs_head' => 'Захищати ноги та голову',
+                                'head_chest',
+                                'chest_belly',
+                                'belly_belt',
+                                'belt_legs',
+                                'legs_head',
                             ];
                         @endphp
+
                         <div>
-                            @foreach($defenseOptions as $key => $label)
+                            @foreach($defenseOptions as $key)
                                 <label class="block mr-3 mb-1 text-sm">
                                     <input type="radio" wire:model="defenseChoice" name="defenseChoice" value="{{ $key }}">
-                                    {{ $label }}
+                                    {{ __('fight.defense.' . $key) }}
                                 </label>
                             @endforeach
                         </div>
+
                     </div>
                 </div>
 
                 <div class="flex mt-2 justify-center bg-gray-100 p-1">
                     <button type="submit" class="bg-blue-600 text-white px-10 py-1 rounded hover:bg-blue-700">
-                        Бій!
+                        {{ __('fight.attack') }}!
                     </button>
                 </div>
             </form>
@@ -836,16 +859,16 @@
 
                             <div class="absolute bg-black/60 text-white w-full h-full overflow-auto p-2 top-0 -left-full ml-2 group-hover:left-[0] group-hover:ml-0 transition-w duration-300">
                                 <ul class="monster-stats list-inside">
-                                    <li>Сила: {{ $monster->strength }}</li>
-                                    <li>Спритність: {{ $monster->agility }}</li>
-                                    <li>Інтуіція: {{ $monster->intuition }}</li>
-                                    <li>Витривалість {{ $monster->endurance }}</li>
-                                    <li>Базовий урон: {{ $monster->total_damage_range['min'] ?? '0' }} - {{ $monster->total_damage_range['max'] ?? '0' }}</li>
-                                    <li>Критичний урон: {{ $monster->critical_damage_range['min'] ?? '0' }} - {{ $monster->critical_damage_range['max'] ?? '0' }}</li>
-                                    <li>Крит: {{ $monster->crit_chance }}%</li>
-                                    <li>Анти-крит: {{ $monster->anti_crit_chance }}%</li>
-                                    <li>Ухил: {{ $monster->dodge_chance }}%</li>
-                                    <li>Анті-ухил: {{ $monster->anti_dodge_chance }}%</li>
+                                    <li>{{ __('messages.strength') }}: {{ $monster->strength }}</li>
+                                    <li>{{ __('messages.agility') }}: {{ $monster->agility }}</li>
+                                    <li>{{ __('messages.intuition') }}: {{ $monster->intuition }}</li>
+                                    <li>{{ __('messages.endurence') }} {{ $monster->endurance }}</li>
+                                    <li>{{ __('messages.baseDamage') }}: {{ $monster->total_damage_range['min'] ?? '0' }} - {{ $monster->total_damage_range['max'] ?? '0' }}</li>
+                                    <li>{{ __('messages.critDamage') }}: {{ $monster->critical_damage_range['min'] ?? '0' }} - {{ $monster->critical_damage_range['max'] ?? '0' }}</li>
+                                    <li>{{ __('messages.crit') }}: {{ $monster->crit_chance }}%</li>
+                                    <li>{{ __('messages.antiCrit') }}: {{ $monster->anti_crit_chance }}%</li>
+                                    <li>{{ __('messages.dodge') }}: {{ $monster->dodge_chance }}%</li>
+                                    <li>{{ __('messages.antiDodge') }}: {{ $monster->anti_dodge_chance }}%</li>
                                     @php
                                         $defenseByZone = $monster->totalDefenseByZone();
                                     @endphp
@@ -855,7 +878,7 @@
                                             $min = $defenseByZone[$zone]['min'] ?? 0;
                                             $max = $defenseByZone[$zone]['max'] ?? 0;
                                         @endphp
-                                        <li>{{ $label }}: @if($min != 0){{ $min }} - @endif{{ $max }}</li>
+                                        <li>{{ __("messages.$zone") }}: @if($min != 0){{ $min }} - @endif{{ $max }}</li>
                                     @endforeach
                                 </ul>
                                 <div class="flex flex-col items-center justify-center gap-1 absolute w-[8px] h-full right-0 top-0 text-white bg-black z-10">

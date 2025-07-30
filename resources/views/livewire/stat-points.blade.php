@@ -1,14 +1,15 @@
 <div>
     <ul class="mb-2 px-2">
-        @foreach(['strength' => 'Сила', 'agility' => 'Спритність', 'intuition' => 'Інтуїція', 'endurance' => 'Витривалість'] as $statKey => $statName)
+        @foreach(['strength', 'agility', 'intuition', 'endurance'] as $statKey)
             @php
+                $statName = __('messages.' . $statKey);
                 $baseValue = $character->$statKey;
                 $bonusValue = $character->bonuses[$statKey] ?? 0;
                 $totalValue = $character->getTotalStat($statKey);
             @endphp
             <li class="flex justify-between mb-1">
                 <span class="flex items-center">
-                    <span class="">{{ $statName }}:</span>
+                    <span>{{ $statName }}:</span>
                     <span class="text-green-900 font-medium mx-[5px]">{{ $baseValue + $bonusValue }}</span>
                     <span class="font-light">
                         @if($bonusValue > 0)<span class="mr-[3px]">({{ $baseValue }}</span>+<span class="ml-[3px]">{{ $bonusValue }})</span>@endif
@@ -22,8 +23,9 @@
                 @endif
             </li>
         @endforeach
+
         @if($character->stat_points > 0)
-            <li class="mt-2 -ml-2"><p class="text-[14px] font-thin italic">Нерозподілені стати: <span class=" ml-1">{{ $character->stat_points }}</span></p></li>
+            <li class="mt-2 -ml-2"><p class="text-[14px] font-thin italic text-green-500">{{ __('messages.freeStats') }}: <span class=" ml-1">{{ $character->stat_points }}</span></p></li>
         @endif
     </ul>
 </div>
