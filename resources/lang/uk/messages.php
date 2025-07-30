@@ -94,4 +94,8 @@ return [
     'sign_up' => 'Зареєструватися',
     'back_to_login' => 'Назад до логіну',
     'auth_failed' => 'Невірний email або пароль.',
+    'gender_male' => 'Чоловіча',
+    'gender_female' => 'Жіноча',
+    'choose_gender' => 'Виберіть стать вашого персонажа',
+
 ];

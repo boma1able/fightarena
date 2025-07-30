@@ -18,16 +18,16 @@
         </div>
 
         <div class="mb-4">
-            <label class="block mb-2">Стать</label>
+            <label class="block mb-2">{{ __('messages.choose_gender') }}</label>
             <label class="mr-4">
                 <input type="radio" name="gender" value="male" required
                     {{ old('gender', 'male') === 'male' ? 'checked' : '' }}>
-                Чоловіча
+                    {{ __('messages.gender_male') }}
             </label>
             <label>
                 <input type="radio" name="gender" value="female" required
                     {{ old('gender') === 'female' ? 'checked' : '' }}>
-                Жіноча
+                    {{ __('messages.gender_female') }}
             </label>
             @error('gender')
                 <div class="text-red-500 text-sm">{{ $message }}</div>

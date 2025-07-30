@@ -396,7 +396,7 @@ class Character extends Model
                 $updateData = ['current_durability' => $newDurability];
                 // $msg = "{$item->name} зазнав шкоди [залишилось $newDurability / $pivot->max_durability].";
                 $msg = __('messages.item_damaged', [
-                    'name' => $item->name,
+                    'name' => __('items.' . $drop->key . '.name'),
                     'new' => $newDurability,
                     'max' => $pivot->max_durability,
                 ]);
@@ -404,7 +404,9 @@ class Character extends Model
                 if ($newDurability === 0) {
                     $updateData['is_broken'] = true;
                     // $msg = "Предмет {$item->name} зламався!";
-                    $msg = __('messages.item_broken', ['name' => $item->name]);
+                    $msg = __('messages.item_broken', [
+                        'name' => __('items.' . $item->key . '.name'),
+                    ]);
                 }
 
                 \DB::table('character_items')

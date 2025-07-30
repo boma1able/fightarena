@@ -94,4 +94,8 @@ return [
     'sign_up' => 'Sign Up',
     'back_to_login' => 'Back to login',
     'auth_failed' => 'Incorrect email or password.',
+    'gender_male' => 'Male',
+    'gender_female' => 'Female',
+    'choose_gender' => "Choose your character's gender",
+
 ];
