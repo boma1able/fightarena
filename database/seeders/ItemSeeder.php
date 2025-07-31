@@ -35,12 +35,44 @@ class ItemSeeder extends Seeder
             'buy_price' => 24,
             'sell_price' => 6,
             'bonuses' => ['strength' => 1],
-            'min_damage' => 2,
-            'max_damage' => 3,
+            'min_damage' => 1,
+            'max_damage' => 4,
             'type' => 'axe',
             'slot' => 'weapon',
             'rarity' => 'common',
             'image' => '/images/items/axe/axe-1.png',
+            'is_shop' => true,
+        ]);
+
+        Item::create([
+            'key' => 'rusty_sword',
+            'required_level' => 1,
+            'defense_by_zone' => [],
+            'buy_price' => 20,
+            'sell_price' => 7,
+            'bonuses' => ['intuition' => 1],
+            'min_damage' => 2,
+            'max_damage' => 3,
+            'type' => 'sword',
+            'slot' => 'weapon',
+            'rarity' => 'common',
+            'image' => '/images/items/swords/sword-1.png',
+            'is_shop' => true,
+        ]);
+
+        Item::create([
+            'key' => 'cracked_mace',
+            'required_level' => 1,
+            'defense_by_zone' => [],
+            'buy_price' => 22,
+            'sell_price' => 8,
+            'bonuses' => ['endurance' => 1],
+            'min_damage' => 1,
+            'max_damage' => 5,
+            'type' => 'mace',
+            'slot' => 'weapon',
+            'rarity' => 'common',
+            'image' => '/images/items/maces/mace-1.png',
             'is_shop' => true,
         ]);
 

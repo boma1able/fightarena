@@ -28,6 +28,7 @@
                 <input type="radio" name="gender" value="female" required
                     {{ old('gender') === 'female' ? 'checked' : '' }}>
                     {{ __('messages.gender_female') }}
+                    <p class="text-xs italic my-2 text-gray-500/70">{{ __('messages.gender_desc') }}</p>
             </label>
             @error('gender')
                 <div class="text-red-500 text-sm">{{ $message }}</div>

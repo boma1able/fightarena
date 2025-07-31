@@ -97,5 +97,6 @@ return [
     'gender_male' => 'Male',
     'gender_female' => 'Female',
     'choose_gender' => "Choose your character's gender",
+    'gender_desc' => 'Your gender choice only affects the appearance of your character: the avatar and the look of equipped items in the game.',
 
 ];

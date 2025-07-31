@@ -34,7 +34,6 @@
                     <div
                         class="flex flex-col"
                         style="gap: 10px"
-                        x-data="{ tooltip: '', show: false, x: 0, y: 0 }"
                     >
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
                             style="background: url({{ asset('images/empty-equipment/empty-helmet.png') }}) center center no-repeat; background-size: cover;"
@@ -58,8 +57,6 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['helmet']->pivot->id }})"
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -100,8 +97,6 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['armor']->pivot->id }})"
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     >
                                     <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
@@ -139,8 +134,6 @@
                                     $isBroken = $ring1->pivot?->current_durability === 0;
                                 @endphp
                                 <div
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     wire:click="unequipItem({{ $equippedBySlot['ring1']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     >
@@ -188,8 +181,6 @@
                                     $isBroken = $weapon->pivot?->current_durability === 0;
                                 @endphp
                                 <div
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     wire:click="unequipItem({{ $equippedBySlot['weapon']->pivot->id }})"
                                     class="{{ $rarityClass }} relative w-[60px] h-[90px] {{ $isBroken ? 'broken' : '' }}"
                                     >
@@ -229,8 +220,6 @@
                                     $isBroken = $legs->pivot?->current_durability === 0;
                                 @endphp
                                 <div
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     wire:click="unequipItem({{ $equippedBySlot['legs']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     >
@@ -257,25 +246,11 @@
                             <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                         </div>
                         <div class="relative avatar w-[205px] h-[410px] mt-1" style="background: url({{ asset('images/avatar-' . $character->user->gender . '-full.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]">
-                            <div
-                                class="absolute z-10 tooltip-container w-[205px] h-[410px] absolute top-0 bg-black/70 text-white p-4
-                                    transition-all duration-300 ease-in-out transform
-                                    @if(!$hoveredItemTooltip)
-                                       opacity-0 pointer-events-none
-                                    @else
-                                        opacity-100
-                                    @endif"
-                                    {{-- style="background: url({{ asset('images/items/item-back.png') }}) center center no-repeat; background-size: cover;" --}}
-                            >
-                                {!! nl2br(e($hoveredItemTooltip)) !!}
-
-                            </div>
                             <img
                                 class="absolute top-0 left-0 scale-[1.02]"
                                 src="{{ asset('images/cover-frame.png') }}"
                                 alt=""
                             >
-
                             @if(isset($equippedBySlot['helmet']))
                                 @php
                                     $helmet = $equippedBySlot['helmet'];
@@ -327,6 +302,24 @@
 
                                 <div class="absolute eequipped-neckless w-[205px] h-[70px] top-[19%]"
                                     style="background: url({{ $necklessEquipped }}) center center no-repeat; background-size: cover;filter: drop-shadow(-0.5px 0px 1px #000);"
+                                ></div>
+                            @endif
+
+                            @if(isset($equippedBySlot['ring1']))
+                                @php
+                                    $ring1 = $equippedBySlot['ring1'];
+                                    $ring1Path = $ring1['image'] ?? null;
+
+                                    if ($ring1Path) {
+                                        $ring1File = pathinfo($ring1Path, PATHINFO_FILENAME);
+                                        $ring1Equipped = asset('images/items/ring/' . $ring1File . '-equipped.png');
+                                    } else {
+                                        $ring1Equipped = null;
+                                    }
+                                @endphp
+
+                                <div class="absolute eequipped-ring1 w-[205px] h-[37px] top-[21.5%]"
+                                    style="background: url({{ $ring1Equipped }}) center center no-repeat; background-size: cover;"
                                 ></div>
                             @endif
 
@@ -411,8 +404,6 @@
                                     $isBroken = $neckless->pivot?->current_durability === 0;
                                 @endphp
                                 <div
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     wire:click="unequipItem({{ $equippedBySlot['neckless']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     >
@@ -451,8 +442,6 @@
                                     $isBroken = $arms->pivot?->current_durability === 0;
                                 @endphp
                                 <div
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     wire:click="unequipItem({{ $equippedBySlot['arms']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     >
@@ -491,8 +480,6 @@
                                     $isBroken = $ring2->pivot?->current_durability === 0;
                                 @endphp
                                 <div
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     wire:click="unequipItem({{ $equippedBySlot['ring2']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     >
@@ -531,8 +518,6 @@
                                     $isBroken = $shield->pivot?->current_durability === 0;
                                 @endphp
                                 <div
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     wire:click="unequipItem({{ $equippedBySlot['shield']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     >
@@ -571,8 +556,6 @@
                                     $isBroken = $boots->pivot?->current_durability === 0;
                                 @endphp
                                 <div
-                                    wire:mouseenter="showTooltip({{ json_encode($title) }})"
-                                    wire:mouseleave="hideTooltip"
                                     wire:click="unequipItem({{ $equippedBySlot['boots']->pivot->id }})"
                                     class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                     >
@@ -767,8 +750,13 @@
 
                             <div class="w-full flex flex-col p-2">
                                 <h3 class="font-semibold mb-1 item-name text-xl">{{ __('items.' . $item->key . '.name') }} [{{ $item->pivot->level }}]</h3>
-                                @if($item->pivot->min_damage)
-                                    <p class="text-sm">{{ __('messages.damage') }}: {{ $item->pivot->min_damage }}–{{ $item->pivot->max_damage }}</p>
+                                @php
+                                    $minDamage = $item->pivot->min_damage ?? $item->min_damage;
+                                    $maxDamage = $item->pivot->max_damage ?? $item->max_damage;
+                                @endphp
+
+                                @if($minDamage && $maxDamage)
+                                    <p class="text-sm">{{ __('messages.damage') }}: {{ $minDamage }}–{{ $maxDamage }}</p>
                                 @endif
                                 @foreach($item->defense_by_zone as $zone => $range)
                                     <p class="text-sm">{{ __('messages.' . $zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>

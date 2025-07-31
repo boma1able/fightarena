@@ -12,7 +12,6 @@ class Inventory extends Component
     public $characterExpPercent = 0;
     public $allTypes = [];
     public string $filterType = 'all';
-    public string $hoveredItemTooltip = '';
 
     public function mount()
     {
@@ -105,7 +104,6 @@ class Inventory extends Component
             ->update(['location' => 'inventory', 'slot' => null]);
 
         $this->refreshCharacter();
-        $this->hideTooltip();
         $this->dispatch('trigger-toast', ['message' => 'Предмет знято!', 'type' => 'success']);
     }
 
@@ -217,16 +215,6 @@ class Inventory extends Component
             'allTypes' => $allTypes,
             'filterType' => $this->filterType,
         ])->layout('layouts.app');
-    }
-
-    public function showTooltip(string $text): void
-    {
-        $this->hoveredItemTooltip = $text;
-    }
-
-    public function hideTooltip(): void
-    {
-        $this->hoveredItemTooltip = '';
     }
 
 }
