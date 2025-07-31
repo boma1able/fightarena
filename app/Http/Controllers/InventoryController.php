@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Services\TooltipService;
 
 class InventoryController extends Controller
 {
@@ -23,11 +22,5 @@ class InventoryController extends Controller
         }
 
         return view('inventory', compact('character', 'inventory', 'equipped', 'equippedBySlot'));
-    }
-
-    public function showTooltipForItem($item)
-    {
-        $title = TooltipService::makeTitleFromItem($item);
-        $this->setHoveredItemTooltip($title);
     }
 }
