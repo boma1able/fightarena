@@ -81,6 +81,10 @@ return [
     'item_damaged' => ':name зазнав шкоди [залишилось :new / :max].',
     'item_broken' => 'Предмет :name зламався!',
     'battle_results' => 'Результати бою',
+    'debuffs' => 'Негативні ефекти',
+    'debuff_applied' => ':name отримує негативний ефект :debuff!',
+    'monster_stunned' => ':name оглушений і пропускає наступний хід!',
+    'stunned' => 'Оглушений',
     //login/registration
     'login' => 'Вхід',
     'email' => 'Email',

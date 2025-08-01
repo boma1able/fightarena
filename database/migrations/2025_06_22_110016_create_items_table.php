@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('slot')->nullable();
             $table->string('rarity')->default('common');
             $table->json('bonuses')->nullable();
+            $table->json('debuffs')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->unsignedInteger('base_max_durability')->default(20);

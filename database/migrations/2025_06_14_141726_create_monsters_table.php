@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('agility')->default(3);
             $table->integer('intuition')->default(3);
             $table->integer('endurance')->default(3);
+            $table->json('debuffs')->nullable();
             $table->integer('level')->default(0);
             $table->integer('gold')->default(0);
             $table->boolean('is_temporary')->default(false);

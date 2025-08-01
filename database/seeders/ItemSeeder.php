@@ -26,6 +26,9 @@ class ItemSeeder extends Seeder
             'rarity' => 'common',
             'image' => '/images/items/knifes/knife-1.webp',
             'is_shop' => true,
+            'debuffs' => [
+                ['key' => 'bleeding', 'chance' => 100, 'duration' => 3],
+            ],
         ]);
 
         Item::create([
@@ -42,6 +45,9 @@ class ItemSeeder extends Seeder
             'rarity' => 'common',
             'image' => '/images/items/axe/axe-1.png',
             'is_shop' => true,
+            'debuffs' => [
+                ['key' => 'damage_reduction', 'chance' => 100, 'duration' => 3],
+            ],
         ]);
 
         Item::create([
@@ -58,6 +64,9 @@ class ItemSeeder extends Seeder
             'rarity' => 'common',
             'image' => '/images/items/swords/sword-1.png',
             'is_shop' => true,
+            'debuffs' => [
+                ['key' => 'accuracy_reduction', 'chance' => 100, 'duration' => 3],
+            ],
         ]);
 
         Item::create([
@@ -74,6 +83,9 @@ class ItemSeeder extends Seeder
             'rarity' => 'common',
             'image' => '/images/items/maces/mace-1.png',
             'is_shop' => true,
+            'debuffs' => [
+                ['key' => 'stun', 'chance' => 100, 'duration' => 1],
+            ],
         ]);
 
         Item::create([

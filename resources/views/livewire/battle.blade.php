@@ -914,6 +914,16 @@
                             <span class="battle-info" x-text="monsterHitMessage"></span>
                         </div>
 
+                        @if (!empty($monster->debuffs))
+                        <div class="monster-debuffs">
+                            @foreach ($monster->debuffs as $key => $debuff)
+                                <div class="debuff-icon" title="{{ $debuff['description'] }}">
+                                    {{ $debuff['name'] }} ({{ $debuff['duration'] }})
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+
                     </div>
 
                     <div class="flex flex-col" style="gap: 10px">

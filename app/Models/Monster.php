@@ -23,6 +23,45 @@ class Monster extends Model
         'rarity',
     ];
 
+    protected $casts = [
+        'debuffs' => 'array',
+    ];
+
+    public function applyDebuff(string $key, int $duration)
+    {
+        $debuffs = $this->debuffs ?? [];
+
+        // Якщо дебаф уже є — оновлюємо duration
+        if (isset($debuffs[$key])) {
+            $debuffs[$key]['duration'] = max($debuffs[$key]['duration'], $duration);
+        } else {
+            $debuffs[$key] = [
+                'duration' => $duration,
+                'name' => __('debuffs.' . $key . '.name'),
+                'description' => __('debuffs.' . $key . '.description'),
+            ];
+        }
+
+        $this->debuffs = $debuffs;
+        $this->save();  // Збереження змін у БД
+    }
+
+    public function updateDebuffs()
+    {
+        $debuffs = $this->debuffs ?? [];
+
+        foreach ($debuffs as $key => &$debuff) {
+            $debuff['duration']--;
+            if ($debuff['duration'] <= 0) {
+                unset($debuffs[$key]);
+            }
+        }
+        unset($debuff);
+
+        $this->debuffs = $debuffs;
+        $this->save();
+    }
+
     public function getBonusesAttribute(): array
     {
         $bonuses = [];

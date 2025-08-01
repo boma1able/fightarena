@@ -89,6 +89,18 @@
                             @if($item->min_damage)
                                 <p class="text-sm">{{ __('messages.damage') }}: {{ $item->min_damage }}–{{ $item->max_damage }}</p>
                             @endif
+                            @if(!empty($item->debuffs) && is_array($item->debuffs))
+                                    <p class="flex text-sm mt-1">
+                                        <ul class="text-sm mb-1 font-thin italic">
+                                            @foreach($item->debuffs as $debuff)
+                                                <li>
+                                                    {{ __('debuffs.' . $debuff['key'] . '.name') }}:
+                                                    {{ __('debuffs.' . $debuff['key'] . '.description') }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </p>
+                                @endif
                             @foreach($item->defense_by_zone as $zone => $range)
                                 <p class="text-sm">{{ __('messages.' . $zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
                             @endforeach

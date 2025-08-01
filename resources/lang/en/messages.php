@@ -81,6 +81,10 @@ return [
     'item_damaged' => ':name took damage [remaining :new / :max].',
     'item_broken' => 'Item :name is broken!',
     'battle_results' => 'Battle results',
+    'debuffs' => 'Debuffs',
+    'debuff_applied' => ':name is affected by :debuff!',
+    'monster_stunned' => ':name is stunned and skips the next turn!',
+    'stunned' => 'Stunned',
     //login/registration
     'login' => 'Login',
     'email' => 'Email',

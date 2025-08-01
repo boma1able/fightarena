@@ -17,13 +17,14 @@ class Item extends Model
         'durability_current', 'durability_max',
         'bonuses', 'min_damage', 'max_damage', 'type', 'slot',
         'image', 'description', 'location', 'character_id',
-        'defense_by_zone', 'base_max_durability', 'rarity',
+        'defense_by_zone', 'base_max_durability', 'rarity', 'debuffs',
     ];
 
     protected $casts = [
         'defense_by_zone' => 'array',
         'bonuses' => 'array',
         'base_max_durability' => 'integer',
+        'debuffs' => 'array',
     ];
 
     public function scopeInShop($query)

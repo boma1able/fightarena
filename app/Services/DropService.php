@@ -44,13 +44,6 @@ class DropService
 
         $item->bonuses = ItemBonusService::generate($rarity, $item->slot, $level);
 
-        \Log::info('Generated item', [
-            'id' => $item->id,
-            'slot' => $item->slot,
-            'type' => $item->type,
-            'defense_by_zone' => $item->defense_by_zone,
-        ]);
-
         return $item;
     }
 
