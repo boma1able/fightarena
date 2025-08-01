@@ -251,8 +251,19 @@ class Battle extends Component
 
         $monsterAttackKey = array_rand($possibleZones);
         $monsterAttack = $monsterAttackKey;
-        $monsterDefenseKey = array_rand($defenseMap);
-        $monsterDefenseZones = $defenseMap[$monsterDefenseKey] ?? [];
+
+        $monsterStunned = !empty($this->monster->debuffs['stun']);
+
+        $monsterAttackKey = array_rand($possibleZones);
+        $monsterAttack = $monsterAttackKey;
+
+        // Якщо монстр застанений — він не обирає оборону
+        if ($monsterStunned) {
+            $monsterDefenseZones = [];
+        } else {
+            $monsterDefenseKey = array_rand($defenseMap);
+            $monsterDefenseZones = $defenseMap[$monsterDefenseKey] ?? [];
+        }
 
         // --- Удар по монстру ---
         if (in_array($charAttack, $monsterDefenseZones)) {
@@ -280,9 +291,12 @@ class Battle extends Component
                     $duration = $debuff['duration'] ?? 1;
 
                     if (rand(1, 100) <= $chance) {
-                        $this->monster->applyDebuff($debuff['key'], $duration);
+                        if ($debuff['key'] === 'stun') {
+                            $this->monster->applyDebuff($debuff['key'], $duration, 1);
+                        } else {
+                            $this->monster->applyDebuff($debuff['key'], $duration, 0);
+                        }
 
-                        // лог в чат
                         $msg = __('messages.debuff_applied', [
                             'name' => $this->monster->name,
                             'debuff' => __('debuffs.' . $debuff['key'] . '.name'),
@@ -290,7 +304,7 @@ class Battle extends Component
                         $this->messages[] = $msg;
                         $this->character->log($msg);
 
-                        $this->dispatch('$refresh'); // оновимо фронт
+                        $this->dispatch('$refresh');
                     }
                 }
             }
@@ -360,7 +374,7 @@ class Battle extends Component
             }
         }
 
-        $monsterStunned = !empty($this->monster->debuffs['stun']);
+        $monsterStunned = !empty($this->monster->debuffs['stun']) && empty($this->monster->debuffs['stun']['delay']);
 
         // --- Удар по персонажу ---
         if (!$monsterStunned) {

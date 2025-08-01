@@ -27,7 +27,7 @@ class Monster extends Model
         'debuffs' => 'array',
     ];
 
-    public function applyDebuff(string $key, int $duration)
+    public function applyDebuff(string $key, int $duration, int $delay = 0)
     {
         $debuffs = $this->debuffs ?? [];
 
@@ -37,30 +37,46 @@ class Monster extends Model
         } else {
             $debuffs[$key] = [
                 'duration' => $duration,
+                'delay' => $delay,
                 'name' => __('debuffs.' . $key . '.name'),
                 'description' => __('debuffs.' . $key . '.description'),
             ];
         }
 
         $this->debuffs = $debuffs;
-        $this->save();  // Збереження змін у БД
+        $this->save();
     }
 
     public function updateDebuffs()
     {
-        $debuffs = $this->debuffs ?? [];
+        $debuffs = $this->debuffs ?? []; // працюємо з копією масиву
 
-        foreach ($debuffs as $key => &$debuff) {
-            $debuff['duration']--;
-            if ($debuff['duration'] <= 0) {
-                unset($debuffs[$key]);
+        foreach ($debuffs as $key => $debuff) {
+            // Якщо є відкладена активація
+            if (!empty($debuff['delay']) && $debuff['delay'] > 0) {
+                $debuff['delay']--;
+
+                // Якщо ще є затримка — оновлюємо й пропускаємо далі
+                $debuffs[$key] = $debuff;
+                continue;
+            }
+
+            // Зменшуємо тривалість
+            if (!empty($debuff['duration'])) {
+                $debuff['duration']--;
+
+                if ($debuff['duration'] <= 0) {
+                    unset($debuffs[$key]);
+                } else {
+                    $debuffs[$key] = $debuff;
+                }
             }
         }
-        unset($debuff);
 
         $this->debuffs = $debuffs;
         $this->save();
     }
+
 
     public function getBonusesAttribute(): array
     {

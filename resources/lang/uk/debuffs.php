@@ -12,6 +12,9 @@ return [
     'stun' => [
         'name' => 'Оглушення',
         'description' => 'Перешкоджає ворогу діяти протягом 1 ходу.',
+        'duration' => 1,
+        'delay' => 1,
+        'icon' => '/images/debuffs/stun.png',
     ],
     'damage_reduction' => [
         'name' => 'Зменшення урону',

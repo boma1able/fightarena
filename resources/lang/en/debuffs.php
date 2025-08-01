@@ -13,6 +13,7 @@ return [
         'name' => 'Stun',
         'description' => 'Prevents the enemy from acting for 1 turn.',
         'duration' => 1,
+        'delay' => 1,
         'icon' => '/images/debuffs/stun.png',
     ],
     'damage_reduction' => [
