@@ -8,13 +8,6 @@ use App\Services\ItemBonusService;
 
 class DropService
 {
-    /**
-     * Генерує дроп предмета з шансом.
-     *
-     * @param float $chancePercent Шанс у відсотках (0-100)
-     * @param int $level Рівень (для бонусів)
-     * @return Item|null
-     */
     public static function generateDrop(float $chancePercent, int $level): ?Item
     {
         if (random_int(1, 100) > $chancePercent) {
@@ -31,13 +24,18 @@ class DropService
             return null;
         }
 
+        $item = clone $item;
+
         if ($item->slot === 'weapon') {
             $damage = self::generateWeaponDamage($item->type, $level);
             $item->min_damage = $damage['min'];
             $item->max_damage = $damage['max'];
         }
 
-        $item = clone $item;
+        if (in_array($item->slot, ['helmet', 'armor', 'legs', 'arms', 'boots'])) {
+            $item->defense_by_zone = self::generateArmorDefense($item->type, $level);
+        }
+
         $item->level = $level;
         // Тут виклик сервісу генерації бонусів
         $rarity = self::pickRarity();
@@ -45,6 +43,13 @@ class DropService
         $item->rarity = $rarity;
 
         $item->bonuses = ItemBonusService::generate($rarity, $item->slot, $level);
+
+        \Log::info('Generated item', [
+            'id' => $item->id,
+            'slot' => $item->slot,
+            'type' => $item->type,
+            'defense_by_zone' => $item->defense_by_zone,
+        ]);
 
         return $item;
     }
@@ -92,13 +97,61 @@ class DropService
 
         // fallback на останній рівень
         $last = end($ranges);
-        $min = rand($last['min_range'][0], $last['min_range'][1]);
-        $max = rand($last['max_range'][0], $last['max_range'][1]);
+        if ($valueRange[0] == $valueRange[1]) {
+            $min = $max = $valueRange[0];
+        } else {
+            $min = rand($valueRange[0], $valueRange[1] - 1);
+            $max = rand($min + 1, $valueRange[1]);
+        }
 
         return [
             'min' => min($min, $max),
             'max' => max($min, $max),
         ];
+    }
+
+    public static function generateArmorDefense(string $type, int $level): array
+    {
+        $ranges = config("armor_defense.$type");
+
+        if (!$ranges) {
+            return [];
+        }
+
+        foreach ($ranges as $range) {
+            if ($level >= $range['level_min'] && $level <= $range['level_max']) {
+                $defense = [];
+
+                foreach ($range['zones'] as $zone => $valueRange) {
+                    // Генеруємо окремо мін і макс для кожної зони
+                    $min = rand($valueRange[0], $valueRange[1]);
+                    $max = rand($min, $valueRange[1]); // щоб max >= min
+
+                    $defense[$zone] = [
+                        'min' => $min,
+                        'max' => $max,
+                    ];
+                }
+
+                return $defense;
+            }
+        }
+
+        // fallback на останній діапазон
+        $last = end($ranges);
+        $defense = [];
+
+        foreach ($last['zones'] as $zone => $valueRange) {
+            $min = rand($valueRange[0], $valueRange[1]);
+            $max = rand($min, $valueRange[1]);
+
+            $defense[$zone] = [
+                'min' => $min,
+                'max' => $max,
+            ];
+        }
+
+        return $defense;
     }
 
 

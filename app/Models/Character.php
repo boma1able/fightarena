@@ -195,7 +195,15 @@ class Character extends Model
              if (method_exists($item, 'isBroken') && $item->isBroken()) {
                 continue;
             }
-            $defenseByZone = $item->defense_by_zone ?? [];
+            $defenseByZone = $item->pivot->defense_by_zone ?? null;
+
+            if (is_string($defenseByZone)) {
+                $defenseByZone = json_decode($defenseByZone, true);
+            }
+
+            if (empty($defenseByZone)) {
+                $defenseByZone = $item->defense_by_zone ?? [];
+            }
 
             foreach ($defenseByZone as $zone => $values) {
                 if (!isset($zones[$zone])) continue;
@@ -343,14 +351,14 @@ class Character extends Model
     public function inventoryItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot', 'is_broken', 'rarity', 'bonuses', 'level', 'sell_price', 'min_damage', 'max_damage',])
+            ->withPivot(['id', 'location', 'current_durability', 'max_durability', 'slot', 'is_broken', 'rarity', 'bonuses', 'level', 'sell_price', 'min_damage', 'max_damage', 'defense_by_zone',])
             ->wherePivot('location', 'inventory');
     }
 
     public function equippedItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity', 'bonuses', 'level', 'sell_price', 'min_damage', 'max_damage',])
+            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity', 'bonuses', 'level', 'sell_price', 'min_damage', 'max_damage', 'defense_by_zone',])
             ->wherePivot('location', 'equipped')
             ->withCasts(['pivot.bonuses' => 'array']);
     }
@@ -389,8 +397,8 @@ class Character extends Model
                 continue;
             }
 
-            // 3% шанс на зношення
-            if (rand(1, 100) <= 3) {
+            // 5% шанс на зношення
+            if (rand(1, 100) <= 5) {
                 $newDurability = max(0, $pivot->current_durability - 1);
 
                 $updateData = ['current_durability' => $newDurability];

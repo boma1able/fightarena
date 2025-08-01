@@ -316,13 +316,13 @@
                             <div class="flex relative items-center justify-center w-[68px] h-[98px]"
                                 style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
                                 >
-                                @if(isset($equippedBySlot['ring1']))
+                                @if(isset($equippedBySlot['ring2']))
                                     @php
-                                        $ring1 = $equippedBySlot['ring1'];
-                                        $title = $ring1->name . ' [' . $ring1->required_level . ']' . "\n"
-                                            . 'Міцність: ' . $ring1->pivot->current_durability . ' / ' . $ring1->pivot->max_durability . "\n";
+                                        $ring2 = $equippedBySlot['ring2'];
+                                        $title = $ring2->name . ' [' . $ring2->required_level . ']' . "\n"
+                                            . 'Міцність: ' . $ring2->pivot->current_durability . ' / ' . $ring2->pivot->max_durability . "\n";
 
-                                        $bonuses = $ring1->pivot->bonuses ?? [];
+                                        $bonuses = $ring2->pivot->bonuses ?? [];
                                         if (is_string($bonuses)) {
                                             $bonuses = json_decode($bonuses, true) ?? [];
                                         }
@@ -330,8 +330,8 @@
                                         foreach ($bonuses as $stat => $value) {
                                             $title .= ($labels_ua[$stat] ?? ucfirst($stat)) . ': +' . $value . "\n";
                                         }
-                                        $rarityClass = $rarityColors[$equippedBySlot['ring1']->pivot->rarity] ?? 'gray';
-                                        $isBroken = $ring1->pivot?->current_durability === 0;
+                                        $rarityClass = $rarityColors[$equippedBySlot['ring2']->pivot->rarity] ?? 'gray';
+                                        $isBroken = $ring2->pivot?->current_durability === 0;
                                     @endphp
                                     <div class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
                                         title="{{ trim($title) }}"
@@ -340,7 +340,7 @@
                                             class="absolute w-[60px]"
                                             style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
                                             alt="">
-                                        <img src="{{ asset($equippedBySlot['ring1']->image) }}"
+                                        <img src="{{ asset($equippedBySlot['ring2']->image) }}"
                                             class="absolute w-[60px]"
                                             style="top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.35); filter: brightness(1.2) drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5));"
                                             alt="">

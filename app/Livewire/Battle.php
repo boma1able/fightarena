@@ -498,6 +498,7 @@ class Battle extends Component
                         'sell_price' => $price,
                         'min_damage' => $drop->min_damage,
                         'max_damage' => $drop->max_damage,
+                        'defense_by_zone' => $drop->defense_by_zone ? json_encode($drop->defense_by_zone) : null,
                     ]);
 
                     // $this->character->log("Ви отримали предмет: {$drop->name} [{$drop->level}] ({$drop->rarity})");

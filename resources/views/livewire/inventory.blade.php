@@ -753,14 +753,24 @@
                                 @php
                                     $minDamage = $item->pivot->min_damage ?? $item->min_damage;
                                     $maxDamage = $item->pivot->max_damage ?? $item->max_damage;
+
+                                    $defense = $item->pivot->defense_by_zone ?? $item->defense_by_zone;
+                                    if (is_string($defense)) {
+                                        $defense = json_decode($defense, true);
+                                    }
                                 @endphp
 
                                 @if($minDamage && $maxDamage)
                                     <p class="text-sm">{{ __('messages.damage') }}: {{ $minDamage }}–{{ $maxDamage }}</p>
                                 @endif
-                                @foreach($item->defense_by_zone as $zone => $range)
-                                    <p class="text-sm">{{ __('messages.' . $zone) }}: {{ $range['min'] }} – {{ $range['max'] }}</p>
-                                @endforeach
+                                @if($defense)
+                                    @foreach($defense as $zone => $range)
+                                        <p class="text-sm">
+                                            {{ __('messages.' . $zone) }}: {{ $range['min'] }} – {{ $range['max'] }}
+                                        </p>
+                                    @endforeach
+                                @endif
+
                                 @foreach(json_decode($item->pivot->bonuses ?? '{}', true) as $stat => $value)
                                     <p class="text-sm">{{ __('messages.' . $stat) }}: +{{ $value }}</p>
                                 @endforeach

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('min_damage')->nullable();
             $table->unsignedInteger('max_damage')->nullable();
             $table->json('bonuses')->nullable();
+            $table->json('defense_by_zone')->nullable();
             $table->string('rarity')->default('common');
             $table->unsignedTinyInteger('current_durability')->default(10);
             $table->unsignedTinyInteger('max_durability')->default(10);
