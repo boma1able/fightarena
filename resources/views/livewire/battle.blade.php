@@ -313,6 +313,18 @@
                             <span class="battle-info" x-text="playerHitMessage"></span>
                         </div>
 
+                        @if (!empty($character->debuffs))
+                            <div class="character-debuffs">
+                                @foreach ($character->debuffs as $key => $debuff)
+                                    @if (isset($debuff['delay']) && $debuff['delay'] > 0)
+                                        <div class="debuff-icon" title="{{ $debuff['description'] }}">
+                                            {{ $debuff['name'] }} ({{ $debuff['duration'] }})
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endif
+
                     </div>
 
                     <div class="flex flex-col" style="gap: 10px">
@@ -537,11 +549,20 @@
                 </div>
             @endif
 
-            <form wire:submit.prevent="fightStep">
+            @php
+                $isStunned = !empty($character->debuffs['stun']) && ($character->debuffs['stun']['delay'] ?? 0) == 1;
+            @endphp
 
-                <div class="flex">
+            <form wire:submit.prevent="fightStep" class="relative pb-6">
+
+                <div class="flex relative">
+                    @if($isStunned)
+                        <div class="absolute top-0 left-0 w-full h-full bg-white/50 z-10"></div>
+                    @endif
+
                     <div class="w-1/2">
                         <h3 class="font-semibold mb-2 bg-gray-100 p-1 text-xl">{{ __('fight.attack') }}</h3>
+
                         @php
                             $attackZones = [
                                 'head' => ['uk' => 'Голову', 'en' => 'Head'],
@@ -554,17 +575,22 @@
 
                         <div>
                             @foreach($attackZones as $key => $labels)
-                                <label class="block mr-3 mb-1 text-sm">
-                                    <input type="radio" wire:model="attackChoice" name="attackChoice" value="{{ $key }}">
+                                <label class="relative block mr-3 mb-1 text-sm cursor-pointer">
+                                    @if($isStunned)<span class="absolute top-[-1px]">🚫</span>@endif
+                                    <input type="radio"
+                                        wire:model="attackChoice"
+                                        name="attackChoice"
+                                        value="{{ $key }}"
+                                        @if($isStunned && $key === 'head') disabled @endif>
                                     {{ __('fight.'.$key) }}
                                 </label>
                             @endforeach
                         </div>
-
                     </div>
 
                     <div class="w-1/2">
                         <h3 class="font-semibold mb-2 bg-gray-100 p-1 text-xl">{{ __('fight.defending') }}</h3>
+
                         @php
                             $defenseOptions = [
                                 'head_chest',
@@ -577,22 +603,46 @@
 
                         <div>
                             @foreach($defenseOptions as $key)
-                                <label class="block mr-3 mb-1 text-sm">
-                                    <input type="radio" wire:model="defenseChoice" name="defenseChoice" value="{{ $key }}">
+                                <label class="relative block mr-3 mb-1 text-sm cursor-pointer">
+                                    @if($isStunned)<span class="absolute top-[-1px]">🚫</span>@endif
+                                    <input type="radio"
+                                        wire:model="defenseChoice"
+                                        name="defenseChoice"
+                                        value="{{ $key }}"
+                                        @if($isStunned && $key === 'head_chest') disabled @endif>
                                     {{ __('fight.defense.' . $key) }}
                                 </label>
                             @endforeach
                         </div>
-
                     </div>
                 </div>
 
                 <div class="flex mt-2 justify-center bg-gray-100 p-1">
-                    <button type="submit" class="bg-blue-600 text-white px-10 py-1 rounded hover:bg-blue-700">
-                        {{ __('fight.attack') }}!
+                    <button type="submit"
+                            class="bg-blue-600 text-white px-10 py-1 rounded hover:bg-blue-700"
+                            @if(!$isStunned) :disabled="!$wire.attackChoice || !$wire.defenseChoice" @endif>
+                        @if($isStunned)
+                            {{ __('fight.miss_step') }}!
+                        @else
+                            {{ __('fight.attack') }}!
+                        @endif
                     </button>
                 </div>
+
+                {{-- Повідомлення, якщо не обрано --}}
+                <div x-show="!$wire.attackChoice || !$wire.defenseChoice"
+                    class="absolute w-full left-1/2 translate-x-[-50%] bottom-[-8px] text-gray-500 text-sm text-center italic"
+                    >
+                    @if (!empty($character->debuffs['stun']['delay'] ?? 0) == 0)
+                        {{ __('fight.select_attack_and_defense') }}
+                    @else
+                        {{ __('fight.next_step') }}
+                    @endif
+                </div>
+
             </form>
+
+
 
             {{-- Чат бою --}}
             @livewire('info-chat')
@@ -915,14 +965,16 @@
                         </div>
 
                         @if (!empty($monster->debuffs))
-                        <div class="monster-debuffs">
-                            @foreach ($monster->debuffs as $key => $debuff)
-                                <div class="debuff-icon" title="{{ $debuff['description'] }}">
-                                    {{ $debuff['name'] }} ({{ $debuff['duration'] }})
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
+                            <div class="monster-debuffs">
+                                @foreach ($monster->debuffs as $key => $debuff)
+                                    @if (isset($debuff['delay']) && $debuff['delay'] > 0)
+                                        <div class="debuff-icon" title="{{ $debuff['description'] }}">
+                                            {{ $debuff['name'] }} ({{ $debuff['duration'] }})
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endif
 
                     </div>
 

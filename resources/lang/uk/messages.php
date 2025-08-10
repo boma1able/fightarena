@@ -85,6 +85,7 @@ return [
     'debuff_applied' => ':name отримує негативний ефект :debuff!',
     'monster_stunned' => ':name оглушений і пропускає наступний хід!',
     'stunned' => 'Оглушений',
+    'debuff_applied_to_you' => ':name накладає на вас ефект :debuff!',
     //login/registration
     'login' => 'Вхід',
     'email' => 'Email',

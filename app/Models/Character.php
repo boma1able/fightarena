@@ -21,6 +21,7 @@ class Character extends Model
         'stat_points' => 'integer',
         'bonuses' => 'array',
         'defense_by_zone' => 'array',
+        'debuffs' => 'array',
     ];
 
     protected static function booted(): void
@@ -32,6 +33,56 @@ class Character extends Model
                 Storage::disk('local')->delete($filePath);
             }
         });
+    }
+
+    //Накласти дебаф на персонажа
+    public function applyDebuff(string $key, int $duration, int $delay = 0): void
+    {
+        $debuffs = $this->debuffs ?? [];
+
+        if (isset($debuffs[$key])) {
+            // Якщо дебаф уже є — оновлюємо тільки тривалість
+            $debuffs[$key]['duration'] = max($debuffs[$key]['duration'], $duration);
+        } else {
+            $debuffs[$key] = [
+                'duration' => $duration,
+                'delay' => $delay,
+                'name' => __('debuffs.' . $key . '.name'),
+                'description' => __('debuffs.' . $key . '.description'),
+            ];
+        }
+
+        $this->debuffs = $debuffs;
+        $this->save();
+    }
+
+    //Оновлює всі дебафи персонажа (зменшує тривалість, знімає закінчені)
+    public function updateDebuffs(): void
+    {
+        $debuffs = $this->debuffs ?? [];
+
+        foreach ($debuffs as $key => $debuff) {
+            // Відкладена активація
+            if (!empty($debuff['delay']) && $debuff['delay'] > 0) {
+                $debuff['delay']--;
+                $debuffs[$key] = $debuff;
+                continue;
+            }
+
+            // Зменшуємо тривалість
+            if (!empty($debuff['duration'])) {
+                $debuff['duration']--;
+
+                if ($debuff['duration'] <= 0) {
+                    unset($debuffs[$key]);
+                } else {
+                    $debuffs[$key] = $debuff;
+                }
+            }
+        }
+
+        $this->debuffs = $debuffs;
+        $this->save();
     }
 
     public function getMaxDurabilityForItem(Item $item): int

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('current_health')->default(0);
             $table->timestamp('health_regeneration_started_at')->nullable();
             $table->boolean('is_in_battle')->default(false);
+            $table->json('debuffs')->nullable();
             $table->integer('strength')->default(3);
             $table->integer('agility')->default(3);
             $table->integer('intuition')->default(3);

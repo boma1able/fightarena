@@ -85,6 +85,7 @@ return [
     'debuff_applied' => ':name is affected by :debuff!',
     'monster_stunned' => ':name is stunned and skips the next turn!',
     'stunned' => 'Stunned',
+    'debuff_applied_to_you' => ':name debuff applied to you :debuff!',
     //login/registration
     'login' => 'Login',
     'email' => 'Email',

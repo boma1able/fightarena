@@ -5,9 +5,9 @@ return [
         'name' => 'Bleeding',
         'description' => 'Causes the target to lose health over 3 turns.',
     ],
-    'accuracy_reduction' => [
-        'name' => 'Accuracy Reduction',
-        'description' => 'Reduces the enemy\'s accuracy for 3 turns.',
+    'armor_reduction' => [
+        'name' => 'Armor Reduction',
+        'description' => 'Reduces the enemy\'s armor for 3 turns.',
     ],
     'stun' => [
         'name' => 'Stun',

@@ -65,7 +65,7 @@ class ItemSeeder extends Seeder
             'image' => '/images/items/swords/sword-1.png',
             'is_shop' => true,
             'debuffs' => [
-                ['key' => 'accuracy_reduction', 'chance' => 100, 'duration' => 3],
+                ['key' => 'armor_reduction', 'chance' => 100, 'duration' => 3],
             ],
         ]);
 
