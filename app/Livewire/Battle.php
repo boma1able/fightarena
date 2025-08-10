@@ -264,6 +264,7 @@ class Battle extends Component
         // Якщо монстр застанений — він не обирає оборону
         if ($monsterStunned) {
             $monsterDefenseZones = [];
+            $monsterAttack = [];
         } else {
             $monsterDefenseKey = array_rand($defenseMap);
             $monsterDefenseZones = $defenseMap[$monsterDefenseKey] ?? [];
@@ -275,7 +276,7 @@ class Battle extends Component
 
         } else{
             // --- Удар по монстру ---
-            if (in_array($charAttack, $monsterDefenseZones)) {
+            if (!$monsterStunned && in_array($charAttack, $monsterDefenseZones)) {
                 $msg = __('messages.monster_blocked', [
                     'name' => $this->monster->name,
                     'zone' => $possibleZones[$charAttack],
@@ -292,37 +293,6 @@ class Battle extends Component
                 $range = $this->character->totalDamageRange;
                 $charDamage = rand($range['min'], $range['max']);
 
-                $weapon = $this->character->equippedItems->where('slot', 'weapon')->first();
-
-                if ($weapon && $charDamage > 0 && !empty($weapon->debuffs)) {
-                    foreach ($weapon->debuffs as $debuff) {
-                        $chance = $debuff['chance'] ?? 100;
-                        $duration = $debuff['duration'] ?? 1;
-
-                        if (rand(1, 100) <= $chance) {
-                            if ($debuff['key'] === 'stun') {
-                                $this->monster->applyDebuff($debuff['key'], $duration, 1);
-                                $msg = __('messages.debuff_applied', [
-                                    'name' => $this->monster->name,
-                                    'debuff' => __('debuffs.' . $debuff['key'] . '.name'),
-                                ]);
-                            } else {
-                                $this->monster->applyDebuff($debuff['key'], $duration, 0);
-                                $msg = __('messages.debuff_removed', [
-                                    'name' => $this->monster->name,
-                                    'debuff' => __('debuffs.' . $debuff['key'] . '.name'),
-                                ]);
-                            }
-
-                            $this->messages[] = $msg;
-                            $this->character->log($msg);
-
-                            $this->dispatch('$refresh');
-                        }
-                    }
-                }
-
-
                 // Якщо у монстра є броня по зоні — віднімаємо її
                 $monsterDefenseByZone = method_exists($this->monster, 'totalDefenseByZone')
                     ? $this->monster->totalDefenseByZone()
@@ -334,7 +304,7 @@ class Battle extends Component
 
                 $charDamage = max(0, $charDamage - $monsterArmorAvg);
 
-                if (rand(1, 100) <= $this->monster->dodge_chance - $this->character->anti_dodge_chance) {
+                if (!$monsterStunned && rand(1, 100) <= $this->monster->dodge_chance - $this->character->anti_dodge_chance) {
 
                     $msg = __('messages.dodged_attack', [
                         'name' => $this->monster->name,
@@ -349,6 +319,40 @@ class Battle extends Component
                         'type' => 'dodge',
                     ]);
                 } else {
+                    $weapon = $this->character->equippedItems->where('slot', 'weapon')->first();
+
+                    if (
+                        $weapon &&
+                        !$weapon->pivot->is_broken &&  // <- перевірка, що зброя персонажа не зламана
+                        $charDamage > 0 &&
+                        !empty($weapon->debuffs)
+                    ){
+                        if ($weapon && $charDamage > 0 && !empty($weapon->debuffs)) {
+                            foreach ($weapon->debuffs as $debuff) {
+                                $chance = $debuff['chance'] ?? 100;
+                                $duration = $debuff['duration'] ?? 1;
+
+                                if (rand(1, 100) <= $chance) {
+
+                                    if ($debuff['key'] === 'stun') {
+                                        $this->monster->applyDebuff($debuff['key'], $duration, 1);
+                                    } else {
+                                        $this->monster->applyDebuff($debuff['key'], $duration, $duration);
+                                    }
+                                    $msg = __('messages.debuff_applied', [
+                                        'name' => $this->monster->name,
+                                        'debuff' => __('debuffs.' . $debuff['key'] . '.name'),
+                                    ]);
+
+                                    $this->messages[] = $msg;
+                                    $this->character->log($msg);
+
+                                    $this->dispatch('$refresh');
+                                }
+                            }
+                        }
+                    }
+
                     $isCrit = rand(1, 10000) <= ($this->character->crit_chance - $this->monster->anti_crit_chance) * 100;
                     if ($isCrit) {
                         $multiplier = $this->character->critical_damage_multiplier;
@@ -440,6 +444,7 @@ class Battle extends Component
 
                     //перевірка накладення дебафу на персонажа
                     $monsterWeapon = $this->monster->equippedItems->where('slot', 'weapon')->first();
+
                     if ($monsterWeapon && $monsterDamage > 0 && !empty($monsterWeapon->debuffs)) {
                         foreach ($monsterWeapon->debuffs as $debuff) {
                             $chance = $debuff['chance'] ?? 100;
@@ -463,6 +468,7 @@ class Battle extends Component
                             }
                         }
                     }
+
 
                     $this->character->current_health = max(0, $this->character->current_health - $monsterDamage);
                     $this->character->save();

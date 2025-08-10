@@ -409,7 +409,7 @@ class Character extends Model
     public function equippedItems()
     {
         return $this->belongsToMany(Item::class, 'character_items')
-            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'rarity', 'bonuses', 'level', 'sell_price', 'min_damage', 'max_damage', 'defense_by_zone',])
+            ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability', 'is_broken', 'rarity', 'bonuses', 'level', 'sell_price', 'min_damage', 'max_damage', 'defense_by_zone',])
             ->wherePivot('location', 'equipped')
             ->withCasts(['pivot.bonuses' => 'array']);
     }

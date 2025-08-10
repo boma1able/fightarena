@@ -316,7 +316,7 @@
                         @if (!empty($character->debuffs))
                             <div class="character-debuffs">
                                 @foreach ($character->debuffs as $key => $debuff)
-                                    @if (isset($debuff['delay']) && $debuff['delay'] > 0)
+                                    @if (isset($debuff['duration']) && $debuff['duration'] > 0)
                                         <div class="debuff-icon" title="{{ $debuff['description'] }}">
                                             {{ $debuff['name'] }} ({{ $debuff['duration'] }})
                                         </div>
@@ -966,10 +966,15 @@
 
                         @if (!empty($monster->debuffs))
                             <div class="monster-debuffs">
-                                @foreach ($monster->debuffs as $key => $debuff)
-                                    @if (isset($debuff['delay']) && $debuff['delay'] > 0)
+                                @foreach ($monster->debuffs as $debuffKey => $debuff)
+                                    @if (
+                                        ($debuffKey === 'stun' && isset($debuff['delay']) && $debuff['delay'] > 0) ||
+                                        ($debuffKey !== 'stun' && isset($debuff['duration']) && $debuff['duration'] > 0)
+                                    )
                                         <div class="debuff-icon" title="{{ $debuff['description'] }}">
-                                            {{ $debuff['name'] }} ({{ $debuff['duration'] }})
+                                            {{ $debuff['name'] }} (
+                                                {{ $debuffKey === 'stun' ? $debuff['delay'] : $debuff['duration'] }}
+                                            )
                                         </div>
                                     @endif
                                 @endforeach
