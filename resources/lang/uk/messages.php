@@ -86,6 +86,8 @@ return [
     'monster_stunned' => ':name оглушений і пропускає наступний хід!',
     'stunned' => 'Оглушений',
     'debuff_applied_to_you' => ':name накладає на вас ефект :debuff!',
+    'bleeding_damage' => ':name втрачає :damage здоров’я через кровотечу!',
+
     //login/registration
     'login' => 'Вхід',
     'email' => 'Email',

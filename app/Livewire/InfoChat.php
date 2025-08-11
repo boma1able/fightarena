@@ -23,7 +23,25 @@ class InfoChat extends Component
 
         if (Storage::disk('local')->exists($filePath)) {
             $allLines = explode("\n", Storage::disk('local')->get($filePath));
-            $this->lines = array_slice(array_reverse($allLines), 0, 30);
+            $recentLines = array_slice(array_reverse($allLines), 0, 30);
+
+            $this->lines = [];
+
+            foreach ($recentLines as $line) {
+                if (str_contains($line, '|||')) {
+                    [$text, $json] = explode('|||', $line, 2);
+                    $meta = json_decode($json, true);
+                    $type = $meta['type'] ?? 'normal';
+                } else {
+                    $text = $line;
+                    $type = 'normal';
+                }
+
+                $this->lines[] = [
+                    'text' => $text,
+                    'type' => $type,
+                ];
+            }
         } else {
             $this->lines = [];
         }

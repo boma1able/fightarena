@@ -232,6 +232,8 @@ class Battle extends Component
         $this->character->updateDebuffs();
         $this->monster->updateDebuffs();
 
+        $this->processBleedingDebuff();
+
         $characterStunned = !empty($this->character->debuffs['stun']) && empty($this->character->debuffs['stun']['delay']);
 
         $defenseMap = [
@@ -336,6 +338,8 @@ class Battle extends Component
 
                                     if ($debuff['key'] === 'stun') {
                                         $this->monster->applyDebuff($debuff['key'], $duration, 1);
+                                    } elseif ($debuff['key'] === 'bleeding') {
+                                        $this->monster->applyDebuff($debuff['key'], $duration, 0);
                                     } else {
                                         $this->monster->applyDebuff($debuff['key'], $duration, $duration);
                                     }
@@ -605,6 +609,38 @@ class Battle extends Component
         $this->attackChoice = null;
         $this->defenseChoice = null;
     }
+
+    protected function processBleedingDebuff()
+    {
+        if (!empty($this->monster->debuffs['bleeding']) &&
+            empty($this->monster->debuffs['bleeding']['delay']) &&
+            $this->monster->debuffs['bleeding']['duration'] >= 0)
+        {
+            // 15% від поточного здоровʼя
+            $bleedingDamage = max(1, ceil($this->monster->current_health * 0.15));
+
+            $this->monster->current_health = max(0, $this->monster->current_health - $bleedingDamage);
+            $this->monster->save();
+
+            $msg = __('messages.bleeding_damage', [
+                'name' => $this->monster->name,
+                'damage' => $bleedingDamage,
+            ]);
+
+            $this->messages[] = [
+                'text' => $msg,
+                'type' => 'bleeding',
+            ];
+            $this->character->log($msg, 'bleeding');
+
+            $this->dispatch('showHit', [
+                'message' => __('messages.hp_damage', ['amount' => $bleedingDamage]),
+                'target' => 'monster',
+                'type' => 'bleeding',
+            ]);
+        }
+    }
+
 
     private function checkStun()
     {

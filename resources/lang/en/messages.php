@@ -86,6 +86,8 @@ return [
     'monster_stunned' => ':name is stunned and skips the next turn!',
     'stunned' => 'Stunned',
     'debuff_applied_to_you' => ':name debuff applied to you :debuff!',
+    'bleeding_damage' => ':name loses :damage health due to bleeding!',
+
     //login/registration
     'login' => 'Login',
     'email' => 'Email',

@@ -92,7 +92,7 @@
                     detail: eventDetail
                 }));
             }
-            console.log('message:', data.message, 'type:', data.type);
+            // console.log('message:', data.message, 'type:', data.type);
         });
 
     </script>

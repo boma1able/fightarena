@@ -36,21 +36,22 @@ class Character extends Model
     }
 
     //Накласти дебаф на персонажа
-    public function applyDebuff(string $key, int $duration, int $delay = 0): void
+    public function applyDebuff(string $key, int $duration, int $delay = 0)
     {
         $debuffs = $this->debuffs ?? [];
 
+        // Якщо дебаф уже є — не накладаємо його знову
         if (isset($debuffs[$key])) {
-            // Якщо дебаф уже є — оновлюємо тільки тривалість
-            $debuffs[$key]['duration'] = max($debuffs[$key]['duration'], $duration);
-        } else {
-            $debuffs[$key] = [
-                'duration' => $duration,
-                'delay' => $delay,
-                'name' => __('debuffs.' . $key . '.name'),
-                'description' => __('debuffs.' . $key . '.description'),
-            ];
+            return;
         }
+
+        // Якщо дебафу немає — додаємо новий
+        $debuffs[$key] = [
+            'duration' => $duration,
+            'delay' => $delay,
+            'name' => __('debuffs.' . $key . '.name'),
+            'description' => __('debuffs.' . $key . '.description'),
+        ];
 
         $this->debuffs = $debuffs;
         $this->save();
@@ -79,6 +80,7 @@ class Character extends Model
                     $debuffs[$key] = $debuff;
                 }
             }
+
         }
 
         $this->debuffs = $debuffs;
@@ -453,7 +455,6 @@ class Character extends Model
                 $newDurability = max(0, $pivot->current_durability - 1);
 
                 $updateData = ['current_durability' => $newDurability];
-                // $msg = "{$item->name} зазнав шкоди [залишилось $newDurability / $pivot->max_durability].";
                 $msg = __('messages.item_damaged', [
                     'name' => __('items.' . $item->key . '.name'),
                     'new' => $newDurability,
@@ -462,7 +463,6 @@ class Character extends Model
 
                 if ($newDurability === 0) {
                     $updateData['is_broken'] = true;
-                    // $msg = "Предмет {$item->name} зламався!";
                     $msg = __('messages.item_broken', [
                         'name' => __('items.' . $item->key . '.name'),
                     ]);
@@ -477,13 +477,13 @@ class Character extends Model
         }
     }
 
-
-    public function log(string $message): void
+    public function log(string $message, string $type = 'normal'): void
     {
         $timestamp = now()->format('H:i:s');
-        $line = "[$timestamp] $message";
+        $line = "[$timestamp] $message|||".json_encode(['type' => $type]);
 
         $filePath = "logs/character_{$this->user->name}-{$this->id}.log";
         Storage::disk('local')->append($filePath, $line);
     }
+
 }

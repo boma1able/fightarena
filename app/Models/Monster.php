@@ -31,17 +31,18 @@ class Monster extends Model
     {
         $debuffs = $this->debuffs ?? [];
 
-        // Якщо дебаф уже є — оновлюємо duration
+        // Якщо дебаф уже є — не накладаємо його знову
         if (isset($debuffs[$key])) {
-            $debuffs[$key]['duration'] = max($debuffs[$key]['duration'], $duration);
-        } else {
-            $debuffs[$key] = [
-                'duration' => $duration,
-                'delay' => $delay,
-                'name' => __('debuffs.' . $key . '.name'),
-                'description' => __('debuffs.' . $key . '.description'),
-            ];
+            return;
         }
+
+        // Якщо дебафу немає — додаємо новий
+        $debuffs[$key] = [
+            'duration' => $duration,
+            'delay' => $delay,
+            'name' => __('debuffs.' . $key . '.name'),
+            'description' => __('debuffs.' . $key . '.description'),
+        ];
 
         $this->debuffs = $debuffs;
         $this->save();
@@ -49,7 +50,7 @@ class Monster extends Model
 
     public function updateDebuffs()
     {
-        $debuffs = $this->debuffs ?? []; // працюємо з копією масиву
+        $debuffs = $this->debuffs ?? [];
 
         foreach ($debuffs as $key => $debuff) {
             // Якщо є відкладена активація
@@ -61,14 +62,21 @@ class Monster extends Model
                 continue;
             }
 
-            // Зменшуємо тривалість
-            if (!empty($debuff['duration'])) {
+            if (isset($debuff['duration'])) {
                 $debuff['duration']--;
 
-                if ($debuff['duration'] <= 0) {
-                    unset($debuffs[$key]);
+                if ($key === 'bleeding') {
+                    if ($debuff['duration'] < 0) {
+                        unset($debuffs[$key]);
+                    } else {
+                        $debuffs[$key] = $debuff;
+                    }
                 } else {
-                    $debuffs[$key] = $debuff;
+                    if ($debuff['duration'] <= 0) {
+                        unset($debuffs[$key]);
+                    } else {
+                        $debuffs[$key] = $debuff;
+                    }
                 }
             }
         }
