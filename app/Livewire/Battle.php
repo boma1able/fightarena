@@ -617,7 +617,8 @@ class Battle extends Component
             $this->monster->debuffs['bleeding']['duration'] >= 0)
         {
             // 15% від поточного здоровʼя
-            $bleedingDamage = max(1, ceil($this->monster->current_health * 0.15));
+            $bleedingPercent = $this->monster->debuffs['bleeding']['power'] ?? 0.15;
+            $bleedingDamage = max(1, ceil($this->monster->current_health * $bleedingPercent));
 
             $this->monster->current_health = max(0, $this->monster->current_health - $bleedingDamage);
             $this->monster->save();
