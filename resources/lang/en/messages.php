@@ -87,6 +87,7 @@ return [
     'stunned' => 'Stunned',
     'debuff_applied_to_you' => ':name debuff applied to you :debuff!',
     'bleeding_damage' => ':name loses :damage health due to bleeding!',
+    'character_bleeding_damage' => 'You lose :damage health due to bleeding!',
 
     //login/registration
     'login' => 'Login',

@@ -36,55 +36,80 @@ class Character extends Model
     }
 
     //Накласти дебаф на персонажа
-    public function applyDebuff(string $key, int $duration, int $delay = 0)
+    public function applyDebuff(string $key, int $duration, int $delay = 0): bool
     {
         $debuffs = $this->debuffs ?? [];
 
-        // Якщо дебаф уже є — не накладаємо його знову
         if (isset($debuffs[$key])) {
-            return;
+            return false; // вже висить — не оновлюємо і не спамимо в лог/чат
         }
 
-        // Якщо дебафу немає — додаємо новий
         $debuffs[$key] = [
-            'duration' => $duration,
-            'delay' => $delay,
-            'name' => __('debuffs.' . $key . '.name'),
+            'duration'    => $duration,
+            'delay'       => $delay,
+            'name'        => __('debuffs.' . $key . '.name'),
             'description' => __('debuffs.' . $key . '.description'),
         ];
 
         $this->debuffs = $debuffs;
         $this->save();
+
+        return true;
     }
 
     //Оновлює всі дебафи персонажа (зменшує тривалість, знімає закінчені)
-    public function updateDebuffs(): void
+    public function updateDebuffs()
     {
         $debuffs = $this->debuffs ?? [];
 
         foreach ($debuffs as $key => $debuff) {
-            // Відкладена активація
+            // Якщо є відкладена активація
             if (!empty($debuff['delay']) && $debuff['delay'] > 0) {
                 $debuff['delay']--;
+
+                // Якщо ще є затримка — оновлюємо й пропускаємо далі
                 $debuffs[$key] = $debuff;
                 continue;
             }
 
-            // Зменшуємо тривалість
-            if (!empty($debuff['duration'])) {
+            if (isset($debuff['duration'])) {
                 $debuff['duration']--;
 
-                if ($debuff['duration'] <= 0) {
-                    unset($debuffs[$key]);
+                if ($key === 'bleeding') {
+                    if ($debuff['duration'] < 0) {
+                        unset($debuffs[$key]);
+                    } else {
+                        $debuffs[$key] = $debuff;
+                    }
                 } else {
-                    $debuffs[$key] = $debuff;
+                    if ($debuff['duration'] <= 0) {
+                        unset($debuffs[$key]);
+                    } else {
+                        $debuffs[$key] = $debuff;
+                    }
                 }
             }
-
         }
 
         $this->debuffs = $debuffs;
         $this->save();
+    }
+
+    public function processBleedingDebuffCharacter(): int
+    {
+        if (!empty($this->debuffs['bleeding']) &&
+            empty($this->debuffs['bleeding']['delay']) &&
+            $this->debuffs['bleeding']['duration'] >= 0)
+        {
+            $bleedingPercent = $this->debuffs['bleeding']['power'] ?? 0.15;
+            $bleedingDamage = max(1, ceil($this->current_health * $bleedingPercent));
+
+            $this->current_health = max(0, $this->current_health - $bleedingDamage);
+            $this->save();
+
+            return $bleedingDamage;
+        }
+        return 0;
     }
 
     public function getMaxDurabilityForItem(Item $item): int

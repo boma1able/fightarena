@@ -27,25 +27,25 @@ class Monster extends Model
         'debuffs' => 'array',
     ];
 
-    public function applyDebuff(string $key, int $duration, int $delay = 0)
+    public function applyDebuff(string $key, int $duration, int $delay = 0): bool
     {
         $debuffs = $this->debuffs ?? [];
 
-        // Якщо дебаф уже є — не накладаємо його знову
         if (isset($debuffs[$key])) {
-            return;
+            return false; // вже висить — не оновлюємо і не спамимо в лог/чат
         }
 
-        // Якщо дебафу немає — додаємо новий
         $debuffs[$key] = [
-            'duration' => $duration,
-            'delay' => $delay,
-            'name' => __('debuffs.' . $key . '.name'),
+            'duration'    => $duration,
+            'delay'       => $delay,
+            'name'        => __('debuffs.' . $key . '.name'),
             'description' => __('debuffs.' . $key . '.description'),
         ];
 
         $this->debuffs = $debuffs;
         $this->save();
+
+        return true;
     }
 
     public function updateDebuffs()
@@ -83,6 +83,23 @@ class Monster extends Model
 
         $this->debuffs = $debuffs;
         $this->save();
+    }
+
+    public function processBleedingDebuffMonster(): int
+    {
+        if (!empty($this->debuffs['bleeding']) &&
+            empty($this->debuffs['bleeding']['delay']) &&
+            $this->debuffs['bleeding']['duration'] >= 0)
+        {
+            $bleedingPercent = $this->debuffs['bleeding']['power'] ?? 0.15;
+            $bleedingDamage = max(1, ceil($this->current_health * $bleedingPercent));
+
+            $this->current_health = max(0, $this->current_health - $bleedingDamage);
+            $this->save();
+
+            return $bleedingDamage;
+        }
+        return 0;
     }
 
 

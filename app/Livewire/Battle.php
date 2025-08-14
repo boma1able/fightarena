@@ -149,7 +149,7 @@ class Battle extends Component
         if ($monster->level >= 3) {
             $weapon = Item::query()
                 ->where('slot', 'weapon')
-                ->where('type', 'sword') //temp!!!!!
+                ->where('type', 'knife') //temp!!!!!
                 ->where('required_level', '<=', $monster->level)
                 ->inRandomOrder()
                 ->first();
@@ -232,7 +232,41 @@ class Battle extends Component
         $this->character->updateDebuffs();
         $this->monster->updateDebuffs();
 
-        $this->processBleedingDebuff();
+        // --- тік кровотечі персонажа
+        $charBleed = $this->character->processBleedingDebuffCharacter();
+        if ($charBleed > 0) {
+            $msg = __('messages.character_bleeding_damage', [
+                'name'   => $this->character->name,
+                'damage' => $charBleed,
+            ]);
+            $this->messages[] = ['text' => $msg, 'type' => 'bleeding'];
+            $this->character->log($msg, 'bleeding');
+
+            $this->dispatch('showHit', [
+                'message' => __('messages.hp_damage', ['amount' => $charBleed]),
+                'target'  => 'player',
+                'type'    => 'bleeding',
+            ]);
+        }
+
+        // --- тік кровотечі монстра
+        $monsterBleed = $this->monster->processBleedingDebuffMonster();
+        if ($monsterBleed > 0) {
+            $msg = __('messages.bleeding_damage', [
+                'name'   => $this->monster->name,
+                'damage' => $monsterBleed,
+            ]);
+            $this->messages[] = ['text' => $msg, 'type' => 'bleeding'];
+            $this->character->log($msg, 'bleeding');
+
+            $this->dispatch('showHit', [
+                'message' => __('messages.hp_damage', ['amount' => $monsterBleed]),
+                'target'  => 'monster',
+                'type'    => 'bleeding',
+            ]);
+        }
+
+        // $this->processBleedingDebuff();
 
         $characterStunned = !empty($this->character->debuffs['stun']) && empty($this->character->debuffs['stun']['delay']);
 
@@ -457,8 +491,10 @@ class Battle extends Component
                             if (rand(1, 100) <= $chance) {
                                 if ($debuff['key'] === 'stun') {
                                     $this->character->applyDebuff($debuff['key'], $duration, 1);
-                                } else {
+                                } elseif ($debuff['key'] === 'bleeding') {
                                     $this->character->applyDebuff($debuff['key'], $duration, 0);
+                                }else {
+                                    $this->character->applyDebuff($debuff['key'], $duration, $duration);
                                 }
 
                                 $msg = __('messages.debuff_applied_to_you', [
@@ -610,37 +646,37 @@ class Battle extends Component
         $this->defenseChoice = null;
     }
 
-    protected function processBleedingDebuff()
-    {
-        if (!empty($this->monster->debuffs['bleeding']) &&
-            empty($this->monster->debuffs['bleeding']['delay']) &&
-            $this->monster->debuffs['bleeding']['duration'] >= 0)
-        {
-            // 15% від поточного здоровʼя
-            $bleedingPercent = $this->monster->debuffs['bleeding']['power'] ?? 0.15;
-            $bleedingDamage = max(1, ceil($this->monster->current_health * $bleedingPercent));
+    // protected function processBleedingDebuffMonster()
+    // {
+    //     if (!empty($this->monster->debuffs['bleeding']) &&
+    //         empty($this->monster->debuffs['bleeding']['delay']) &&
+    //         $this->monster->debuffs['bleeding']['duration'] >= 0)
+    //     {
+    //         // 15% від поточного здоровʼя
+    //         $bleedingPercent = $this->monster->debuffs['bleeding']['power'] ?? 0.15;
+    //         $bleedingDamage = max(1, ceil($this->monster->current_health * $bleedingPercent));
 
-            $this->monster->current_health = max(0, $this->monster->current_health - $bleedingDamage);
-            $this->monster->save();
+    //         $this->monster->current_health = max(0, $this->monster->current_health - $bleedingDamage);
+    //         $this->monster->save();
 
-            $msg = __('messages.bleeding_damage', [
-                'name' => $this->monster->name,
-                'damage' => $bleedingDamage,
-            ]);
+    //         $msg = __('messages.bleeding_damage', [
+    //             'name' => $this->monster->name,
+    //             'damage' => $bleedingDamage,
+    //         ]);
 
-            $this->messages[] = [
-                'text' => $msg,
-                'type' => 'bleeding',
-            ];
-            $this->character->log($msg, 'bleeding');
+    //         $this->messages[] = [
+    //             'text' => $msg,
+    //             'type' => 'bleeding',
+    //         ];
+    //         $this->character->log($msg, 'bleeding');
 
-            $this->dispatch('showHit', [
-                'message' => __('messages.hp_damage', ['amount' => $bleedingDamage]),
-                'target' => 'monster',
-                'type' => 'bleeding',
-            ]);
-        }
-    }
+    //         $this->dispatch('showHit', [
+    //             'message' => __('messages.hp_damage', ['amount' => $bleedingDamage]),
+    //             'target' => 'monster',
+    //             'type' => 'bleeding',
+    //         ]);
+    //     }
+    // }
 
 
     private function checkStun()

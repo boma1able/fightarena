@@ -87,6 +87,7 @@ return [
     'stunned' => 'Оглушений',
     'debuff_applied_to_you' => ':name накладає на вас ефект :debuff!',
     'bleeding_damage' => ':name втрачає :damage здоров’я через кровотечу!',
+    'character_bleeding_damage' => 'Ви втрачаєте :damage здоров’я через кровотечу!',
 
     //login/registration
     'login' => 'Вхід',
