@@ -53,7 +53,7 @@
                         {{ __('messages.shop') }}
                     </a>
                     <a href="{{ route('forge') }}" class="px-3 py-1 text-white {{ request()->routeIs('forge') ? 'bg-blue-500 text-black' : 'text-[#28292b]' }}">
-                        {{ __('messages.forge') }}
+                        {{ __('messages.blacksmith') }}
                     </a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf

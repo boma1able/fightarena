@@ -5,6 +5,7 @@ return [
     'inventory' => 'Інвентар',
     'shop' => 'Магазин',
     'forge' => 'Кузня',
+    'blacksmith' => 'Коваль',
     'quit' => 'Вихід',
     'characteristic' => 'Характеристики',
     'information' => 'Інформація',

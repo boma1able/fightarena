@@ -24,7 +24,7 @@ class ItemSeeder extends Seeder
             'type' => 'knife',
             'slot' => 'weapon',
             'rarity' => 'common',
-            'image' => '/images/items/knifes/knife-1.webp',
+            'image' => '/images/items/knifes/knife-1-art.png',
             'is_shop' => true,
             'debuffs' => [
                 ['key' => 'bleeding', 'chance' => 100, 'duration' => 3],
@@ -43,7 +43,7 @@ class ItemSeeder extends Seeder
             'type' => 'axe',
             'slot' => 'weapon',
             'rarity' => 'common',
-            'image' => '/images/items/axe/axe-1.png',
+            'image' => '/images/items/axe/axe-1-art.png',
             'is_shop' => true,
             'debuffs' => [
                 ['key' => 'damage_reduction', 'chance' => 100, 'duration' => 3],
@@ -62,7 +62,7 @@ class ItemSeeder extends Seeder
             'type' => 'sword',
             'slot' => 'weapon',
             'rarity' => 'common',
-            'image' => '/images/items/swords/sword-1.png',
+            'image' => '/images/items/swords/sword-1-art.png',
             'is_shop' => true,
             'debuffs' => [
                 ['key' => 'armor_reduction', 'chance' => 100, 'duration' => 3],
@@ -81,7 +81,7 @@ class ItemSeeder extends Seeder
             'type' => 'mace',
             'slot' => 'weapon',
             'rarity' => 'common',
-            'image' => '/images/items/maces/mace-1.png',
+            'image' => '/images/items/maces/mace-1-art.png',
             'is_shop' => true,
             'debuffs' => [
                 ['key' => 'stun', 'chance' => 100, 'duration' => 1],
@@ -103,7 +103,7 @@ class ItemSeeder extends Seeder
             'type' => 'armor',
             'slot' => 'armor',
             'rarity' => 'common',
-            'image' => '/images/items/torso/torso-1.png',
+            'image' => '/images/items/torso/torso-1-art.png',
             'is_shop' => true,
         ]);
 
@@ -121,7 +121,7 @@ class ItemSeeder extends Seeder
             'type' => 'helmet',
             'slot' => 'helmet',
             'rarity' => 'common',
-            'image' => '/images/items/helmet/helmet-1.png',
+            'image' => '/images/items/helmet/helmet-1-art.png',
             'is_shop' => true,
         ]);
 
@@ -137,7 +137,7 @@ class ItemSeeder extends Seeder
             'type' => 'neckless',
             'slot' => 'neckless',
             'rarity' => 'common',
-            'image' => '/images/items/neckless/neckless-1.png',
+            'image' => '/images/items/neckless/neckless-1-art.png',
             'is_shop' => true,
         ]);
 
@@ -153,7 +153,7 @@ class ItemSeeder extends Seeder
             'type' => 'ring',
             'slot' => 'ring',
             'rarity' => 'common',
-            'image' => '/images/items/ring/ring-1.png',
+            'image' => '/images/items/ring/ring-1-art.png',
             'is_shop' => true,
         ]);
 
@@ -171,7 +171,7 @@ class ItemSeeder extends Seeder
             'type' => 'arms',
             'slot' => 'arms',
             'rarity' => 'common',
-            'image' => '/images/items/arms/arms-1.png',
+            'image' => '/images/items/arms/arms-1-art.png',
             'is_shop' => true,
         ]);
 
@@ -187,7 +187,7 @@ class ItemSeeder extends Seeder
             'type' => 'shield',
             'slot' => 'shield',
             'rarity' => 'common',
-            'image' => '/images/items/shield/shield-1.png',
+            'image' => '/images/items/shield/shield-1-art.png',
             'is_shop' => true,
         ]);
 
@@ -206,7 +206,7 @@ class ItemSeeder extends Seeder
             'type' => 'legs',
             'slot' => 'legs',
             'rarity' => 'common',
-            'image' => '/images/items/legs/legs-1.png',
+            'image' => '/images/items/legs/legs-1-art.png',
             'is_shop' => true,
         ]);
 
@@ -224,7 +224,7 @@ class ItemSeeder extends Seeder
             'type' => 'boots',
             'slot' => 'boots',
             'rarity' => 'common',
-            'image' => '/images/items/boots/boots-1.png',
+            'image' => '/images/items/boots/boots-1-art.png',
             'is_shop' => true,
         ]);
 

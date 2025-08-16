@@ -5,6 +5,7 @@ return [
     'inventory' => 'Inventory',
     'shop' => 'Shop',
     'forge' => 'Forge',
+    'blacksmith' => 'Blacksmith',
     'quit' => 'Quit',
     'characteristic' => 'Characteristic',
     'information' => 'Information',

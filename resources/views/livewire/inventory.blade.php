@@ -36,7 +36,7 @@
                         style="gap: 10px"
                     >
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-helmet.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-helmet.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['helmet']))
                                 @php
@@ -69,12 +69,12 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-helmet.png') }}) center center no-repeat; background-size: cover;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-helmet.jpg') }}) center center no-repeat; background-size: cover;"></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-armor.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-armor.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['armor']))
                                 @php
@@ -109,12 +109,12 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-armor.png') }}) center center no-repeat; background-size: cover; background-size: cover;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-armor.jpg') }}) center center no-repeat; background-size: cover; background-size: cover;"></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-ring.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['ring1']))
                                 @php
@@ -147,12 +147,12 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover; background-size: cover; "></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.jpg') }}) center center no-repeat; background-size: cover; background-size: cover; "></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-weapon.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-weapon.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['weapon']))
                                 @php
@@ -195,12 +195,12 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-weapon.png') }}) center center no-repeat; background-size: cover;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-weapon.jpg') }}) center center no-repeat; background-size: cover;"></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-legs.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-legs.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['legs']))
                                 @php
@@ -233,7 +233,7 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-legs.png') }}) center center no-repeat; background-size: cover; "></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-legs.jpg') }}) center center no-repeat; background-size: cover; "></span>
                             @endif
                         </div>
 
@@ -245,13 +245,13 @@
                             <div class="absolute top-0 left-0 w-full text-center text-black z-[1]"></div>
                             <div class="absolute top-0 left-0 bg-red-400 h-1" style="width: {{ $characterExpPercent }}%"></div>
                         </div>
-                        <div class="relative avatar w-[205px] h-[410px] mt-1" style="background: url({{ asset('images/avatar-' . $character->user->gender . '-full.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]">
+                        <div class="relative avatar w-[205px] h-[410px] mt-1" style="background: url({{ asset('images/avatar-' . $character->user->gender . '-art.jpg') }}) center center no-repeat; background-size: cover;" title="{{ $character->user->name }} [{{ $character->level }}]">
                             <img
                                 class="absolute top-0 left-0 scale-[1.02]"
                                 src="{{ asset('images/cover-frame.png') }}"
                                 alt=""
                             >
-                            @if(isset($equippedBySlot['helmet']))
+                            {{-- @if(isset($equippedBySlot['helmet']))
                                 @php
                                     $helmet = $equippedBySlot['helmet'];
                                     $helmetPath = $helmet['image'] ?? null;
@@ -375,7 +375,7 @@
                                 <div class="absolute eequipped-weapon w-[205px] h-[100px] top-[22%]"
                                     style="background: url({{ $weaponEquipped }}) center center no-repeat; background-size: cover;"
                                 ></div>
-                            @endif
+                            @endif --}}
 
                         </div>
                         <div id="banner" class="w-[165px] h-[50px]"></div>
@@ -384,7 +384,7 @@
 
                     <div class="flex flex-col" style="gap: 10px">
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-neckless.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-neckless.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['neckless']))
                                 @php
@@ -417,12 +417,12 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-neckless.png') }}) center center no-repeat; background-size: contain;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-neckless.jpg') }}) center center no-repeat; background-size: contain;"></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-arms.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-arms.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['arms']))
                                 @php
@@ -455,12 +455,12 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-arms.png') }}) center center no-repeat; background-size: cover;"></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-arms.jpg') }}) center center no-repeat; background-size: cover;"></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-ring.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['ring2']))
                                 @php
@@ -493,12 +493,12 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.png') }}) center center no-repeat; background-size: cover; background-size: cover; "></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-ring.jpg') }}) center center no-repeat; background-size: cover; background-size: cover; "></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-shield.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-shield.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['shield']))
                                 @php
@@ -531,12 +531,12 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-shield.png') }}) center center no-repeat; background-size: cover; background-size: cover; "></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-shield.jpg') }}) center center no-repeat; background-size: cover; background-size: cover; "></span>
                             @endif
                         </div>
 
                         <div class="flex relative items-center justify-center w-[68px] h-[98px]"
-                            style="background: url({{ asset('images/empty-equipment/empty-boots.png') }}) center center no-repeat; background-size: cover;"
+                            style="background: url({{ asset('images/empty-equipment/empty-boots.jpg') }}) center center no-repeat; background-size: cover;"
                             >
                             @if(isset($equippedBySlot['boots']))
                                 @php
@@ -569,7 +569,7 @@
                                         alt="">
                                 </div>
                             @else
-                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-boots.png') }}) center center no-repeat; background-size: cover; "></span>
+                                <span class="block w-full h-full" style="background: url({{ asset('images/empty-equipment/empty-boots.jpg') }}) center center no-repeat; background-size: cover; "></span>
                             @endif
                         </div>
 
