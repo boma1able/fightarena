@@ -32,7 +32,7 @@ class Monster extends Model
         $debuffs = $this->debuffs ?? [];
 
         if (isset($debuffs[$key])) {
-            return false; // вже висить — не оновлюємо і не спамимо в лог/чат
+            return false;
         }
 
         $debuffs[$key] = [
@@ -41,6 +41,34 @@ class Monster extends Model
             'name'        => __('debuffs.' . $key . '.name'),
             'description' => __('debuffs.' . $key . '.description'),
         ];
+
+        // логіка для дебафа deep_cut
+        if ($key === 'deep_cut') {
+            // тягнемо % із lang
+            $raw = __('debuffs.' . $key . '.max_hp_reduction_percent');
+            $percent = is_numeric($raw) ? (int)$raw : 10;
+            $percent = max(0, $percent);
+
+            $originalBase    = (int)$this->base_health;
+            $originalCurrent = (int)$this->current_health;
+
+            $reductionBase    = (int) floor($originalBase    * $percent / 100);
+            $reductionCurrent = (int) floor($originalCurrent * $percent / 100);
+
+            // захист від мінусу
+            $reductionBase    = max(0, min($reductionBase,    max(0, $originalBase - 1)));
+            $reductionCurrent = max(0, min($reductionCurrent, $originalCurrent));
+
+            if ($reductionBase > 0) {
+                $this->base_health = $originalBase - $reductionBase;
+            }
+            if ($reductionCurrent > 0) {
+                $this->current_health = $originalCurrent - $reductionCurrent;
+            }
+
+            $debuffs[$key]['reduction_base'] = $reductionBase; // повернемо рівно стільки
+            $debuffs[$key]['percent']        = $percent;       // для +% до current при знятті
+        }
 
         $this->debuffs = $debuffs;
         $this->save();
@@ -64,6 +92,35 @@ class Monster extends Model
 
             if (isset($debuff['duration'])) {
                 $debuff['duration']--;
+
+                if ($debuff['duration'] <= 0) {
+                    // момент спадання
+                    if ($key === 'deep_cut') {
+                        //повертаємо base_health рівно на зняту суму
+                        $restoreBase = (int)($debuff['reduction_base'] ?? 0);
+                        if ($restoreBase > 0) {
+                            $this->base_health = (int)$this->base_health + $restoreBase;
+                        }
+
+                        //current_health + % від ПОТОЧНОГО значення на момент зняття
+                        $percent = (int)($debuff['percent'] ?? 10);
+                        if ($percent > 0 && $this->current_health > 0) {
+                            $increase = (int) floor($this->current_health * $percent / 100);
+                            if ($increase > 0) {
+                                $this->current_health = (int) $this->current_health + $increase;
+                            }
+                        }
+
+                        //не вище за відновлений base_health
+                        if ($this->current_health > $this->base_health) {
+                            $this->current_health = $this->base_health;
+                        }
+                    }
+
+                    unset($debuffs[$key]);
+                } else {
+                    $debuffs[$key] = $debuff;
+                }
 
                 if ($key === 'bleeding') {
                     if ($debuff['duration'] < 0) {

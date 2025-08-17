@@ -149,7 +149,7 @@ class Battle extends Component
         if ($monster->level >= 3) {
             $weapon = Item::query()
                 ->where('slot', 'weapon')
-                ->where('type', 'knife') //temp!!!!!
+                ->where('type', 'axe') //temp!!!!!
                 ->where('required_level', '<=', $monster->level)
                 ->inRandomOrder()
                 ->first();
@@ -373,6 +373,8 @@ class Battle extends Component
                                     if ($debuff['key'] === 'stun') {
                                         $this->monster->applyDebuff($debuff['key'], $duration, 1);
                                     } elseif ($debuff['key'] === 'bleeding') {
+                                        $this->monster->applyDebuff($debuff['key'], $duration, 0);
+                                    } elseif ($debuff['key'] === 'deep_cut') {
                                         $this->monster->applyDebuff($debuff['key'], $duration, 0);
                                     } else {
                                         $this->monster->applyDebuff($debuff['key'], $duration, $duration);

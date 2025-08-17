@@ -5,9 +5,11 @@ return [
         'name' => 'Bleeding',
         'description' => 'Causes the target to lose health over 3 turns.',
     ],
-    'armor_reduction' => [
-        'name' => 'Armor Reduction',
-        'description' => 'Reduces the enemy\'s armor for 3 turns.',
+    'deep_cut' => [
+        'name' => 'Deep Cut',
+        'duration' => 3,
+        'max_hp_reduction_percent' => 10,
+        'description' => 'Deep cut reduces maximum HP for 3 turns.'
     ],
     'stun' => [
         'name' => 'Stun',
