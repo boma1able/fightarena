@@ -41,7 +41,7 @@ class Character extends Model
         $debuffs = $this->debuffs ?? [];
 
         if (isset($debuffs[$key])) {
-            return false; // вже висить — не оновлюємо і не спамимо в лог/чат
+            return false;
         }
 
         $debuffs[$key] = [
@@ -51,11 +51,38 @@ class Character extends Model
             'description' => __('debuffs.' . $key . '.description'),
         ];
 
+        if ($key === 'deep_cut') {
+            $raw = __('debuffs.' . $key . '.max_hp_reduction_percent');
+            $percent = is_numeric($raw) ? (int)$raw : 10;
+            $percent = max(0, $percent);
+
+            $originalMax    = (int)$this->max_health;
+            $originalCurrent = (int)$this->current_health;
+
+            $reduction = (int) floor($originalMax * $percent / 100);
+            $reduction = max(0, min($reduction, $originalMax - 1));
+
+            if ($reduction > 0) {
+                $this->max_health_modifier += $reduction;
+            }
+
+            if ($originalCurrent > 0) {
+                $reduceCurrent = (int) floor($originalCurrent * $percent / 100);
+                $reduceCurrent = min($reduceCurrent, $this->current_health);
+
+                $this->current_health -= $reduceCurrent;
+            }
+
+            $debuffs[$key]['reduction'] = $reduction;
+            $debuffs[$key]['percent']   = $percent;
+        }
+
         $this->debuffs = $debuffs;
         $this->save();
 
         return true;
     }
+
 
     //Оновлює всі дебафи персонажа (зменшує тривалість, знімає закінчені)
     public function updateDebuffs()
@@ -74,6 +101,27 @@ class Character extends Model
 
             if (isset($debuff['duration'])) {
                 $debuff['duration']--;
+
+                if ($key === 'deep_cut' && $debuff['duration'] <= 0) {
+                    $restore = (int)($debuff['reduction'] ?? 0);
+                    if ($restore > 0) {
+                        $this->max_health_modifier -= $restore;
+                        if ($this->max_health_modifier < 0) {
+                            $this->max_health_modifier = 0;
+                        }
+                    }
+
+                    $percent = (int)($debuff['percent'] ?? 10);
+                    if ($percent > 0 && $this->current_health > 0) {
+                        $increase = (int) floor($this->current_health * $percent / 100);
+                        $this->current_health += $increase;
+                    }
+
+                    // не вище за новий max
+                    if ($this->current_health > $this->max_health) {
+                        $this->current_health = $this->max_health;
+                    }
+                }
 
                 if ($key === 'bleeding') {
                     if ($debuff['duration'] < 0) {
@@ -112,6 +160,33 @@ class Character extends Model
         return 0;
     }
 
+    public function clearAllDebuffs(): void
+    {
+        foreach ($this->debuffs ?? [] as $key => $debuff) {
+            if ($key === 'deep_cut') {
+                $restore = (int)($debuff['reduction'] ?? 0);
+                if ($restore > 0) {
+                    $this->max_health_modifier -= $restore;
+                    if ($this->max_health_modifier < 0) {
+                        $this->max_health_modifier = 0;
+                    }
+                }
+
+                $percent = (int)($debuff['percent'] ?? 10);
+                if ($percent > 0 && $this->current_health > 0) {
+                    $increase = (int) floor($this->current_health * $percent / 100);
+                    $this->current_health += $increase;
+                }
+                if ($this->current_health > $this->max_health) {
+                    $this->current_health = $this->max_health;
+                }
+            }
+        }
+
+        $this->debuffs = [];
+        $this->save();
+    }
+
     public function getMaxDurabilityForItem(Item $item): int
     {
         $level = $item->level ?? $item->required_level ?? 1;
@@ -144,7 +219,9 @@ class Character extends Model
     // Базова витривалість = здоровʼя
     public function getMaxHealthAttribute(): int
     {
-        return $this->base_health + ($this->total_endurance * 6);
+        $base = $this->base_health + ($this->total_endurance * 6);
+
+        return max(1, $base - ($this->max_health_modifier ?? 0));
     }
     public function getTotalEnduranceAttribute(): int
     {

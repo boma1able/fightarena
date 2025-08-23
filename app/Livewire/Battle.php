@@ -661,6 +661,7 @@ class Battle extends Component
 
     private function resetBattle()
     {
+        $this->character->clearAllDebuffs();
         $this->character->is_in_battle = false;
         $this->character->debuffs = [];
 

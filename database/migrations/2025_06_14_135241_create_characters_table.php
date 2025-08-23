@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('base_health')->default(0);
             $table->integer('current_health')->default(0);
+            $table->integer('max_health_modifier')->default(0);
             $table->timestamp('health_regeneration_started_at')->nullable();
             $table->boolean('is_in_battle')->default(false);
             $table->json('debuffs')->nullable();
