@@ -56,7 +56,7 @@ class User extends Authenticatable
             $endurance = 3;
 
             $user->character()->create([
-                'bace_health' => 0,
+                'base_health' => 0,
                 'current_health' => $endurance * 6,
                 'strength' => 3,
                 'agility' => 3,

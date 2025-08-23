@@ -57,11 +57,11 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['helmet']->pivot->id }})"
-                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
+                                    class=" {{ $isBroken ? 'broken' : '' }} relative w-full h-full"
                                     >
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['helmet']->image) }}"
                                         class="absolute w-[60px]"
@@ -97,11 +97,11 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['armor']->pivot->id }})"
-                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
+                                    class="{{ $isBroken ? 'broken' : '' }} relative w-full h-full"
                                     >
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['armor']->image) }}"
                                         class="absolute w-[60px]"
@@ -135,11 +135,11 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['ring1']->pivot->id }})"
-                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
+                                    class="{{ $isBroken ? 'broken' : '' }} relative w-full h-full"
                                     >
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['ring1']->image) }}"
                                         class="absolute w-[60px]"
@@ -182,12 +182,12 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['weapon']->pivot->id }})"
-                                    class="{{ $rarityClass }} relative w-[60px] h-[90px] {{ $isBroken ? 'broken' : '' }}"
+                                    class="relative w-full h-full {{ $isBroken ? 'broken' : '' }}"
                                     >
 
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['weapon']->image) }}"
                                         class="absolute w-[60px]"
@@ -221,11 +221,11 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['legs']->pivot->id }})"
-                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
+                                    class="{{ $isBroken ? 'broken' : '' }} relative w-full h-full"
                                     >
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['legs']->image) }}"
                                         class="absolute w-[60px]"
@@ -405,11 +405,11 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['neckless']->pivot->id }})"
-                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
+                                    class="{{ $isBroken ? 'broken' : '' }} relative w-full h-full"
                                     >
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['neckless']->image) }}"
                                         class="absolute w-[60px]"
@@ -443,11 +443,11 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['arms']->pivot->id }})"
-                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
+                                    class="{{ $isBroken ? 'broken' : '' }} relative w-full h-full"
                                     >
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['arms']->image) }}"
                                         class="absolute w-[60px]"
@@ -481,11 +481,11 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['ring2']->pivot->id }})"
-                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
+                                    class="{{ $isBroken ? 'broken' : '' }} relative w-full h-full"
                                     >
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['ring2']->image) }}"
                                         class="absolute w-[60px]"
@@ -519,11 +519,11 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['shield']->pivot->id }})"
-                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
+                                    class="{{ $isBroken ? 'broken' : '' }} relative w-full h-full"
                                     >
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['shield']->image) }}"
                                         class="absolute w-[60px]"
@@ -557,11 +557,11 @@
                                 @endphp
                                 <div
                                     wire:click="unequipItem({{ $equippedBySlot['boots']->pivot->id }})"
-                                    class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px]"
+                                    class=" {{ $isBroken ? 'broken' : '' }} relative w-full h-full"
                                     >
-                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-' . $rarityClass . '-art.jpg') }}"
+                                        class="absolute w-full h-full"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="">
                                     <img src="{{ asset($equippedBySlot['boots']->image) }}"
                                         class="absolute w-[60px]"
@@ -733,11 +733,11 @@
                                     $isBroken = $item->pivot?->current_durability === 0;
                                 @endphp
                                 <div
-                                    wire:click="equipItem({{ $item->pivot->id }})" class="{{ $rarityClass }} {{ $isBroken ? 'broken' : '' }} relative w-[60px] h-[90px] cursor-pointer"
+                                    wire:click="equipItem({{ $item->pivot->id }})" class="{{ $isBroken ? 'broken' : '' }} relative w-[64px] h-[90px] cursor-pointer"
                                     title="Екіпірувати">
-                                    <img src="{{ asset('images/items/frame-'.  ($rarityColors[$item->pivot->rarity] ?? 'gray') . '.png') }}"
-                                        class="absolute w-[60px]"
-                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                                    <img src="{{ asset('images/items/frame-'.  ($rarityColors[$item->pivot->rarity] ?? 'gray') . '-art.jpg') }}"
+                                        class="absolute w-[62px] h-[93px]"
+                                        style="top: 50%; left: 50%; transform: translate(-50%, -50%); filter: brightness(1.1);"
                                         alt="{{ $item->name }}">
                                     <img src="{{ asset($item->image) }}"
                                         class="absolute w-[60px]"
