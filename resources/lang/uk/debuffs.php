@@ -4,12 +4,14 @@ return [
     'bleeding' => [
         'name' => 'Кровотеча',
         'description' => 'Змушує ціль втрачати здоров’я протягом 3 ходів.',
+        'icon' => '/images/debuffs/bleeding.png',
     ],
     'deep_cut' => [
         'name' => 'Глибокий поріз',
         'duration' => 3,
         'max_hp_reduction_percent' => 10,
-        'description' => 'Глибокий поріз зменшує максимальне HP протягом 3 ходів.'
+        'description' => 'Глибокий поріз зменшує максимальне HP протягом 3 ходів.',
+        'icon' => '/images/debuffs/deep_cut.png',
     ],
     'stun' => [
         'name' => 'Оглушення',

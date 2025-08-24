@@ -49,6 +49,7 @@ class Character extends Model
             'delay'       => $delay,
             'name'        => __('debuffs.' . $key . '.name'),
             'description' => __('debuffs.' . $key . '.description'),
+            'icon'        => __('debuffs.' . $key . '.icon') ?? '/images/debuffs/default.png',
         ];
 
         if ($key === 'deep_cut') {

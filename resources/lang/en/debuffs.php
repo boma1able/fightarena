@@ -4,12 +4,14 @@ return [
     'bleeding' => [
         'name' => 'Bleeding',
         'description' => 'Causes the target to lose health over 3 turns.',
+        'icon' => '/images/debuffs/bleeding.png',
     ],
     'deep_cut' => [
         'name' => 'Deep Cut',
         'duration' => 3,
         'max_hp_reduction_percent' => 10,
-        'description' => 'Deep cut reduces maximum HP for 3 turns.'
+        'description' => 'Deep cut reduces maximum HP for 3 turns.',
+        'icon' => '/images/debuffs/deep_cut.png',
     ],
     'stun' => [
         'name' => 'Stun',

@@ -40,6 +40,7 @@ class Monster extends Model
             'delay'       => $delay,
             'name'        => __('debuffs.' . $key . '.name'),
             'description' => __('debuffs.' . $key . '.description'),
+            'icon'        => __('debuffs.' . $key . '.icon') ?? '/images/debuffs/default.png',
         ];
 
         // логіка для дебафа deep_cut

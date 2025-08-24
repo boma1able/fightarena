@@ -149,7 +149,7 @@ class Battle extends Component
         if ($monster->level >= 3) {
             $weapon = Item::query()
                 ->where('slot', 'weapon')
-                ->where('type', 'axe') //temp!!!!!
+                ->where('type', 'sword') //temp!!!!!
                 ->where('required_level', '<=', $monster->level)
                 ->inRandomOrder()
                 ->first();
