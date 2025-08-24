@@ -149,7 +149,7 @@ class Battle extends Component
         if ($monster->level >= 3) {
             $weapon = Item::query()
                 ->where('slot', 'weapon')
-                ->where('type', 'sword') //temp!!!!!
+                ->where('type', 'axe') //temp!!!!!
                 ->where('required_level', '<=', $monster->level)
                 ->inRandomOrder()
                 ->first();
@@ -343,6 +343,16 @@ class Battle extends Component
                     $sunderPercent = $this->monster->debuffs['sunder']['percent'] ?? 100;
                     // Зменшуємо броню на відсоток
                     $monsterArmorAvg = (int) round($monsterArmorAvg * (100 - $sunderPercent) / 100);
+
+                    $this->dispatch('showHit', [
+                        'message' => __('fight.sunder_destroyed', ['name' => $this->monster->name]),
+                        'target' => 'monster',
+                        'type' => 'sunder',
+                    ]);
+                    $monDebuffs = $this->monster->debuffs;
+                    $monDebuffs['sunder']['notified'] = true;
+                    $this->monster->debuffs = $monDebuffs;
+                    $this->monster->save();
                 }
 
                 $charDamage = max(0, $charDamage - $monsterArmorAvg);
@@ -466,7 +476,22 @@ class Battle extends Component
 
                 $defenseByZone = $this->character->totalDefenseByZone();
                 $zoneDefense = $defenseByZone[$monsterAttack] ?? ['min' => 0, 'max' => 0];
+
                 $armorAvg = intval(round(($zoneDefense['min'] + $zoneDefense['max']) / 2));
+
+                $debuffs = $this->character->debuffs ?? [];
+                $sunderPercent = isset($debuffs['sunder']) ? ($debuffs['sunder']['percent'] ?? 0) : 0;
+
+                $armorAvgBefore = $armorAvg;
+                if ($sunderPercent > 0) {
+                    $armorAvg = (int) round($armorAvg * (100 - $sunderPercent) / 100);
+
+                    $this->dispatch('showHit', [
+                        'message' => __('fight.sunder_destroyed', ['name' => $this->character->name]),
+                        'target' => 'character',
+                        'type' => 'sunder',
+                    ]);
+                }
 
                 $monsterDamage = max(0, $monsterDamage - $armorAvg);
 
@@ -506,7 +531,9 @@ class Battle extends Component
                                     $this->character->applyDebuff($debuff['key'], $duration, 0);
                                 } elseif ($debuff['key'] === 'deep_cut') {
                                     $this->character->applyDebuff($debuff['key'], $duration, 0);
-                                } else {
+                                } elseif ($debuff['key'] === 'sunder') {
+                                    $this->character->applyDebuff($debuff['key'], $duration, 0);
+                                }else {
                                     $this->character->applyDebuff($debuff['key'], $duration, $duration);
                                 }
 

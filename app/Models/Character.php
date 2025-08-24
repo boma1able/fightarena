@@ -77,6 +77,14 @@ class Character extends Model
             $debuffs[$key]['percent']   = $percent;
         }
 
+        if ($key === 'sunder') {
+            $raw = __('debuffs.' . $key . '.armor_reduction_percent');
+            $percent = is_numeric($raw) ? (int)$raw : 100; // за замовчуванням 100%
+            $percent = max(0, min(100, $percent));
+
+            $debuffs[$key]['percent'] = $percent;
+        }
+
         $this->debuffs = $debuffs;
         $this->save();
 
@@ -121,6 +129,10 @@ class Character extends Model
                     if ($this->current_health > $this->max_health) {
                         $this->current_health = $this->max_health;
                     }
+                }
+
+                if ($key === 'sunder' && $debuff['duration'] <= 0) {
+                    unset($debuffs[$key]);
                 }
 
                 if ($key === 'bleeding') {

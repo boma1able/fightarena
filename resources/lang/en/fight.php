@@ -16,5 +16,6 @@ return [
     'legs' => 'Legs',
     'select_attack_and_defense' => 'Select attack and defense',
     'miss_step' => 'Miss this step',
-    'next_step' => 'You received the stun status and will be able to continue on the next turn.'
+    'next_step' => 'You received the stun status and will be able to continue on the next turn.',
+    'sunder_destroyed' => 'Your Sunder effect destroyed :name’s armor!',
 ];
