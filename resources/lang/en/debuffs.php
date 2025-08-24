@@ -18,8 +18,11 @@ return [
         'delay' => 1,
         'icon' => '/images/debuffs/stun.png',
     ],
-    'damage_reduction' => [
-        'name' => 'Damage Reduction',
-        'description' => 'Lowers the enemy\'s damage output for 3 turns.',
+    'sunder' => [
+        'name' => 'Sunder',
+        'description' => 'Reduces the target’s armor, making them take more damage.',
+        'duration' => 3,
+        'armor_reduction_percent' => 100,
+        'icon' => '/images/debuffs/sunder.png',
     ],
 ];

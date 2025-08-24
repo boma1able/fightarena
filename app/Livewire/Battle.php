@@ -338,6 +338,13 @@ class Battle extends Component
                 // Візьмемо середнє значення броні монстра для зони
                 $monsterArmorAvg = intval(round(($monsterZoneArmor['min'] + $monsterZoneArmor['max']) / 2));
 
+                // --- Sunder перевірка ---
+                if (!empty($this->monster->debuffs['sunder'])) {
+                    $sunderPercent = $this->monster->debuffs['sunder']['percent'] ?? 100;
+                    // Зменшуємо броню на відсоток
+                    $monsterArmorAvg = (int) round($monsterArmorAvg * (100 - $sunderPercent) / 100);
+                }
+
                 $charDamage = max(0, $charDamage - $monsterArmorAvg);
 
                 if (!$monsterStunned && rand(1, 100) <= $this->monster->dodge_chance - $this->character->anti_dodge_chance) {
@@ -375,6 +382,8 @@ class Battle extends Component
                                     } elseif ($debuff['key'] === 'bleeding') {
                                         $this->monster->applyDebuff($debuff['key'], $duration, 0);
                                     } elseif ($debuff['key'] === 'deep_cut') {
+                                        $this->monster->applyDebuff($debuff['key'], $duration, 0);
+                                    } elseif ($debuff['key'] === 'sunder') {
                                         $this->monster->applyDebuff($debuff['key'], $duration, 0);
                                     } else {
                                         $this->monster->applyDebuff($debuff['key'], $duration, $duration);

@@ -18,8 +18,11 @@ return [
         'delay' => 1,
         'icon' => '/images/debuffs/stun.png',
     ],
-    'damage_reduction' => [
-        'name' => 'Зменшення урону',
-        'description' => 'Знижує урон ворога на 3 ходи.',
+    'sunder' => [
+        'name' => 'Sunder',
+        'description' => 'Зменшує броню цілі, змушуючи її отримувати більше урона',
+        'duration' => 3,
+        'armor_reduction_percent' => 100,
+        'icon' => '/images/debuffs/sunder.png',
     ],
 ];

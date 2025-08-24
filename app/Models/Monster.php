@@ -117,6 +117,17 @@ class Monster extends Model
                         }
                     }
 
+                    if ($key === 'sunder') {
+                        $raw = __('debuffs.' . $key . '.armor_reduction_percent');
+                        $percent = is_numeric($raw) ? (int)$raw : 100; // за замовчуванням 100%
+                        $percent = max(0, min(100, $percent));
+
+                        $debuffs[$key]['percent'] = $percent;
+
+                        // Ми не міняємо базові параметри монстра напряму,
+                        // а просто зберігаємо % для використання під час розрахунку бою
+                    }
+
                     unset($debuffs[$key]);
                 } else {
                     $debuffs[$key] = $debuff;

@@ -46,7 +46,7 @@ class ItemSeeder extends Seeder
             'image' => '/images/items/axe/axe-1-art.png',
             'is_shop' => true,
             'debuffs' => [
-                ['key' => 'damage_reduction', 'chance' => 100, 'duration' => 3],
+                ['key' => 'sunder', 'chance' => 100, 'duration' => 3],
             ],
         ]);
 
