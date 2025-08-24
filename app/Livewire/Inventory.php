@@ -37,6 +37,15 @@ class Inventory extends Component
         $itemRow = DB::table('character_items')->find($pivotId);
         if (!$itemRow || $itemRow->location !== 'inventory') return;
 
+        // Забороняємо одягати повністю зламані предмети
+        if ($itemRow->current_durability === 0) {
+            $this->dispatch('trigger-toast', [
+                'message' => 'Цей предмет повністю зламаний і не може бути екіпірований!',
+                'type' => 'error',
+            ]);
+            return;
+        }
+
         $item = Item::findOrFail($itemRow->item_id);
 
         if ($this->character->level < $itemRow->level) {

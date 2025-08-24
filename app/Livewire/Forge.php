@@ -25,7 +25,7 @@ class Forge extends Component
         $query = $this->character->inventoryItems()
             ->wherePivot('location', 'inventory')
             ->wherePivot('slot', null)
-            ->wherePivot('current_durability', '<', DB::raw('max_durability'))
+            // ->wherePivot('current_durability', '<', DB::raw('max_durability'))
             ->withPivot(['id', 'location', 'slot', 'current_durability', 'max_durability']);
 
         if ($this->filterType !== 'all') {
@@ -33,7 +33,13 @@ class Forge extends Component
         }
 
         $this->inventory = $query->get();
-        $this->allTypes = Item::distinct()->pluck('type')->toArray();
+        // $this->allTypes = Item::distinct()->pluck('type')->toArray();
+        $this->allTypes = $this->character->inventoryItems()
+            ->wherePivot('location', 'inventory')
+            ->pluck('type')
+            ->unique()
+            ->values()
+            ->toArray();
     }
 
     public function setFilter($type)
