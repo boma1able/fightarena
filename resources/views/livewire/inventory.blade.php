@@ -712,11 +712,12 @@
                             @php
                                 $isBroken = $item->pivot?->current_durability === 0;
                                 $rarityColor = $rarityColors[$item->pivot->rarity] ?? 'gray';
+                                $levelRejected = $item->pivot->level > $character->level ? 'level_rejected' : '';
                             @endphp
 
                             <div
                                 wire:click="equipItem({{ $item->pivot->id }})"
-                                class="{{ $rarityColor }} {{ $isBroken ? 'broken' : '' }} relative w-[68px] h-[98px] cursor-pointer"
+                                class="{{ $rarityColor }} {{ $isBroken ? 'broken' : '' }} {{ $levelRejected }} relative w-[68px] h-[98px] cursor-pointer"
                                 onmouseenter="showItemTooltip(event, @js(array_merge(
                                     $item->toArray(),
                                     [

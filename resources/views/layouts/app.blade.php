@@ -13,7 +13,23 @@
         button, .btn, .battle-info{
             font-family: "Forum", serif!important;
         }
-        .broken:before{
+        .broken{
+            filter: sepia(1) saturate(10) hue-rotate(-25deg) brightness(1.3);
+            cursor: not-allowed!important;
+        }
+        .forge .broken:before{
+            display: none;
+        }
+        .broken img{
+            filter: brightness(.5)!important;
+        }
+        .broken .item-img{
+            filter: drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5))!important;
+        }
+        .level_rejected{
+            cursor: not-allowed!important;
+        }
+        .level_rejected:before{
             content: '';
             background: url('/images/broken.png') center center no-repeat;
             background-size: cover;
@@ -24,21 +40,17 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 99;
-        }
-        .forge .broken:before{
-            display: none;
-        }
-        .broken img{
-            filter: brightness(.5)!important;
-        }
-        .forge .broken img{
-            filter: brightness(1)!important;
-        }
-        .broken .item-img{
-            filter: drop-shadow(-1px 2px 1px rgba(0, 0, 0, 0.5))!important;
+            z-index: 1;
+            filter: drop-shadow(-1px 2px 1px rgba(0,0,0,0.5));
         }
     </style>
+    @if (request()->routeIs('forge'))
+        <style>
+            .broken {
+                cursor: pointer !important;
+            }
+        </style>
+    @endif
     @livewireStyles
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -128,6 +140,7 @@
             'damage' => __('messages.damage'),
             'durability' => __('messages.durability'),
             'level' => __('messages.level'),
+            'min_level' => __('messages.min_level'),
             'sellPrice' => __('messages.sellPrice'),
             'gold' => __('messages.gold'),
             'strength' => __('messages.strength'),
@@ -148,6 +161,8 @@
             legendary: 'text-yellow-500',
         };
 
+        const characterLevel = @js(auth()->user()->character->level);
+
         function showItemTooltip(event, item) {
             let minDamage = item.min_damage;
             let maxDamage = item.max_damage;
@@ -156,6 +171,8 @@
             if (typeof defense === 'string') defense = JSON.parse(defense);
 
             let bonuses = item.bonuses ?? {};
+
+            const levelClass = item.level > characterLevel ? 'text-red-500' : 'text-gray-300';
 
             tooltip.innerHTML = `
                 <div class="bg-gray-900 p-[25px] m-[4px]">
@@ -184,11 +201,10 @@
                         </div>
                     </div>
 
-                    <img src="/images/separator.png" alt="-" class="w-[150px] my-4">
-
-                    <div class="text-gray-300 text-xs">
-                        ${translations.level}: ${item.level ?? 1}
+                    <div class="${levelClass} text-xs">
+                        ${item.level > characterLevel ? translations.min_level : translations.level}: ${item.level}
                     </div>
+
                     <div class="${item.current_durability === 0 ? 'text-red-500' : 'text-gray-300'} text-xs">
                         ${translations.durability}: ${item.current_durability ?? 0} / ${item.max_durability ?? 0}
                     </div>
